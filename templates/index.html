@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+        <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <div class="frame" >
+
+            <!-- Background dekorasi (ikon sayur) -->
+            <div class="deco-layer" aria-hidden="true">
+                <img src="{% static 'img/Group-8.svg' %}"   alt="" style="left:10.49%; top:0.99%;  --w:5.00">
+                <img src="{% static 'img/Group-6.svg' %}"   alt="" style="left:32.15%; top:3.41%;  --w:3.61">
+                <img src="{% static 'img/Vector-8.svg' %}"  alt="" style="left:84.79%; top:1.56%;  --w:3.82">
+                <img src="{% static 'img/Group-4.svg' %}"   alt="" style="left:24.72%; top:26.14%; --w:4.72">
+                <img src="{% static 'img/Vector-11.svg' %}" alt="" style="left:39.58%; top:27.27%; --w:3.40">
+                <img src="{% static 'img/Group-9.svg' %}"   alt="" style="left:74.93%; top:25.43%; --w:5.00">
+                <img src="{% static 'img/Group-11.svg' %}"  alt="" style="left:93.06%; top:33.52%; --w:5.69">
+                <img src="{% static 'img/Group-10.svg' %}"  alt="" style="left:85.00%; top:44.60%; --w:4.24">
+                <img src="{% static 'img/Vector-9.svg' %}"  alt="" style="left:44.17%; top:40.91%; --w:7.85">
+                <img src="{% static 'img/Group-5.svg' %}"   alt="" style="left:68.82%; top:49.86%; --w:3.96">
+                <img src="{% static 'img/Vector-12.svg' %}" alt="" style="left:1.11%;  top:74.86%; --w:4.17">
+                <img src="{% static 'img/Vector-10.svg' %}" alt="" style="left:29.03%; top:76.85%; --w:7.78">
+                <img src="{% static 'img/Group-12.svg' %}"  alt="" style="left:17.43%; top:85.65%; --w:4.31">
+                <img src="{% static 'img/Group-7.svg' %}"   alt="" style="left:61.32%; top:75.00%; --w:4.72">
+                <img src="{% static 'img/Vector-7.svg' %}"  alt="" style="left:47.92%; top:90.34%; --w:3.68">
+            </div>
+
+            <div class="div" >
+                <img class="nasgor" src="{% static 'img/nasgor-1.png' %}" alt="Nasi goreng" />
+                <img class="mie" src="{% static 'img/mie-1.png' %}" alt="Mie" />
+                <img class="nasi-ayam" src="{% static 'img/nasi-ayam.png' %}" alt="Nasi ayam" />
+            </div>
+
+            <div class="div-2" >
+                <div class="group" >
+                    <div class="text-wrapper">
+                        Fill My Dish!
+                    </div>
+                    <div class="text-wrapper-2" >
+                        Fill My Dish!
+                    </div>
+                    <div class="text-wrapper-3" >
+                        Welcome To
+                    </div>
+                    <div class="text-wrapper-4" >
+                        Welcome To
+                    </div>
+                    <div class="text-wrapper-5" >
+                        Welcome To
+                    </div>
+                </div>
+            </div>
+
+            <div class="group-wrapper" >
+                <div class="group-2" >
+                    <div class="text-wrapper-6" >
+                        Kelompok 12 PBP E
+                    </div>
+                    <div class="text-wrapper-7" >
+                        Fakultas Ilmu Komputer
+                    </div>
+                    <div class="text-wrapper-8" >
+                        Universitas Indonesia
+                    </div>
+                </div>
+            </div>
+
+            <div class="div-3" id="site-nav" >
+                <span class="brand">Fill My Dish</span>
+                <button class="hamburger" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="site-nav">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="navbar" >
+                    <div class="text-wrapper-9" >
+                        Profile
+                    </div>
+                    <div class="text-wrapper-9" >
+                        Find Recipe
+                    </div>
+                    <div class="text-wrapper-9" >
+                        Saved Recipe
+                    </div>
+                    <div class="text-wrapper-9" >
+                        Meal Plan
+                    </div>
+                    <div class="text-wrapper-9" >
+                        Review
+                    </div>
+                </div>
+                <div class="text-wrapper-10" >
+                    Login
+                </div>
+                <div class="text-wrapper-10" >
+                    Register
+                </div>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                var nav = document.getElementById('site-nav');
+                var btn = nav.querySelector('.hamburger');
+
+                function setOpen(open) {
+                    nav.classList.toggle('open', open);
+                    btn.setAttribute('aria-expanded', open);
+                    btn.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
+                }
+
+                btn.addEventListener('click', function () {
+                    setOpen(!nav.classList.contains('open'));
+                });
+
+                // Tutup saat klik di luar menu atau tekan Escape
+                document.addEventListener('click', function (e) {
+                    if (!nav.contains(e.target)) setOpen(false);
+                });
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') setOpen(false);
+                });
+
+                // Reset saat layar diperlebar ke tampilan tablet/desktop
+                window.addEventListener('resize', function () {
+                    if (window.innerWidth >= 768) setOpen(false);
+                });
+            })();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&family=Poppins:wght@600;800&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css");
+
+* {
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+/* Mobile / tablet: ukuran normal 16px, layout disusun ulang di style.css */
+html {
+  margin: 0;
+  min-height: 100%;
+  font-size: 16px;
+}
+
+/* Desktop: 90rem = 100% lebar layar, jadi desain Figma 1440px ikut skala */
+@media (min-width: 1024px) {
+  html {
+    font-size: calc(100vw / 90);
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+button:focus-visible {
+  outline: 2px solid #4a90e2 !important;
+  outline: -webkit-focus-ring-color auto 5px !important;
+}
+
+a {
+  text-decoration: none;
+}

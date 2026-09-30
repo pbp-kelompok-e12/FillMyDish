@@ -1,0 +1,8 @@
+:root {
+  --color-palette-base-50: rgba(245, 247, 248, 1);
+  --color-palette-primary-500: rgba(131, 0, 0, 1);
+  --color-palette-primary-600: rgba(114, 0, 0, 1);
+  --color-palette-font-50: rgba(248, 249, 250, 1);
+  --color-palette-primary-200: rgba(255, 202, 202, 1);
+  --color-palette-secondary-800: rgba(47, 61, 57, 1);
+}
