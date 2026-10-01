@@ -1,16 +1,6 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta charset="utf-8" />
-        <link rel="stylesheet" href="{% static 'css/globals.css' %}">
-        <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    </head>
-    <body>
-        <div class="frame" >
-
+    {% block content %}
             <!-- Background dekorasi (ikon sayur) -->
             <div class="deco-layer" aria-hidden="true">
                 <img src="{% static 'img/Group-8.svg' %}"   alt="" style="left:10.49%; top:0.99%;  --w:5.00">
@@ -55,88 +45,4 @@
                     </div>
                 </div>
             </div>
-
-            <div class="group-wrapper" >
-                <div class="group-2" >
-                    <div class="text-wrapper-6" >
-                        Kelompok 12 PBP E
-                    </div>
-                    <div class="text-wrapper-7" >
-                        Fakultas Ilmu Komputer
-                    </div>
-                    <div class="text-wrapper-8" >
-                        Universitas Indonesia
-                    </div>
-                </div>
-            </div>
-
-            <div class="div-3" id="site-nav" >
-                <span class="brand">Fill My Dish</span>
-                <button class="hamburger" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="site-nav">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <div class="navbar" >
-                    <div class="text-wrapper-9" >
-                        Profile
-                    </div>
-                    <div class="text-wrapper-9" >
-                        Find Recipe
-                    </div>
-                    <div class="text-wrapper-9" >
-                        Saved Recipe
-                    </div>
-                    <div class="text-wrapper-9" >
-                        Meal Plan
-                    </div>
-                    <div class="text-wrapper-9" >
-                        Review
-                    </div>
-                </div>
-                {% if user.is_authenticated %}
-                <div class="text-wrapper-10" >
-                    Logout
-                </div>
-                {% else %}
-                <div class="text-wrapper-10" >
-                    Login
-                </div>
-                <div class="text-wrapper-10" >
-                    Register
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <script>
-            (function () {
-                var nav = document.getElementById('site-nav');
-                var btn = nav.querySelector('.hamburger');
-
-                function setOpen(open) {
-                    nav.classList.toggle('open', open);
-                    btn.setAttribute('aria-expanded', open);
-                    btn.setAttribute('aria-label', open ? 'Tutup menu' : 'Buka menu');
-                }
-
-                btn.addEventListener('click', function () {
-                    setOpen(!nav.classList.contains('open'));
-                });
-
-                // Tutup saat klik di luar menu atau tekan Escape
-                document.addEventListener('click', function (e) {
-                    if (!nav.contains(e.target)) setOpen(false);
-                });
-                document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape') setOpen(false);
-                });
-
-                // Reset saat layar diperlebar ke tampilan tablet/desktop
-                window.addEventListener('resize', function () {
-                    if (window.innerWidth >= 768) setOpen(false);
-                });
-            })();
-        </script>
-    </body>
-</html>
+{% endblock content %}
