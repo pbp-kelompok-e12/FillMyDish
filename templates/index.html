@@ -94,12 +94,18 @@
                         Review
                     </div>
                 </div>
+                {% if user.is_authenticated %}
+                <div class="text-wrapper-10" >
+                    Logout
+                </div>
+                {% else %}
                 <div class="text-wrapper-10" >
                     Login
                 </div>
                 <div class="text-wrapper-10" >
                     Register
                 </div>
+                {% endif %}
             </div>
         </div>
 
