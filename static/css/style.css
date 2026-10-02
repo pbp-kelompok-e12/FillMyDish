@@ -241,6 +241,18 @@
   background-color: var(--color-palette-primary-500);
   border-radius: 5.625rem;
   overflow: hidden;
+  transition: transform 0.35s ease;
+  will-change: transform;
+}
+
+.frame .div-3.nav-hidden {
+  transform: translateY(calc(-100% - 6rem));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame .div-3 {
+    transition: none;
+  }
 }
 
 .frame .navbar {

@@ -49,18 +49,18 @@
                         Review
                     </div>
                 </div>
-                {% if user.is_authenticated %}
+                
                 <div class="text-wrapper-10" >
                     Logout
                 </div>
-                {% else %}
+
                 <div class="text-wrapper-10" >
                     Login
                 </div>
                 <div class="text-wrapper-10" >
                     Register
                 </div>
-                {% endif %}
+
             </div>
         </div>
 
@@ -91,6 +91,33 @@
                 window.addEventListener('resize', function () {
                     if (window.innerWidth >= 768) setOpen(false);
                 });
+
+                var lastY = window.scrollY;
+                var ticking = false;
+                var THRESHOLD = 8; // abaikan gerakan scroll yang sangat kecil
+
+                function handleScroll() {
+                    var y = Math.max(0, window.scrollY); // cegah nilai negatif (overscroll iOS)
+
+                    if (Math.abs(y - lastY) >= THRESHOLD) {
+                        if (y <= 10 || y < lastY) {
+                            // di paling atas halaman, atau scroll ke atas -> tampilkan
+                            nav.classList.remove('nav-hidden');
+                        } else if (!nav.classList.contains('open')) {
+                            // scroll ke bawah -> sembunyikan (kecuali menu hamburger sedang terbuka)
+                            nav.classList.add('nav-hidden');
+                        }
+                        lastY = y;
+                    }
+                    ticking = false;
+                }
+
+                window.addEventListener('scroll', function () {
+                    if (!ticking) {
+                        window.requestAnimationFrame(handleScroll);
+                        ticking = true;
+                    }
+                }, { passive: true });
             })();
         </script>
     </body>
