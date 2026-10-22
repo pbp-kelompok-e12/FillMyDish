@@ -7,6 +7,8 @@
         <link rel="stylesheet" href="{% static 'css/globals.css' %}">
         <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/find.css' %}">
+        <link rel="stylesheet" href="{% static 'css/input.css' %}">
     </head>
     <body>
         <div class="frame" >
@@ -49,14 +51,15 @@
                         Review
                     </div>
                 </div>
-                
+                {% if user.is_authenticated %}
                 <div class="text-wrapper-10" >
                     Logout
                 </div>
-
+                {% else %}
                 <div class="text-wrapper-10" >
                     Login
                 </div>
+                {% endif %}
                 <div class="text-wrapper-10" >
                     Register
                 </div>

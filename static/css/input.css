@@ -1,0 +1,152 @@
+/* =========================================================
+   HALAMAN FIND RECIPE: form + salad
+   ========================================================= */
+
+.frame .salad {
+  position: absolute;
+  width: 29.625rem;
+  height: 25.844rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Form ada di alur normal, jadi tinggi halaman (dan posisi footer) ikut tinggi form */
+.frame .div-2.find-page {
+  height: auto;
+  padding-bottom: 4.4rem;     /* jarak form ke footer */
+}
+
+.find-card {
+  position: relative;
+  width: 53.625rem;
+  margin: 11.5rem 0 0 5.188rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.4rem 6.5rem 2.4rem 3.6rem;
+  background-color: #f4ce14;
+  border-radius: 2rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.field-label {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #5c4b00;
+}
+
+.field-input {
+  width: 100%;
+  height: 3.2rem;
+  padding: 0 1rem;
+  background-color: #fff6a8;
+  border: 1px solid #d9b800;
+  border-radius: 0.6rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #3d3200;
+}
+
+.field-input::placeholder {
+  color: #7a6408;
+  opacity: 0.8;
+}
+
+.field-input:focus-visible {
+  outline: 2px solid #830000;
+  outline-offset: 2px;
+}
+
+.search-btn {
+  align-self: flex-end;
+  margin-right: -2.5rem;
+  padding: 0.8rem 1.8rem;
+  background-color: var(--color-palette-primary-500);
+  border: 0;
+  border-radius: 0.5rem;
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.search-btn:hover {
+  background-color: var(--color-palette-primary-600);
+}
+
+.search-btn:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px #830000;
+}
+
+/* ---------- Desktop: layer makanan mengikuti tinggi halaman ---------- */
+@media (min-width: 1023.02px) {
+  .frame .div.food-layer {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Koordinat lama dikurangi offset layer (-9.8125rem / -11rem) */
+  .frame .food-layer .nasi-ayam { top: 0;     left: 0; }
+  .frame .food-layer .mie       { top: 0;     left: 44.0625rem; }
+  .frame .food-layer .nasgor    { top: 26rem; left: 64.1875rem; }
+
+  /* Salad menempel ke dasar halaman: ±9.4rem terlihat di atas footer, sisanya tertutup */
+  .frame .food-layer .salad {
+    top: auto;
+    bottom: -4.1rem;
+    left: 6.2rem;
+  }
+}
+
+/* ---------- Tablet & HP ---------- */
+@media (max-width: 1023px) {
+  .frame {
+    --salad-w: clamp(10rem, 45vw, 18rem);
+  }
+
+  .frame .div-2.find-page {
+    padding-bottom: calc(var(--salad-w) * 0.6);
+  }
+
+  .find-card {
+    width: 100%;
+    max-width: 40rem;
+    margin: 1rem auto 0;
+    padding: 1.5rem 1.25rem;
+    gap: 1.25rem;
+    border-radius: 1.5rem;
+  }
+
+  .field-group {
+    gap: 0.75rem;
+  }
+
+  .field-input {
+    height: 2.75rem;
+  }
+
+  .search-btn {
+    margin-right: 0;
+  }
+
+  .frame .salad {
+    top: auto;
+    bottom: 2.5rem;
+    left: -1rem;
+    width: var(--salad-w);
+    height: auto;
+    object-fit: contain;
+  }
+}
