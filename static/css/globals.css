@@ -31,6 +31,7 @@ button:focus-visible {
   outline: -webkit-focus-ring-color auto 5px !important;
 }
 
-a {
-  text-decoration: none;
+a, a:visited, a:hover, a:active {
+  color: inherit;
+  text-decoration: none; /* Removes the underline if desired */
 }
