@@ -29,7 +29,8 @@ def normalize(item):
         "title": item.get("title", "Untitled"),
         "image": item.get("image", ""),
         "summary": item.get("summary", ""),
-        "instructions": item.get("analyzedInstructions")
+        "instructions": item.get("analyzedInstructions"),
+        "nutrition": item.get("nutrition")
     }
 
 def split_csv(raw):
@@ -67,6 +68,8 @@ def show_recipes(request):
                         "number": 10,
                         "sort": "min-missing-ingredients",
                         "addRecipeInformation": "true",
+                        "addRecipeInstructions": "true",
+                        "addRecipeNutrition": "true",
                     },
                     timeout=8,)
                 response.raise_for_status()
