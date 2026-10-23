@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'FillMyDish.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+SPOONACULAR_API_KEY = os.environ.get("SPOONACULAR_API_KEY", "")
 if PRODUCTION:
     DATABASES = {
         'default': {
