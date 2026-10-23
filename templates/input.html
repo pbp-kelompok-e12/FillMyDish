@@ -30,11 +30,12 @@
             <div class="div-2 find-page">
                 <!-- ganti action dengan -->
                 <form class="find-card" method="get" action="/">
+                    <input type="hidden" name="ingredients" id="ingredients-csv">
                     <div class="field-group" data-name="ingredients">
                         <label class="field-label">Ingredients</label>
-                        <input class="field-input" type="text" name="ingredients" placeholder="1st Ingredient">
-                        <input class="field-input" type="text" name="ingredients" placeholder="2nd Ingredient">
-                        <input class="field-input" type="text" name="ingredients" placeholder="3rd Ingredient">
+                        <input class="field-input" type="text" placeholder="1st Ingredient">
+                        <input class="field-input" type="text" placeholder="2nd Ingredient">
+                        <input class="field-input" type="text" placeholder="3rd Ingredient">
                         <input class="field-input add-field" type="text" placeholder="Add New Ingredient..." aria-label="Add New Ingredient">
                     </div>
 
@@ -53,9 +54,10 @@
 
             <script>
                 (function () {
-                    var form    = document.querySelector('.find-card');
-                    var dialog  = document.getElementById('confirm-dialog');
-                    var list    = document.getElementById('confirm-list');
+                    var form   = document.querySelector('.find-card');
+                    var dialog = document.getElementById('confirm-dialog');
+                    var list   = document.getElementById('confirm-list');
+                    var csv    = document.getElementById('ingredients-csv');
                     var confirmed = false;
 
                     // Tambah baris baru dari kolom "Add New ..." (Enter atau saat submit)
@@ -65,10 +67,21 @@
                         var row = document.createElement('input');
                         row.type = 'text';
                         row.className = 'field-input';
-                        row.name = addInput.closest('.field-group').dataset.name;
                         row.value = value;
                         addInput.parentNode.insertBefore(row, addInput);
                         addInput.value = '';
+                    }
+
+                    // Ambil semua isian; koma di dalam satu kolom dipecah jadi item terpisah
+                    function getValues() {
+                        var values = [];
+                        form.querySelectorAll('.field-input').forEach(function (input) {
+                            input.value.split(',').forEach(function (part) {
+                                var v = part.trim();
+                                if (v) values.push(v);
+                            });
+                        });
+                        return values;
                     }
 
                     form.querySelectorAll('.add-field').forEach(function (input) {
@@ -85,16 +98,11 @@
                         e.preventDefault();
 
                         form.querySelectorAll('.add-field').forEach(commit);
-
-                        var values = [];
-                        form.querySelectorAll('input[name="ingredients"]').forEach(function (input) {
-                            var v = input.value.trim();
-                            if (v) values.push(v);
-                        });
+                        var values = getValues();
 
                         // Tidak ada isian: jangan buka popup, arahkan ke kolom pertama
                         if (values.length === 0) {
-                            form.querySelector('input[name="ingredients"]').focus();
+                            form.querySelector('.field-input').focus();
                             return;
                         }
 
@@ -110,10 +118,7 @@
 
                     document.getElementById('confirm-yes').addEventListener('click', function () {
                         confirmed = true;
-                        // Kolom kosong tidak ikut terkirim
-                        form.querySelectorAll('input[name="ingredients"]').forEach(function (input) {
-                            if (!input.value.trim()) input.disabled = true;
-                        });
+                        csv.value = getValues().join(',');   // satu parameter: ingredients=a,b,c
                         dialog.close();
                         form.submit();
                     });
