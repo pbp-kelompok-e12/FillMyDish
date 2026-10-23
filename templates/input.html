@@ -31,6 +31,7 @@
                 <!-- ganti action dengan -->
                 <form class="find-card" method="get" action="/">
                     <input type="hidden" name="ingredients" id="ingredients-csv">
+                    <input type="hidden" name="tools" id="tools-csv">
                     <div class="field-group" data-name="ingredients">
                         <label class="field-label">Ingredients</label>
                         <input class="field-input" type="text" placeholder="1st Ingredient">
@@ -38,13 +39,22 @@
                         <input class="field-input" type="text" placeholder="3rd Ingredient">
                         <input class="field-input add-field" type="text" placeholder="Add New Ingredient..." aria-label="Add New Ingredient">
                     </div>
-
+                    <div class="field-group" data-name="tools">
+                        <label class="field-label">Tools</label>
+                        <input class="field-input" type="text" placeholder="1st Tool">
+                        <input class="field-input add-field" type="text" placeholder="Add New Tool..." aria-label="Add New Tool">
+                    </div>
                     <button class="search-btn" type="submit">Find Recipe</button>
                 </form>
                 <dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="confirm-title">
                     <h2 class="confirm-title" id="confirm-title">Are you sure?</h2>
                     <p class="confirm-text">You are about to search for recipes containing:</p>
                     <ol class="confirm-list" id="confirm-list"></ol>
+
+                    <div id="confirm-tools-section">
+                        <p class="confirm-text">With these tools available:</p>
+                        <ol class="confirm-list" id="confirm-list-tools"></ol>
+                    </div>
                     <div class="confirm-actions">
                         <button class="confirm-btn confirm-btn--yes" type="button" id="confirm-yes">Confirm</button>
                         <button class="confirm-btn confirm-btn--no" type="button" id="confirm-no">Cancel</button>
@@ -54,13 +64,17 @@
 
             <script>
                 (function () {
-                    var form   = document.querySelector('.find-card');
-                    var dialog = document.getElementById('confirm-dialog');
-                    var list   = document.getElementById('confirm-list');
-                    var csv    = document.getElementById('ingredients-csv');
+                    var form    = document.querySelector('.find-card');
+                    var dialog  = document.getElementById('confirm-dialog');
+                    var toolsSection = document.getElementById('confirm-tools-section');
+                    var groups  = {};   // { ingredients: <div>, tools: <div> }
                     var confirmed = false;
-
-                    // Tambah baris baru dari kolom "Add New ..." (Enter atau saat submit)
+                
+                    form.querySelectorAll('.field-group').forEach(function (g) {
+                        groups[g.dataset.name] = g;
+                    });
+                
+                    // Tambah baris baru di grup yang sama dengan kolom "Add New ..."
                     function commit(addInput) {
                         var value = addInput.value.trim();
                         if (!value) return;
@@ -71,11 +85,11 @@
                         addInput.parentNode.insertBefore(row, addInput);
                         addInput.value = '';
                     }
-
-                    // Ambil semua isian; koma di dalam satu kolom dipecah jadi item terpisah
-                    function getValues() {
+                
+                    // Ambil isian satu grup saja; koma dipecah jadi item terpisah
+                    function getValues(name) {
                         var values = [];
-                        form.querySelectorAll('.field-input').forEach(function (input) {
+                        groups[name].querySelectorAll('.field-input').forEach(function (input) {
                             input.value.split(',').forEach(function (part) {
                                 var v = part.trim();
                                 if (v) values.push(v);
@@ -83,7 +97,21 @@
                         });
                         return values;
                     }
-
+                
+                    function hiddenFor(name) {
+                        return form.querySelector('input[type="hidden"][name="' + name + '"]');
+                    }
+                
+                    function fillList(id, values) {
+                        var ol = document.getElementById(id);
+                        ol.innerHTML = '';
+                        values.forEach(function (v) {
+                            var li = document.createElement('li');
+                            li.textContent = v;          // textContent: aman dari HTML injection
+                            ol.appendChild(li);
+                        });
+                    }
+                
                     form.querySelectorAll('.add-field').forEach(function (input) {
                         input.addEventListener('keydown', function (e) {
                             if (e.key === 'Enter') {
@@ -92,44 +120,56 @@
                             }
                         });
                     });
-
+                
                     form.addEventListener('submit', function (e) {
-                        if (confirmed) return;           // sudah dikonfirmasi, kirim form
+                        if (confirmed) return;
                         e.preventDefault();
-
+                    
                         form.querySelectorAll('.add-field').forEach(commit);
-                        var values = getValues();
-
-                        // Tidak ada isian: jangan buka popup, arahkan ke kolom pertama
-                        if (values.length === 0) {
-                            form.querySelector('.field-input').focus();
+                    
+                        var ingredients = getValues('ingredients');
+                        var tools       = getValues('tools');
+                    
+                        // Bahan wajib diisi; alat opsional
+                        if (ingredients.length === 0) {
+                            groups.ingredients.querySelector('.field-input').focus();
                             return;
                         }
-
-                        list.innerHTML = '';
-                        values.forEach(function (v) {
-                            var li = document.createElement('li');
-                            li.textContent = v;          // textContent: aman dari HTML injection
-                            list.appendChild(li);
-                        });
-
+                    
+                        fillList('confirm-list-ingredients', ingredients);
+                        fillList('confirm-list-tools', tools);
+                        toolsSection.hidden = tools.length === 0;   // sembunyikan bagian alat jika kosong
+                    
                         dialog.showModal();
                     });
-
+                
                     document.getElementById('confirm-yes').addEventListener('click', function () {
                         confirmed = true;
-                        csv.value = getValues().join(',');   // satu parameter: ingredients=a,b,c
+                        Object.keys(groups).forEach(function (name) {
+                            var values = getValues(name);
+                            var hidden = hiddenFor(name);
+                            hidden.value = values.join(',');
+                            hidden.disabled = values.length === 0;   // parameter kosong tidak dikirim
+                        });
                         dialog.close();
                         form.submit();
                     });
-
+                
                     document.getElementById('confirm-no').addEventListener('click', function () {
                         dialog.close();
                     });
-
+                
                     // Klik di luar kotak popup (backdrop) = batal
                     dialog.addEventListener('click', function (e) {
                         if (e.target === dialog) dialog.close();
+                    });
+                
+                    // Tombol Back di browser: reset status supaya form bisa dikirim lagi
+                    window.addEventListener('pageshow', function () {
+                        confirmed = false;
+                        Object.keys(groups).forEach(function (name) {
+                            hiddenFor(name).disabled = false;
+                        });
                     });
                 })();
             </script>
