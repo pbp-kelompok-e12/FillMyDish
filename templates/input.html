@@ -28,30 +28,37 @@
             </div>
 
             <div class="div-2 find-page">
-                <!-- ganti action dengan -->
                 <form class="find-card" method="get" action="/">
                     <input type="hidden" name="ingredients" id="ingredients-csv">
                     <input type="hidden" name="tools" id="tools-csv">
+                    <input type="hidden" name="exclude" id="exclude-csv">
                     <div class="field-group" data-name="ingredients">
                         <label class="field-label">Ingredients</label>
                         <input class="field-input" type="text" placeholder="1st Ingredient">
-                        <input class="field-input" type="text" placeholder="2nd Ingredient">
-                        <input class="field-input" type="text" placeholder="3rd Ingredient">
                         <input class="field-input add-field" type="text" placeholder="Add New Ingredient..." aria-label="Add New Ingredient">
+                    </div>
+                    <div class="field-group" data-name="exclude">
+                        <label class="field-label">Exclude Ingredients</label>
+                        <input class="field-input add-field" type="text" placeholder="Add Ingredient to Exclude..." aria-label="Add Ingredient to Exclude">
                     </div>
                     <div class="field-group" data-name="tools">
                         <label class="field-label">Tools</label>
-                        <input class="field-input" type="text" placeholder="1st Tool">
                         <input class="field-input add-field" type="text" placeholder="Add New Tool..." aria-label="Add New Tool">
                     </div>
                     <button class="search-btn" type="submit">Find Recipe</button>
                 </form>
                 <dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="confirm-title">
                     <h2 class="confirm-title" id="confirm-title">Are you sure?</h2>
-                    <p class="confirm-text">You are about to search for recipes containing:</p>
-                    <ol class="confirm-list" id="confirm-list"></ol>
+                    <div class="confirm-section" data-section="ingredients">
+                        <p class="confirm-text">You are about to search for recipes containing:</p>
+                        <ol class="confirm-list"></ol>
+                    </div>
 
-                    <div id="confirm-tools-section">
+                    <div class="confirm-section" data-section="exclude" hidden>
+                        <p class="confirm-text">Without these ingredients:</p>
+                        <ol class="confirm-list"></ol>
+                    </div>
+                    <div id="confirm-tools-section" data-section="tools" hidden>
                         <p class="confirm-text">With these tools available:</p>
                         <ol class="confirm-list" id="confirm-list-tools"></ol>
                     </div>
@@ -66,8 +73,7 @@
                 (function () {
                     var form    = document.querySelector('.find-card');
                     var dialog  = document.getElementById('confirm-dialog');
-                    var toolsSection = document.getElementById('confirm-tools-section');
-                    var groups  = {};   // { ingredients: <div>, tools: <div> }
+                    var groups  = {};   // { ingredients: <div>, exclude: <div>, tools: <div> }
                     var confirmed = false;
                 
                     form.querySelectorAll('.field-group').forEach(function (g) {
@@ -102,14 +108,17 @@
                         return form.querySelector('input[type="hidden"][name="' + name + '"]');
                     }
                 
-                    function fillList(id, values) {
-                        var ol = document.getElementById(id);
+                    // Isi satu bagian popup; bagian kosong disembunyikan
+                    function fillSection(name, values) {
+                        var section = dialog.querySelector('[data-section="' + name + '"]');
+                        var ol = section.querySelector('ol');
                         ol.innerHTML = '';
                         values.forEach(function (v) {
                             var li = document.createElement('li');
                             li.textContent = v;          // textContent: aman dari HTML injection
                             ol.appendChild(li);
                         });
+                        section.hidden = values.length === 0;
                     }
                 
                     form.querySelectorAll('.add-field').forEach(function (input) {
@@ -127,18 +136,35 @@
                     
                         form.querySelectorAll('.add-field').forEach(commit);
                     
-                        var ingredients = getValues('ingredients');
-                        var tools       = getValues('tools');
+                        var values = {};
+                        Object.keys(groups).forEach(function (name) {
+                            values[name] = getValues(name);
+                        });
                     
-                        // Bahan wajib diisi; alat opsional
-                        if (ingredients.length === 0) {
+                        // Bahan wajib diisi; yang lain opsional
+                        if (values.ingredients.length === 0) {
                             groups.ingredients.querySelector('.field-input').focus();
                             return;
                         }
                     
-                        fillList('confirm-list-ingredients', ingredients);
-                        fillList('confirm-list-tools', tools);
-                        toolsSection.hidden = tools.length === 0;   // sembunyikan bagian alat jika kosong
+                        // Bahan yang sama tidak boleh ada di "include" dan "exclude"
+                        var included = values.ingredients.map(function (v) { return v.toLowerCase(); });
+                        var clash = values.exclude.filter(function (v) {
+                            return included.indexOf(v.toLowerCase()) !== -1;
+                        });
+                        if (clash.length) {
+                            var field = groups.exclude.querySelector('.field-input');
+                            field.setCustomValidity('"' + clash[0] + '" is also in your ingredients.');
+                            field.reportValidity();
+                            field.addEventListener('input', function () {
+                                field.setCustomValidity('');
+                            }, { once: true });
+                            return;
+                        }
+                    
+                        Object.keys(values).forEach(function (name) {
+                            fillSection(name, values[name]);
+                        });
                     
                         dialog.showModal();
                     });
