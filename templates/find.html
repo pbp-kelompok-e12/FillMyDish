@@ -26,23 +26,23 @@
                 <img class="nasi-ayam" src="{% static 'img/nasi-ayam.png' %}" alt="Nasi ayam" />
             </div>
 
-<div class="div-2">
-    <section class="hero-find">
-        <div class="hey-wrap">
-            <b class="hey">Hey,</b>
-            <b class="hey2" aria-hidden="true">Hey,</b>
-        </div>
+            <div class="div-2">
+                <section class="hero-find">
+                    <div class="hey-wrap">
+                        <b class="hey">Hey,</b>
+                        <b class="hey2" aria-hidden="true">Hey,</b>
+                    </div>
 
-        <h1 class="looking-wrap">
-            <span class="looking-for-the">Looking for the Best Recipe?</span>
-            <span class="looking-for-the2" aria-hidden="true">Looking for the Best Recipe?</span>
-            <span class="looking-for-the3" aria-hidden="true">Looking for the Best Recipe?</span>
-        </h1>
+                    <h1 class="looking-wrap">
+                        <span class="looking-for-the">Looking for the Best Recipe?</span>
+                        <span class="looking-for-the2" aria-hidden="true">Looking for the Best Recipe?</span>
+                        <span class="looking-for-the3" aria-hidden="true">Looking for the Best Recipe?</span>
+                    </h1>
 
-        <!-- ganti URL sesuai nama url Django kamu -->
-        <button class="find-btn" type="button" onclick="location.href='{% url "recipefinder:input_ingredients" %}'">
-            Find Recipe
-        </button>
-    </section>
-</div>
+                    <!-- ganti URL sesuai nama url Django kamu -->
+                    <button class="find-btn" type="button" onclick="location.href='{% url "recipefinder:input_ingredients" %}'">
+                        Find Recipe
+                    </button>
+                </section>
+            </div>
 {% endblock content %}
