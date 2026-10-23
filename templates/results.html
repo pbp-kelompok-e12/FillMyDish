@@ -27,7 +27,7 @@
             </div>
 
             <div class="div-2 find-page">
-               <a class="back-btn" href="{% url 'recipefinder:input_ingredient' %}">Back</a>
+               <a class="back-btn" href="{% url 'recipefinder:input_ingredients' %}">Back</a>
 
                {% if error %}
                    <p class="results-status" role="alert">{{ error }}</p>
@@ -45,7 +45,7 @@
                                    {% endif %}
                                </div>
                                <h3 class="recipe-card__title">{{ r.title }}</h3>
-                               <p class="recipe-card__sub">{{ r.subtitle }}</p>
+                               <p class="recipe-card__summary">{{ r.summary|striptags|truncatewords:25 }}</p>
                            </article>
                        {% endfor %}
                    </section>
