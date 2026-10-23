@@ -3,21 +3,28 @@
    ========================================================= */
 
 .back-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  margin: 11rem 0 0 0.5rem;
-  padding: 0.7rem 1.8rem;
-  background-color: var(--color-palette-primary-500);
-  border-radius: 0.5rem;
-  color: #ffffff;
+  justify-content: center;
+  width: 12.675rem;
+  height: 3.9rem;
+  margin: 11rem 0 0 auto;  
+  box-sizing: border-box;
+  background-color: #f4ce14;
+  border: 2.6px solid #7a6408;
+  border-radius: 45px;
+  color: #f8f9fa;
   font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
   font-weight: 700;
-  font-size: 1.1rem;
-  transition: background-color 0.15s ease;
+  font-size: 1.41rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
 .back-btn:hover {
-  background-color: var(--color-palette-primary-600);
+  background-color: #e6c000;
+  transform: translateY(-2px);
 }
 
 .back-btn:focus-visible {
@@ -89,7 +96,12 @@
 }
 
 @media (max-width: 1023px) {
-  .back-btn { margin-top: 1rem; }
+  .back-btn {
+  margin-top: 1rem;
+  width: clamp(9.5rem, 40vw, 12.675rem);
+  height: clamp(3rem, 9vw, 3.9rem);
+  font-size: clamp(1.05rem, 3.5vw, 1.41rem);
+}
   .recipe-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
 }
 
