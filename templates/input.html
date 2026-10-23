@@ -40,11 +40,23 @@
 
                     <button class="search-btn" type="submit">Find Recipe</button>
                 </form>
+                <dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+                    <h2 class="confirm-title" id="confirm-title">Are you sure?</h2>
+                    <p class="confirm-text">You are about to search for recipes containing:</p>
+                    <ol class="confirm-list" id="confirm-list"></ol>
+                    <div class="confirm-actions">
+                        <button class="confirm-btn confirm-btn--yes" type="button" id="confirm-yes">Confirm</button>
+                        <button class="confirm-btn confirm-btn--no" type="button" id="confirm-no">Cancel</button>
+                    </div>
+                </dialog>
             </div>
 
             <script>
                 (function () {
-                    var form = document.querySelector('.find-card');
+                    var form    = document.querySelector('.find-card');
+                    var dialog  = document.getElementById('confirm-dialog');
+                    var list    = document.getElementById('confirm-list');
+                    var confirmed = false;
 
                     // Tambah baris baru dari kolom "Add New ..." (Enter atau saat submit)
                     function commit(addInput) {
@@ -68,8 +80,51 @@
                         });
                     });
 
-                    form.addEventListener('submit', function () {
+                    form.addEventListener('submit', function (e) {
+                        if (confirmed) return;           // sudah dikonfirmasi, kirim form
+                        e.preventDefault();
+
                         form.querySelectorAll('.add-field').forEach(commit);
+
+                        var values = [];
+                        form.querySelectorAll('input[name="ingredients"]').forEach(function (input) {
+                            var v = input.value.trim();
+                            if (v) values.push(v);
+                        });
+
+                        // Tidak ada isian: jangan buka popup, arahkan ke kolom pertama
+                        if (values.length === 0) {
+                            form.querySelector('input[name="ingredients"]').focus();
+                            return;
+                        }
+
+                        list.innerHTML = '';
+                        values.forEach(function (v) {
+                            var li = document.createElement('li');
+                            li.textContent = v;          // textContent: aman dari HTML injection
+                            list.appendChild(li);
+                        });
+
+                        dialog.showModal();
+                    });
+
+                    document.getElementById('confirm-yes').addEventListener('click', function () {
+                        confirmed = true;
+                        // Kolom kosong tidak ikut terkirim
+                        form.querySelectorAll('input[name="ingredients"]').forEach(function (input) {
+                            if (!input.value.trim()) input.disabled = true;
+                        });
+                        dialog.close();
+                        form.submit();
+                    });
+
+                    document.getElementById('confirm-no').addEventListener('click', function () {
+                        dialog.close();
+                    });
+
+                    // Klik di luar kotak popup (backdrop) = batal
+                    dialog.addEventListener('click', function (e) {
+                        if (e.target === dialog) dialog.close();
                     });
                 })();
             </script>
