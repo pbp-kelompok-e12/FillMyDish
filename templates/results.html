@@ -38,7 +38,7 @@
                {% else %}
                    <section class="recipe-grid" aria-label="Recipe results">
                        {% for r in recipes %}
-                           <article class="recipe-card">
+                            <a class="recipe-card" href="{% url 'recipefinder:show_recipe_details' r.id %}">
                                <div class="recipe-card__img">
                                    {% if r.image %}
                                        <img src="{{ r.image }}" alt="{{ r.title }}" loading="lazy">
@@ -46,7 +46,7 @@
                                </div>
                                <h3 class="recipe-card__title">{{ r.title }}</h3>
                                <p class="recipe-card__summary">{{ r.summary|striptags|truncatewords:25 }}</p>
-                           </article>
+                           </a>
                        {% endfor %}
                    </section>
                {% endif %}

@@ -108,3 +108,20 @@
 @media (max-width: 599px) {
   .recipe-grid { grid-template-columns: 1fr; }
 }
+
+a.recipe-card {
+  color: #f1f5f4;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+a.recipe-card:hover {
+  background-color: #495e57;   /* the darker card color from your Figma */
+  transform: translateY(-4px);
+}
+
+a.recipe-card:focus-visible {
+  outline: 3px solid #830000;
+  outline-offset: 3px;
+}
