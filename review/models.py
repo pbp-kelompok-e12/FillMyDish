@@ -4,7 +4,7 @@ from django.conf import settings
 # Create your models here.
 class Review(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.cascade,
+                             on_delete=models.CASCADE,
                              related_name='reviews'
                             )
     message = models.TextField()
