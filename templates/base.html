@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="{% static 'css/find.css' %}">
         <link rel="stylesheet" href="{% static 'css/input.css' %}">
         <link rel="stylesheet" href="{% static 'css/results.css' %}">
+        <link rel="stylesheet" href="{% static 'css/review.css' %}">
     </head>
     <body>
         <div class="frame" >
@@ -49,7 +50,7 @@
                         Meal Plan
                     </div>
                     <div class="text-wrapper-9" >
-                        Review
+                        <a href="{% url 'review:list' %}"> Review </a>
                     </div>
                 </div>
                 {% if user.is_authenticated %}
