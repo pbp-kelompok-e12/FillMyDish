@@ -26,6 +26,7 @@ def get_reviews_json(request):
             "pk":str(review.pk),
             "fields":{
                 "user":review.user.username,
+                "is_owner": review.user_id == request.user.id,
                 "message":review.message,
                 "created_at":review.created_at,
                 "updated_at":review.updated_at,
@@ -42,7 +43,7 @@ def create_review_ajax(request):
     if form.is_valid():
         review = form.save(commit = False)
         review.user = request.user
-        review.save
+        review.save()
         return JsonResponse(
             {"message":"Review berhasil ditambahkan.",
              "pk":str(review.pk)}, status = 201

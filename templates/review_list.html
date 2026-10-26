@@ -15,7 +15,7 @@
     </section>
 </div>
 
-<!-- Modal: hanya untuk menambah review -->
+
 <div class="review-modal" id="modal">
     <form class="review-form" id="review-form">
         {% csrf_token %}
@@ -155,7 +155,7 @@
             showToast(data.message);
             loadReviews();
         } else if (data.errors) {
-            // get_json_data() -> { field: [ {message, code}, ... ] }
+       
             errorEl.textContent = Object.values(data.errors).flat().map((e) => e.message).join(' ');
             errorEl.style.display = 'block';
         } else {
@@ -163,7 +163,6 @@
         }
     });
 
-    // Pesan dari redirect (setelah update/delete)
     {% for message in messages %}
     showToast("{{ message|escapejs }}");
     {% endfor %}
