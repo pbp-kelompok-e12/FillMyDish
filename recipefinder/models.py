@@ -17,8 +17,7 @@ class Recipe(models.Model):
     instructions = models.JSONField()
     
 class RecipeCache(models.Model):
-    key = models.TextField(primary_key=True)
-    recipes = models.ManyToManyField(Recipe)
+    recipes = models.JSONField(default=dict)
     
     
 
