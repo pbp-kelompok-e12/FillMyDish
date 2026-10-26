@@ -1,7 +1,6 @@
 from django.contrib import messages
 from django.core import serializers
-from django.core.cache import cache
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required  
@@ -12,6 +11,8 @@ from django.conf import settings
 import datetime
 import requests
 from django.views.decorators.http import require_POST
+
+from recipefinder.models import RecipeCache, Recipe
 from .wordlist import EQUIPMENT
 API_URL = "https://api.spoonacular.com/recipes/complexSearch"
 # Create your views here.
@@ -56,7 +57,8 @@ def show_recipes(request):
             ",".join(sorted(e.lower() for e in exclude)),
             ",".join(sorted(t.lower() for t in tools)),
         ])
-        recipes = cache.get(key)
+        recipe_cache, created = RecipeCache.objects.get_or_create(id=1)
+        recipes = recipe_cache.recipes.get(key)
         if recipes is None:
             try:
                 response = requests.get(API_URL, 
@@ -74,13 +76,37 @@ def show_recipes(request):
                     timeout=8,)
                 response.raise_for_status()
                 recipes = [normalize(x) for x in response.json().get("results", [])]
-                cache.set(key, recipes, 60 * 60)
+                recipe_models = []
+                for r in recipes:
+                    Recipe.objects.update_or_create(id=r["id"], title=r["title"], image=r.get("image"), summary=r.get("summary"), instructions=r.get("instructions"), nutrients=r.get("nutrition"))
+                    recipe_models.append(get_object_or_404(Recipe, pk=r["id"]))
+                recipe_cache.recipes[key] = recipes
+                recipe_cache.save()
+                recipes = recipe_models
             except (requests.RequestException, ValueError):
                 recipes, error = [], "We couldn't load recipes right now. Please try again."
+        else:
+            recipes = [get_object_or_404(Recipe, pk=recipe["id"]) for recipe in recipes]
     context = {
         "ingredients": ingredients,
         "recipes": recipes,
         "error": error,
     }
     return render(request, "results.html", context)
-    
+
+def show_recipe_details(request, recipe_id):
+    try:
+        recipe = get_object_or_404(Recipe, pk=recipe_id)
+    except Http404:
+        return render(request, "details.html", {"error": f"Could not find recipe with id {recipe_id}"})
+    nutrition = recipe.nutrients.get("nutrients")
+    instructions = recipe.instructions[0].get("steps")
+    steps = [step for step in instructions]
+    context = {
+        "nutrients": nutrition,
+        "steps": steps,
+        "title": recipe.title,
+        "summary": recipe.summary,
+        "image": recipe.image
+    }
+    return render(request, "details.html", context)
