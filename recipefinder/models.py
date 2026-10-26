@@ -17,6 +17,7 @@ class Recipe(models.Model):
     instructions = models.JSONField()
     
 class RecipeCache(models.Model):
+    id = models.IntegerField(primary_key=True)
     recipes = models.JSONField(default=dict)
     
     
