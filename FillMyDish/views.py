@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Profile
-from .forms import RegisterForm, LoginForm, ProfileForm
+from .forms import RegisterForm, LoginForm, ProfileForm, ConnectionFormSet
 
 
 def register_view(request):
@@ -57,8 +57,9 @@ def edit_profile_view(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
     if request.method == "POST":
-        form = ProfileForm(request.POST, instance=profile)
-        if form.is_valid():
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        formset = ConnectionFormSet(request.POST, instance=profile)
+        if form.is_valid() and formset.is_valid():
             profile = form.save(commit=False)
             profile.user = request.user
             # Sinkronisasi dengan model User bawaan Django
@@ -66,9 +67,15 @@ def edit_profile_view(request):
             request.user.email = profile.email
             request.user.save()
             profile.save()
+            formset.save()
             messages.success(request, "Profile updated successfully!")
             return redirect("profile")
     else:
         form = ProfileForm(instance=profile)
+        formset = ConnectionFormSet(instance=profile)
 
-    return render(request, "edit_profile.html", {"form": form, "profile": profile})
+    return render(request, "edit_profile.html", {
+        "form": form,
+        "formset": formset,
+        "profile": profile,
+    })

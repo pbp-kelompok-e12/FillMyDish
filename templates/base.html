@@ -118,6 +118,32 @@
                     }
                 }, { passive: true });
             })();
+
+            // Add Connection: duplikasi baris kosong terakhir di formset connections
+            (function () {
+                var addBtn = document.getElementById('add-connection');
+                if (!addBtn) return;
+
+                var list = document.getElementById('connection-list');
+                var template = document.getElementById('empty-connection-template');
+                var totalForms = document.querySelector('[name$="-TOTAL_FORMS"]');
+
+                function maxPrefixIndex() {
+                    var max = -1;
+                    list.querySelectorAll('.connection-row input[name$="-platform"]').forEach(function (input) {
+                        var m = input.name.match(/-(\d+)-platform$/);
+                        if (m) max = Math.max(max, parseInt(m[1], 10));
+                    });
+                    return max;
+                }
+
+                addBtn.addEventListener('click', function () {
+                    var idx = maxPrefixIndex() + 1;
+                    var html = template.innerHTML.replace(/__prefix__/g, String(idx));
+                    list.insertAdjacentHTML('beforeend', html);
+                    totalForms.value = String(idx + 1);
+                });
+            })();
         </script>
     </body>
 </html>

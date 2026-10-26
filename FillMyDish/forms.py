@@ -1,7 +1,8 @@
 from django import forms
+from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
-from .models import Profile
+from .models import Profile, Connection
 
 
 class RegisterForm(UserCreationForm):
@@ -9,7 +10,7 @@ class RegisterForm(UserCreationForm):
         required=True,
         widget=forms.EmailInput(attrs={
             "class": "form-input",
-            "placeholder": "Change Your Email",
+            "placeholder": "Enter Your Email",
         }),
         label="Email",
     )
@@ -18,7 +19,7 @@ class RegisterForm(UserCreationForm):
         required=True,
         widget=forms.TextInput(attrs={
             "class": "form-input",
-            "placeholder": "Change Your Full Name",
+            "placeholder": "Enter Your Full Name",
         }),
         label="Full Name",
     )
@@ -27,7 +28,7 @@ class RegisterForm(UserCreationForm):
         required=True,
         widget=forms.TextInput(attrs={
             "class": "form-input",
-            "placeholder": "Change Your Username",
+            "placeholder": "Enter Your Username",
         }),
         label="Username",
     )
@@ -80,10 +81,41 @@ class LoginForm(AuthenticationForm):
     )
 
 
+class ConnectionForm(forms.ModelForm):
+    class Meta:
+        model = Connection
+        fields = ["platform", "url"]
+        widgets = {
+            "platform": forms.TextInput(attrs={
+                "class": "form-input",
+                "placeholder": "Platform (e.g. Instagram)",
+            }),
+            "url": forms.URLInput(attrs={
+                "class": "form-input",
+                "placeholder": "https://instagram.com/...",
+            }),
+        }
+        labels = {
+            "platform": "Platform",
+            "url": "Link",
+        }
+
+
+# Bisa >1: mulai 1 baris kosong, tambah lebih banyak via tombol "+ Add Connection"
+ConnectionFormSet = inlineformset_factory(
+    Profile,
+    Connection,
+    form=ConnectionForm,
+    fields=["platform", "url"],
+    extra=1,
+    can_delete=True,
+)
+
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ["full_name", "username", "email", "date_of_birth", "bio"]
+        fields = ["full_name", "username", "email", "date_of_birth", "bio", "profile_image"]
         widgets = {
             "full_name": forms.TextInput(attrs={
                 "class": "form-input",
@@ -107,6 +139,7 @@ class ProfileForm(forms.ModelForm):
                 "placeholder": "Change Your Bio",
                 "rows": 3,
             }),
+            "profile_image": forms.FileInput(attrs={"class": "form-input profile-image-input", "accept": "image/*"}),
         }
         labels = {
             "full_name": "Full Name",
@@ -114,4 +147,5 @@ class ProfileForm(forms.ModelForm):
             "email": "Email",
             "date_of_birth": "Date of Birth",
             "bio": "Bio",
+            "profile_image": "Profile Picture",
         }
