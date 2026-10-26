@@ -13,12 +13,12 @@ class Recipe(models.Model):
     title = models.CharField(max_length=255)
     image = models.URLField(blank=True, null=True)
     summary = models.TextField()
-    nutrients = models.ManyToManyField(Nutrient)
+    nutrients = models.ManyToManyField(Nutrient, related_name="nutrient")
     instructions = models.JSONField()
     
 class RecipeCache(models.Model):
     key = models.TextField(primary_key=True)
-    recipes = models.ManyToManyField(Recipe, name="related_recipe")
+    recipes = models.ManyToManyField(Recipe, related_name="related_recipe")
     
     
 
