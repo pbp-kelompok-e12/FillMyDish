@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content %}
+            {% include '_decor.html' %}
+
+            <div class="div-2 find-page">
+                <form class="find-card" method="get" action="{% url 'recipefinder:show_recipes' %}">
+                    <input type="hidden" name="ingredients" id="ingredients-csv">
+                    <input type="hidden" name="tools" id="tools-csv">
+                    <input type="hidden" name="exclude" id="exclude-csv">
+                    <div class="field-group" data-name="ingredients">
+                        <label class="field-label">Ingredients</label>
+                        <input class="field-input" type="text" placeholder="1st Ingredient">
+                        <input class="field-input add-field" type="text" placeholder="Add New Ingredient..." aria-label="Add New Ingredient">
+                    </div>
+                    <div class="field-group" data-name="exclude">
+                        <label class="field-label">Exclude Ingredients</label>
+                        <input class="field-input add-field" type="text" placeholder="Add Ingredient to Exclude..." aria-label="Add Ingredient to Exclude">
+                    </div>
+                    <div class="field-group" data-name="tools">
+                        <label class="field-label">Tools</label>
+                        <input class="field-input add-field" type="text" placeholder="Add New Tool..." aria-label="Add New Tool">
+                    </div>
+                    <button class="search-btn" type="submit">Find Recipe</button>
+                </form>
+                <dialog class="confirm-dialog" id="confirm-dialog" aria-labelledby="confirm-title">
+                    <h2 class="confirm-title" id="confirm-title">Are you sure?</h2>
+                    <div class="confirm-section" data-section="ingredients">
+                        <p class="confirm-text">You are about to search for recipes containing:</p>
+                        <ol class="confirm-list"></ol>
+                    </div>
+
+                    <div class="confirm-section" data-section="exclude" hidden>
+                        <p class="confirm-text">Without these ingredients:</p>
+                        <ol class="confirm-list"></ol>
+                    </div>
+                    <div id="confirm-tools-section" data-section="tools" hidden>
+                        <p class="confirm-text">With these tools available:</p>
+                        <ol class="confirm-list" id="confirm-list-tools"></ol>
+                    </div>
+                    <div class="confirm-actions">
+                        <button class="confirm-btn confirm-btn--yes" type="button" id="confirm-yes">Confirm</button>
+                        <button class="confirm-btn confirm-btn--no" type="button" id="confirm-no">Cancel</button>
+                    </div>
+                </dialog>
+            </div>
+
+            <script>
+                (function () {
+                    var form    = document.querySelector('.find-card');
+                    var dialog  = document.getElementById('confirm-dialog');
+                    var groups  = {};   // { ingredients: <div>, exclude: <div>, tools: <div> }
+                    var confirmed = false;
+                
+                    form.querySelectorAll('.field-group').forEach(function (g) {
+                        groups[g.dataset.name] = g;
+                    });
+                
+                    // Tambah baris baru di grup yang sama dengan kolom "Add New ..."
+                    function commit(addInput) {
+                        var value = addInput.value.trim();
+                        if (!value) return;
+                        var row = document.createElement('input');
+                        row.type = 'text';
+                        row.className = 'field-input';
+                        row.value = value;
+                        addInput.parentNode.insertBefore(row, addInput);
+                        addInput.value = '';
+                    }
+                
+                    // Ambil isian satu grup saja; koma dipecah jadi item terpisah
+                    function getValues(name) {
+                        var values = [];
+                        groups[name].querySelectorAll('.field-input').forEach(function (input) {
+                            input.value.split(',').forEach(function (part) {
+                                var v = part.trim();
+                                if (v) values.push(v);
+                            });
+                        });
+                        return values;
+                    }
+                
+                    function hiddenFor(name) {
+                        return form.querySelector('input[type="hidden"][name="' + name + '"]');
+                    }
+                
+                    // Isi satu bagian popup; bagian kosong disembunyikan
+                    function fillSection(name, values) {
+                        var section = dialog.querySelector('[data-section="' + name + '"]');
+                        var ol = section.querySelector('ol');
+                        ol.innerHTML = '';
+                        values.forEach(function (v) {
+                            var li = document.createElement('li');
+                            li.textContent = v;          // textContent: aman dari HTML injection
+                            ol.appendChild(li);
+                        });
+                        section.hidden = values.length === 0;
+                    }
+                
+                    form.querySelectorAll('.add-field').forEach(function (input) {
+                        input.addEventListener('keydown', function (e) {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                commit(input);
+                            }
+                        });
+                    });
+                
+                    form.addEventListener('submit', function (e) {
+                        if (confirmed) return;
+                        e.preventDefault();
+                    
+                        form.querySelectorAll('.add-field').forEach(commit);
+                    
+                        var values = {};
+                        Object.keys(groups).forEach(function (name) {
+                            values[name] = getValues(name);
+                        });
+                    
+                        // Bahan wajib diisi; yang lain opsional
+                        if (values.ingredients.length === 0) {
+                            groups.ingredients.querySelector('.field-input').focus();
+                            return;
+                        }
+                    
+                        // Bahan yang sama tidak boleh ada di "include" dan "exclude"
+                        var included = values.ingredients.map(function (v) { return v.toLowerCase(); });
+                        var clash = values.exclude.filter(function (v) {
+                            return included.indexOf(v.toLowerCase()) !== -1;
+                        });
+                        if (clash.length) {
+                            var field = groups.exclude.querySelector('.field-input');
+                            field.setCustomValidity('"' + clash[0] + '" is also in your ingredients.');
+                            field.reportValidity();
+                            field.addEventListener('input', function () {
+                                field.setCustomValidity('');
+                            }, { once: true });
+                            return;
+                        }
+                    
+                        Object.keys(values).forEach(function (name) {
+                            fillSection(name, values[name]);
+                        });
+                    
+                        dialog.showModal();
+                    });
+                
+                    document.getElementById('confirm-yes').addEventListener('click', function () {
+                        confirmed = true;
+                        Object.keys(groups).forEach(function (name) {
+                            var values = getValues(name);
+                            var hidden = hiddenFor(name);
+                            hidden.value = values.join(',');
+                            hidden.disabled = values.length === 0;   // parameter kosong tidak dikirim
+                        });
+                        dialog.close();
+                        form.submit();
+                    });
+                
+                    document.getElementById('confirm-no').addEventListener('click', function () {
+                        dialog.close();
+                    });
+                
+                    // Klik di luar kotak popup (backdrop) = batal
+                    dialog.addEventListener('click', function (e) {
+                        if (e.target === dialog) dialog.close();
+                    });
+                
+                    // Tombol Back di browser: reset status supaya form bisa dikirim lagi
+                    window.addEventListener('pageshow', function () {
+                        confirmed = false;
+                        Object.keys(groups).forEach(function (name) {
+                            hiddenFor(name).disabled = false;
+                        });
+                    });
+                })();
+            </script>
+{% endblock content %}

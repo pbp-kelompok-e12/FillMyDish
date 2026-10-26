@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Profile
@@ -72,4 +72,3 @@ def edit_profile_view(request):
         form = ProfileForm(instance=profile)
 
     return render(request, "edit_profile.html", {"form": form, "profile": profile})
-

@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -7,6 +7,11 @@
         <link rel="stylesheet" href="{% static 'css/globals.css' %}">
         <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/find.css' %}">
+        <link rel="stylesheet" href="{% static 'css/input.css' %}">
+        <link rel="stylesheet" href="{% static 'css/results.css' %}">
+        <link rel="stylesheet" href="{% static 'css/review.css' %}">
+        <link rel="stylesheet" href="{% static 'css/details.css' %}">
     </head>
     <body>
         <div class="frame" >
@@ -26,7 +31,7 @@
             </div>
 
             <div class="div-3" id="site-nav" >
-                <span class="brand">Fill My Dish</span>
+                <span class="brand"><a href="{% url 'main:show_main' %}"> FilMyDish </a></span>
                 <button class="hamburger" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="site-nav">
                     <span></span>
                     <span></span>
@@ -34,10 +39,18 @@
                 </button>
                 <div class="navbar" >
                     <a class="text-wrapper-9 {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
-                    <a class="text-wrapper-9" href="#">Find Recipe</a>
-                    <a class="text-wrapper-9" href="#">Saved Recipe</a>
-                    <a class="text-wrapper-9" href="#">Meal Plan</a>
-                    <a class="text-wrapper-9" href="#">Review</a>
+                    <div class="text-wrapper-9">
+                        <a href="{% url 'recipefinder:find_recipe' %}">Find Recipe</a>
+                    </div>
+                    <div class="text-wrapper-9">
+                        Saved Recipe
+                    </div>
+                    <div class="text-wrapper-9">
+                        Meal Plan
+                    </div>
+                    <div class="text-wrapper-9">
+                        <a href="{% url 'review:list' %}">Review</a>
+                    </div>
                 </div>
 
                 {% if user.is_authenticated %}

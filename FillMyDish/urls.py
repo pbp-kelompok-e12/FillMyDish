@@ -12,7 +12,7 @@ Class-based views
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from FillMyDish import views
 
 urlpatterns = [
@@ -22,4 +22,7 @@ urlpatterns = [
     path("login/", views.login_view, name="login"),
     path("register/", views.register_view, name="register"),
     path("logout/", views.logout_view, name="logout"),
+    path("", include("recipefinder.urls")),
+    path("", include("main.urls")),
+    path("review/", include("review.urls")),
 ]
