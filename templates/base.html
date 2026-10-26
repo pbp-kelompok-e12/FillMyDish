@@ -33,33 +33,19 @@
                     <span></span>
                 </button>
                 <div class="navbar" >
-                    <div class="text-wrapper-9" >
-                        Profile
-                    </div>
-                    <div class="text-wrapper-9" >
-                        Find Recipe
-                    </div>
-                    <div class="text-wrapper-9" >
-                        Saved Recipe
-                    </div>
-                    <div class="text-wrapper-9" >
-                        Meal Plan
-                    </div>
-                    <div class="text-wrapper-9" >
-                        Review
-                    </div>
-                </div>
-                
-                <div class="text-wrapper-10" >
-                    Logout
+                    <a class="text-wrapper-9 {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
+                    <a class="text-wrapper-9" href="#">Find Recipe</a>
+                    <a class="text-wrapper-9" href="#">Saved Recipe</a>
+                    <a class="text-wrapper-9" href="#">Meal Plan</a>
+                    <a class="text-wrapper-9" href="#">Review</a>
                 </div>
 
-                <div class="text-wrapper-10" >
-                    Login
-                </div>
-                <div class="text-wrapper-10" >
-                    Register
-                </div>
+                {% if user.is_authenticated %}
+                    <a class="text-wrapper-10" href="{% url 'logout' %}">Logout</a>
+                {% else %}
+                    <a class="text-wrapper-10" href="{% url 'login' %}">Login</a>
+                    <a class="text-wrapper-10" href="{% url 'register' %}">Register</a>
+                {% endif %}
 
             </div>
         </div>

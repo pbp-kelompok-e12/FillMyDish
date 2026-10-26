@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="profile-page">
+    <div class="profile-card">
+        <a class="profile-edit-btn" href="{% url 'edit_profile' %}">Edit</a>
+        <div class="profile-avatar">
+            <span class="avatar-circle"></span>
+            <div class="profile-names">
+                <div class="profile-username">@{{ profile.username|default:user.username }}</div>
+                <div class="profile-fullname">{{ profile.full_name|default:user.get_full_name|default:user.username }}</div>
+            </div>
+        </div>
+        <div class="profile-bio">
+            {% if profile.bio %}{{ profile.bio }}{% else %}No bio yet.{% endif %}
+        </div>
+        <div class="profile-stats">
+            <div class="stat"><span class="stat-num">0</span><span class="stat-label">Recipes</span></div>
+            <div class="stat"><span class="stat-num">0</span><span class="stat-label">Saved</span></div>
+            <div class="stat"><span class="stat-num">0</span><span class="stat-label">Reviews</span></div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+

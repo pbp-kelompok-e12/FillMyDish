@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="profile-page">
+    <form class="profile-form-card" method="post" action="{% url 'edit_profile' %}">
+        {% csrf_token %}
+        <h2 class="form-title">Edit Profile</h2>
+
+        {% if form.non_field_errors %}
+            <div class="form-error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        {% for field in form %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+            </div>
+        {% endfor %}
+
+        <div class="form-actions">
+            <a class="btn-cancel" href="{% url 'profile' %}">Cancel</a>
+            <button type="submit" class="btn-submit">Update Profile</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
