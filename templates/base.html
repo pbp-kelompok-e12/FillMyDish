@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="{% static 'css/find.css' %}">
         <link rel="stylesheet" href="{% static 'css/input.css' %}">
         <link rel="stylesheet" href="{% static 'css/results.css' %}">
+        <link rel="stylesheet" href="{% static 'css/review.css' %}">
     </head>
     <body>
         <div class="frame" >
@@ -29,7 +30,7 @@
             </div>
 
             <div class="div-3" id="site-nav" >
-                <span class="brand">Fill My Dish</span>
+                <span class="brand"><a href="{% url 'main:show_main' %}"> FilMyDish </a></span>
                 <button class="hamburger" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="site-nav">
                     <span></span>
                     <span></span>
@@ -49,7 +50,7 @@
                         Meal Plan
                     </div>
                     <div class="text-wrapper-9" >
-                        Review
+                        <a href="{% url 'review:list' %}"> Review </a>
                     </div>
                 </div>
                 {% if user.is_authenticated %}
