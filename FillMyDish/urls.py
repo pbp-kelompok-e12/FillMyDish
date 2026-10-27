@@ -23,6 +23,8 @@ urlpatterns = [
     path("edit-profile/", views.edit_profile_view, name="edit_profile"),
     path("login/", views.login_view, name="login"),
     path("register/", views.register_view, name="register"),
+    path("accounts/google/login/", views.google_login_view, name="google_login"),
+    path("accounts/google/callback/", views.google_callback_view, name="google_callback"),
     path("logout/", views.logout_view, name="logout"),
     path("", include("recipefinder.urls")),
     path("", include("main.urls")),
