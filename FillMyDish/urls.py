@@ -29,6 +29,7 @@ urlpatterns = [
     path("", include("recipefinder.urls")),
     path("", include("main.urls")),
     path("review/", include("review.urls")),
+    path("", include("mealplan.urls")),
 ]
 
 if settings.DEBUG:
