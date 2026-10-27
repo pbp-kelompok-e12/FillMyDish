@@ -14,6 +14,9 @@ from django.views.decorators.http import require_POST
 
 from recipefinder.models import RecipeCache, Recipe
 from .wordlist import EQUIPMENT
+from datetime import datetime, timedelta, timezone
+
+WIB = timezone(timedelta(hours=7))
 API_URL = "https://api.spoonacular.com/recipes/complexSearch"
 # Create your views here.
 # @login_required(login_url="")
@@ -36,7 +39,16 @@ def normalize(item):
 
 def split_csv(raw):
     return [i.strip() for i in raw.split(",") if i.strip()]
- 
+
+def get_recipe_cache():
+    today = datetime.now(WIB).date()
+    recipe_cache, _ = RecipeCache.objects.get_or_create(id=1)
+    if recipe_cache.last_reset != today:
+        updated = RecipeCache.objects.filter(id=1).exclude(last_reset=today).update(recipes={}, last_reset=today)
+        if updated:
+            recipe_cache.refresh_from_db()
+    return recipe_cache
+    
 # @login_required(login_url="")
 def show_recipes(request):
     ingredients_raw = request.GET.get("ingredients", "")
@@ -57,7 +69,7 @@ def show_recipes(request):
             ",".join(sorted(e.lower() for e in exclude)),
             ",".join(sorted(t.lower() for t in tools)),
         ])
-        recipe_cache, created = RecipeCache.objects.get_or_create(id=1)
+        recipe_cache = get_recipe_cache()
         recipes = recipe_cache.recipes.get(key)
         if recipes is None:
             try:

@@ -12,6 +12,7 @@ class Recipe(models.Model):
 class RecipeCache(models.Model):
     id = models.IntegerField(primary_key=True)
     recipes = models.JSONField(default=dict)
+    last_reset = models.DateField(blank=True, null=True)
     
     
 
