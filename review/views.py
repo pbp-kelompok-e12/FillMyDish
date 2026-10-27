@@ -12,7 +12,7 @@ def review_list(request):
     reviews = Review.objects.filter(is_visible=True).select_related('user')
     return render(request, 'review_list.html', {'reviews': reviews})
 
-@login_required
+@login_required(login_url="/login")
 def review_add(request):
     if request.method == 'POST':
         form = ReviewForm(request.POST)
@@ -25,7 +25,7 @@ def review_add(request):
         form = ReviewForm()
     return render(request, 'review_form.html', {'form':form})
 
-@login_required
+@login_required(login_url="/login")
 def review_edit(request, pk):
     review = get_object_or_404(Review, pk=pk, user=request.user)
     if request.method == "POST":
@@ -38,7 +38,7 @@ def review_edit(request, pk):
 
     return render(request, 'review_form.html', {'form':form})
 
-@login_required
+@login_required(login_url="/login")
 @require_POST
 def review_delete(request,pk):
     review = get_object_or_404(Review, pk=pk, user=request.user)
