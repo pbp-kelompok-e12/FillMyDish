@@ -907,6 +907,43 @@
   outline-offset: 1px;
 }
 
+.password-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.password-input-wrap .form-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-page .profile-form-card .password-input-wrap .password-toggle {
+  flex: 0 0 auto;
+  min-width: 5.25rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-palette-primary-600);
+  color: var(--color-palette-font-50);
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.profile-page .profile-form-card .password-input-wrap .password-toggle:hover {
+  background: var(--color-palette-primary-500);
+  transform: translateY(-1px);
+}
+
+.profile-page .profile-form-card .password-input-wrap .password-toggle:focus-visible {
+  outline: 2px solid var(--color-palette-secondary-800);
+  outline-offset: 2px;
+}
+
 .form-textarea {
   resize: vertical;
   min-height: 5rem;
