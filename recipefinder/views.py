@@ -19,11 +19,10 @@ from datetime import datetime, timedelta, timezone
 WIB = timezone(timedelta(hours=7))
 API_URL = "https://api.spoonacular.com/recipes/complexSearch"
 # Create your views here.
-# @login_required(login_url="")
 def find_recipe(request):
     return render(request, "find.html")
 
-# @login_required(login_url="")
+@login_required(login_url="/login")
 def input_ingredients(request):
     return render(request, "input.html")
 
@@ -49,7 +48,7 @@ def get_recipe_cache():
             recipe_cache.refresh_from_db()
     return recipe_cache
     
-# @login_required(login_url="")
+@login_required(login_url="login")
 def show_recipes(request):
     ingredients_raw = request.GET.get("ingredients", "")
     tools_raw = request.GET.get("tools", "")
