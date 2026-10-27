@@ -1,0 +1,151 @@
+/* =========================================================
+   HERO "Looking for the Best Recipe?"
+   Desktop: rem (1rem = 100vw / 90). Mobile: fluid clamp().
+   ========================================================= */
+
+.hero-find {
+  position: absolute;
+  top: 11.5rem;
+  left: 5.188rem;
+  width: 53.625rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: "Poppins", Helvetica, sans-serif;
+}
+
+/* ---------- "Hey," ---------- */
+.hey-wrap {
+  position: relative;
+  line-height: 1.2;
+  font-size: 5.842rem;
+}
+
+.hey,
+.hey2 {
+  display: block;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 800;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.hey {
+  position: relative;
+  color: #830000;
+  text-shadow: 0.15em 0 0 #f5f7f8, 0 0.15em 0 #f5f7f8,
+              -0.15em 0 0 #f5f7f8, 0 -0.15em 0 #f5f7f8;
+}
+
+.hey2 {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0.76deg, #720000, rgba(113, 113, 124, 0) 28.44%, rgba(245, 160, 160, 0.5) 64.34%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Judul ---------- */
+.looking-wrap {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  font-size: 3rem;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.looking-for-the,
+.looking-for-the2,
+.looking-for-the3 {
+  display: block;
+  font-weight: 800;
+}
+
+.looking-for-the {
+  position: relative;
+  color: #830000;
+  text-shadow: 0.1em 0 0 #f5f7f8, 0 0.1em 0 #f5f7f8,
+              -0.1em 0 0 #f5f7f8, 0 -0.1em 0 #f5f7f8;
+}
+
+.looking-for-the2 {
+  position: absolute;
+  inset: 0;
+  color: #830000;
+}
+
+.looking-for-the3 {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(114, 0, 0, 0.8) 13.82%, rgba(34, 35, 38, 0) 44.75%, rgba(245, 160, 160, 0.5) 95.11%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Tombol ---------- */
+.find-btn {
+  align-self: center;
+  margin-top: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12.675rem;
+  height: 3.9rem;
+  padding: 0;
+  border: 2.6px solid #7a6408;
+  border-radius: 45px;
+  background-color: #f4ce14;
+  color: #f8f9fa;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 1.41rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.find-btn:hover {
+  background-color: #e6c000;
+  transform: translateY(-2px);
+}
+
+.find-btn:active {
+  transform: translateY(0);
+}
+
+.find-btn:focus-visible {
+  outline: 3px solid #830000 !important;
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   TABLET & MOBILE (< 1024px)
+   ========================================================= */
+@media (max-width: 1023px) {
+  .hero-find {
+    top: calc(var(--hero-h, 28rem) * 0.22);
+    left: 0;
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    padding: 0 0.5rem;
+  }
+
+  .hey-wrap {
+    font-size: clamp(3rem, 13vw, 5.842rem);
+  }
+
+  .looking-wrap {
+    font-size: clamp(1.5rem, 6vw, 3rem);
+  }
+
+  .find-btn {
+    margin-top: 1.5rem;
+    width: clamp(9.5rem, 40vw, 12.675rem);
+    height: clamp(3rem, 9vw, 3.9rem);
+    font-size: clamp(1.05rem, 3.5vw, 1.41rem);
+  }
+}

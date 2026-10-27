@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include '_decor.html' %}
+
+<div class="review-page review-page--list">
+    <header class="review-header">
+        <h1 class="review-title">What's on Their Plate?</h1>
+        <p class="review-subtitle">See what our community has to say!</p>
+    </header>
+
+    <section class="review-body">
+        <a class="review-add" href="{% url 'review:add' %}">Add Yours</a>
+
+        <div class="review-list">
+            {% for review in reviews %}
+            <article class="review-card">
+                <h3 class="review-card__name">{{ review.user.username }}</h3>
+                <p class="review-card__message">{{ review.message|linebreaksbr }}</p>
+
+                {% if review.user == user %}
+                <div class="review-card__actions">
+                    <a href="{% url 'review:edit' review.pk %}">Edit</a>
+                    <form method="post" action="{% url 'review:delete' review.pk %}">
+                        {% csrf_token %}
+                        <button type="submit">Delete</button>
+                    </form>
+                </div>
+                {% endif %}
+            </article>
+            {% empty %}
+            <article class="review-card">
+                <p class="review-card__message">Belum ada review. Jadilah yang pertama!</p>
+            </article>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock content %}

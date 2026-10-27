@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-sdmy+(u42)c0h_rkxr!+qj*a18^rrpbit1_&=p7n*6@5$(nv=q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1", "musthofa-ridho-fillmydish.pws.cs.ui.ac.id"]
 PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
@@ -41,6 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'FillMyDish',
+    'review',
+    'main',
+    'recipefinder',
 ]
 
 MIDDLEWARE = [
@@ -73,13 +77,15 @@ TEMPLATES = [
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 WHITENOISE_USE_FINDERS = True
 WSGI_APPLICATION = 'FillMyDish.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
+SPOONACULAR_API_KEY = os.environ.get("SPOONACULAR_API_KEY", "")
 if PRODUCTION:
     DATABASES = {
         'default': {

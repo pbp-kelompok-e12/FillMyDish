@@ -1,0 +1,98 @@
+.recipe-detail {
+  display: grid;
+  grid-template-columns: 26.25rem 1fr;
+  column-gap: 2.75rem;
+  margin-top: 1.5rem;
+  padding: 2.313rem 3rem 3rem;
+  /* rgba, bukan opacity, supaya teks tidak ikut pudar */
+  background-color: rgba(73, 94, 87, 0.75);
+  border-radius: 16px;
+  color: #f1f5f4;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+}
+
+.recipe-detail__image {
+  width: 100%;
+  aspect-ratio: 26.25 / 19.75;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.recipe-detail__image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipe-detail__steps {
+  margin-top: 2.1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.recipe-detail__steps-title {
+  margin: 0;
+  font: inherit;
+}
+
+.recipe-detail__steps ol {
+  margin: 0;
+  padding-left: 1.35rem;
+}
+
+.recipe-detail__steps li {
+  margin-bottom: 0.6rem;
+}
+
+.recipe-detail__right {
+  padding-top: 1.1rem;
+  min-width: 0;
+}
+
+.recipe-detail__name {
+  margin: 0;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 800;
+  font-size: 2.774rem;
+  line-height: 1.2;
+  color: #f8f9fa;
+  overflow-wrap: anywhere;
+}
+
+.recipe-detail__desc {
+  margin: 1.5rem 0 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.recipe-detail__nutrition {
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 1.063rem;
+  font-weight: 500;
+}
+
+.recipe-detail__nutrition li + li {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 1023px) {
+  .recipe-detail {
+    grid-template-columns: 1fr;
+    row-gap: 1.5rem;
+    padding: 1.5rem 1.25rem 2rem;
+  }
+
+  .recipe-detail__name {
+    font-size: clamp(1.75rem, 7vw, 2.774rem);
+  }
+
+  /* di HP: judul, deskripsi, gizi dulu, lalu gambar dan langkah */
+  .recipe-detail__right { order: -1; padding-top: 0; }
+  .recipe-detail__steps { font-size: 1.05rem; }
+  .recipe-detail__desc  { font-size: 1.05rem; }
+}
