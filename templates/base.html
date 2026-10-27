@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="{% static 'css/input.css' %}">
         <link rel="stylesheet" href="{% static 'css/results.css' %}">
         <link rel="stylesheet" href="{% static 'css/review.css' %}">
+        <link rel="stylesheet" href="{% static 'css/details.css' %}">
     </head>
     <body>
         <div class="frame" >
@@ -37,34 +38,27 @@
                     <span></span>
                 </button>
                 <div class="navbar" >
-                    <div class="text-wrapper-9" >
-                        Profile
+                    <a class="text-wrapper-9 {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
+                    <div class="text-wrapper-9">
+                        <a href="{% url 'recipefinder:find_recipe' %}">Find Recipe</a>
                     </div>
-                    <div class="text-wrapper-9" >
-                        <a href="{% url 'recipefinder:find_recipe' %}"> Find Recipe </a>
-                    </div>
-                    <div class="text-wrapper-9" >
+                    <div class="text-wrapper-9">
                         Saved Recipe
                     </div>
-                    <div class="text-wrapper-9" >
+                    <div class="text-wrapper-9">
                         Meal Plan
                     </div>
-                    <div class="text-wrapper-9" >
-                        <a href="{% url 'review:list' %}"> Review </a>
+                    <div class="text-wrapper-9">
+                        <a href="{% url 'review:list' %}">Review</a>
                     </div>
                 </div>
+
                 {% if user.is_authenticated %}
-                <div class="text-wrapper-10" >
-                    Logout
-                </div>
+                    <a class="text-wrapper-10" href="{% url 'logout' %}">Logout</a>
                 {% else %}
-                <div class="text-wrapper-10" >
-                    Login
-                </div>
+                    <a class="text-wrapper-10" href="{% url 'login' %}">Login</a>
+                    <a class="text-wrapper-10" href="{% url 'register' %}">Register</a>
                 {% endif %}
-                <div class="text-wrapper-10" >
-                    Register
-                </div>
 
             </div>
         </div>
@@ -123,6 +117,32 @@
                         ticking = true;
                     }
                 }, { passive: true });
+            })();
+
+            // Add Connection: duplikasi baris kosong terakhir di formset connections
+            (function () {
+                var addBtn = document.getElementById('add-connection');
+                if (!addBtn) return;
+
+                var list = document.getElementById('connection-list');
+                var template = document.getElementById('empty-connection-template');
+                var totalForms = document.querySelector('[name$="-TOTAL_FORMS"]');
+
+                function maxPrefixIndex() {
+                    var max = -1;
+                    list.querySelectorAll('.connection-row input[name$="-platform"]').forEach(function (input) {
+                        var m = input.name.match(/-(\d+)-platform$/);
+                        if (m) max = Math.max(max, parseInt(m[1], 10));
+                    });
+                    return max;
+                }
+
+                addBtn.addEventListener('click', function () {
+                    var idx = maxPrefixIndex() + 1;
+                    var html = template.innerHTML.replace(/__prefix__/g, String(idx));
+                    list.insertAdjacentHTML('beforeend', html);
+                    totalForms.value = String(idx + 1);
+                });
             })();
         </script>
     </body>

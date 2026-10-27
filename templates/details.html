@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content %}
+            {% include '_decor.html' %}
+
+            <div class="div-2 find-page">
+               <a class="back-btn" href="javascript:history.back()">Back</a>
+
+               {% if error %}
+                   <p class="results-status" role="alert">{{ error }}</p>
+               {% else %}
+                   <article class="recipe-detail">
+                        <div class="recipe-detail__left">
+                            <div class="recipe-detail__image">
+                                {% if image %}
+                                    <img src="{{ image }}" alt="{{ title }}">
+                                {% endif %}
+                            </div>
+                        
+                            <div class="recipe-detail__steps">
+                                <h2 class="recipe-detail__steps-title">Steps:</h2>
+                                <ol>
+                                    {% for step in steps %}
+                                        <li>{{ step.step }}</li>
+                                        <h3 class="recipe-detail__steps-title">Ingredients:</h3>
+                                        <ol>
+                                            {% for ingredient in step.ingredients %}
+                                                <li>{{ ingredient.name }}</li>
+                                            {% endfor %}
+                                        </ol>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                        </div>
+                    
+                        <div class="recipe-detail__right">
+                            <h1 class="recipe-detail__name">{{ title }}</h1>
+                            <p class="recipe-detail__desc">{{ summary|striptags }}</p>
+                        
+                            {% if nutrients %}
+                                <ul class="recipe-detail__nutrition" aria-label="Nutrition info">
+                                    {% for nutrient in nutrients %}
+                                        <li>{{ nutrient.name }}: {{ nutrient.amount }} {{ nurtrient.unit }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </article>
+               {% endif %}
+            </div>
+{% endblock content %}

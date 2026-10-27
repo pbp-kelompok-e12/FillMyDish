@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% include 'partials/deco.html' %}
+<div class="profile-page">
+    <div class="profile-card">
+        <a class="profile-edit-btn" href="{% url 'edit_profile' %}">Edit</a>
+        <div class="profile-avatar">
+            {% if profile.profile_image %}
+                <img class="avatar-circle" src="{{ profile.profile_image.url }}" alt="{{ profile.username|default:user.username }} profile picture">
+            {% else %}
+                <span class="avatar-circle"></span>
+            {% endif %}
+        </div>
+        <div class="profile-names">
+            <div class="profile-username">@{{ profile.username|default:user.username }}</div>
+            <div class="profile-fullname">{{ profile.full_name|default:user.get_full_name|default:user.username }}</div>
+        </div>
+        <div class="profile-bio">
+            {% if profile.bio %}{{ profile.bio }}{% else %}Biooo{% endif %}
+        </div>
+        <div class="profile-socials">
+            {% for connection in profile.connections.all %}
+                <a class="social-item" href="{{ connection.url }}" target="_blank" rel="noopener noreferrer">{{ connection.platform }}</a>
+            {% empty %}
+                <span class="social-item empty">No connections yet</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

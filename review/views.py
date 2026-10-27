@@ -50,8 +50,21 @@ def create_review_ajax(request):
         )
     return JsonResponse({"errors":form.errors.get_json_data()}, status=400)
 
-@login_required
-def update_review(request, pk):
+@login_required(login_url="/login")
+def review_add(request):
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.user = request.user
+            review.save()
+            return redirect('review:list')
+    else:
+        form = ReviewForm()
+    return render(request, 'review_form.html', {'form':form})
+
+@login_required(login_url="/login")
+def review_edit(request, pk):
     review = get_object_or_404(Review, pk=pk, user=request.user)
     if request.method == "POST":
         form = ReviewForm(request.POST, instance=review)
@@ -62,9 +75,9 @@ def update_review(request, pk):
     else:
         form = ReviewForm(instance=review)
 
-    return render(request, 'update_review.html', {'form':form})
+    return render(request, 'review_edit.html', {'form':form})
 
-@login_required
+@login_required(login_url="/login")
 @require_POST
 def delete_review(request,pk):
     review = get_object_or_404(Review, pk=pk, user=request.user)
