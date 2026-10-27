@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="{% static 'css/results.css' %}">
         <link rel="stylesheet" href="{% static 'css/review.css' %}">
         <link rel="stylesheet" href="{% static 'css/details.css' %}">
+        <link rel="stylesheet" href="{% static 'css/mealplan.css' %}">
     </head>
     <body>
         <div class="frame" >
@@ -46,7 +47,10 @@
                         Saved Recipe
                     </div>
                     <div class="text-wrapper-9">
-                        Meal Plan
+                        <a href="{% url 'mealplan:show_mealplan' %}"
+                            class="{% if request.resolver_match.app_name == 'mealplan' %}active{% endif %}">
+                            Meal Plan
+                        </a>
                     </div>
                     <div class="text-wrapper-9">
                         <a href="{% url 'review:list' %}">Review</a>
