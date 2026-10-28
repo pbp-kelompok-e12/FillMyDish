@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% include '_decor.html' %}
+
 
 <div class="review-page review-page--list">
     <header class="review-header">
@@ -34,6 +34,27 @@
     </form>
 </div>
 
+<div id="django-messages" hidden>
+    {% for message in messages %}
+        <span
+            class="django-message"
+            data-level="{{ message.tags }}"
+        >
+            {{ message }}
+        </span>
+    {% endfor %}
+</div>
+
+
+<div
+    id="review-config"
+    hidden
+    data-logged-in="{{ user.is_authenticated|yesno:'true,false' }}"
+    data-login-url="{{ login_url }}"
+    data-update-url="{% url 'review:update' 0 %}"
+    data-delete-url="{% url 'review:delete' 0 %}"
+></div>
+
 <script>
     const list = document.getElementById('review-list');
     const modal = document.getElementById('modal');
@@ -42,10 +63,19 @@
     const errorEl = document.getElementById('form-error');
     const csrf = form.querySelector('[name=csrfmiddlewaretoken]').value;
 
-    const isLoggedIn = {{ user.is_authenticated|yesno:"true,false" }};
-    const loginUrl = "{{ login_url }}";
-    const updateUrl = (id) => "{% url 'review:update' 0 %}".replace('/0/', `/${id}/`);
-    const deleteUrl = (id) => "{% url 'review:delete' 0 %}".replace('/0/', `/${id}/`);
+    
+    const config = document.getElementById("review-config");
+
+    const isLoggedIn = config.dataset.loggedIn === "true";
+
+    const loginUrl = config.dataset.loginUrl;
+
+    const updateUrl = (id) =>
+        config.dataset.updateUrl.replace("/0/", `/${id}/`);
+
+    const deleteUrl = (id) =>
+        config.dataset.deleteUrl.replace("/0/", `/${id}/`);
+
 
     function showToast(text, isError = false) {
         const toast = document.createElement('div');
@@ -163,9 +193,12 @@
         }
     });
 
-    {% for message in messages %}
-    showToast("{{ message|escapejs }}");
-    {% endfor %}
+    document.querySelectorAll(".django-message").forEach((item) => {
+    const message = item.textContent.trim();
+    const isError = item.dataset.level.split(" ").includes("error");
+
+    showToast(message, isError);
+    });
 
     loadReviews();
 </script>

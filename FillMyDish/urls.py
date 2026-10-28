@@ -13,15 +13,8 @@ Class-based views
 """
 from django.contrib import admin
 from django.urls import path, include
-from FillMyDish.views import test
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', test, name='test'),
-    path("saved-recipes/", include("saved_recipe.urls")),
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path, include
 from FillMyDish import views
 
 urlpatterns = [
@@ -36,6 +29,7 @@ urlpatterns = [
     path("", include("recipefinder.urls")),
     path("", include("main.urls")),
     path("review/", include("review.urls")),
+    path("saved-recipes/", include("saved_recipe.urls")),
 ]
 
 if settings.DEBUG:

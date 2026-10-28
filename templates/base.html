@@ -8,13 +8,13 @@
         <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
         <link rel="stylesheet" href="{% static 'css/background.css' %}">
-
-        {% block extra_css %}{% endblock extra_css %}
         <link rel="stylesheet" href="{% static 'css/find.css' %}">
         <link rel="stylesheet" href="{% static 'css/input.css' %}">
         <link rel="stylesheet" href="{% static 'css/results.css' %}">
         <link rel="stylesheet" href="{% static 'css/review.css' %}">
         <link rel="stylesheet" href="{% static 'css/details.css' %}">
+
+        {% block extra_css %}{% endblock extra_css %}
     </head>
     <body>
         <div class="frame" >
@@ -48,7 +48,9 @@
                         <a href="{% url 'recipefinder:find_recipe' %}">Find Recipe</a>
                     </div>
                     <div class="text-wrapper-9">
-                        Saved Recipe
+                        <a href="{% url 'saved_recipe' %}" class="text-wrapper-9">
+                            Saved Recipe
+                        </a>
                     </div>
                     <div class="text-wrapper-9">
                         Meal Plan
