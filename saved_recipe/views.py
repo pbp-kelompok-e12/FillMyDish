@@ -11,24 +11,28 @@ def saved_recipe_page(request):
             "description": "Nasi goreng dengan telur.",
             "category": "Breakfast",
             "is_favorite": True,
+            "image": "img/nasgor-1.png",
         },
         {
             "name": "Ayam Bakar",
             "description": "Ayam bakar bumbu kecap.",
             "category": "Lunch",
             "is_favorite": False,
+            "image": "",
         },
         {
             "name": "Pancake",
             "description": "Pancake lembut dan manis.",
             "category": "Snack",
             "is_favorite": True,
+            "image": "",
         },
         {
             "name": "Sup Ayam",
             "description": "Sup ayam dengan sayuran.",
             "category": "Dinner",
             "is_favorite": False,
+            "image": "",
         },
     ]
 

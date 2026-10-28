@@ -39,7 +39,14 @@
         <article class="sr-card">
 
             <div class="sr-image">
-                <!-- Foto resep akan dimasukkan di sini -->
+                <div class="sr-image">
+                    {% if recipe.image %}
+                        <img
+                            src="{% static recipe.image %}"
+                            alt="{{ recipe.name }}"
+                        >
+                    {% endif %}
+                </div>
             </div>
 
             <div class="sr-card-info">
@@ -63,7 +70,13 @@
             </div>
 
             <div class="sr-actions">
-                <button type="button" class="sr-btn-edit">
+                <button 
+                    type="button" 
+                    class="sr-btn-edit"
+                    data-name="{{ recipe.name }}"
+                    data-category="{{ recipe.category|lower }}"
+                    data-favorite="{{ recipe.is_favorite|yesno:'true,false' }}"
+                >
                     Edit
                 </button>
 
@@ -78,5 +91,83 @@
         {% endfor %}
     </section>
 
+        
+    <div id="sr-edit-modal" class="sr-modal" hidden>
+        <div class="sr-modal-content"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="sr-modal-title">
+
+            <button type="button"
+                    id="sr-close-modal"
+                    class="sr-modal-close">
+                &times;
+            </button>
+
+            <h2 id="sr-modal-title">Edit Saved Recipe</h2>
+
+            <div class="sr-recipe-preview">
+
+                <div class="sr-edit-photo">
+                    <img id="sr-edit-image" alt="" hidden>
+                </div>
+
+                <div class="sr-recipe-details">
+                    <h3 id="sr-edit-name"></h3>
+                    <p>Saved Recipe</p>
+                </div>
+
+            </div>
+
+
+            <form id="sr-edit-form">
+
+                <label class="sr-favorite-label">
+                    <input type="checkbox" id="sr-edit-favorite">
+                    Favorite Recipe
+                </label>
+
+                <p>Meal Category</p>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="breakfast">
+                    Breakfast
+                </label>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="lunch">
+                    Lunch
+                </label>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="dinner">
+                    Dinner
+                </label>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="snack">
+                    Snack
+                </label>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="uncategorized">
+                    Uncategorized
+                </label>
+
+                <button type="submit" class="sr-save-btn">
+                    Save Changes
+                </button>
+
+            </form>
+        </div>
+    </div>
+
 </main>
+
+<script src="{% static 'js/saved_recipe.js' %}" defer></script>
 {% endblock content %}
