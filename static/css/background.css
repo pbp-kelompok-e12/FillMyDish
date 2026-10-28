@@ -1,0 +1,63 @@
+
+/* =====================================
+   FILL MY DISH - SHARED BACKGROUND
+   Berlaku untuk seluruh halaman
+===================================== */
+
+/* Wadah utama */
+.frame {
+    position: relative;
+    isolation: isolate;
+}
+
+/* Lapisan dekorasi di belakang konten */
+.frame > .site-background {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* MOTIF SAYURAN */
+.site-background::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image: url("../img/mealplan-pattern.png");
+    background-repeat: repeat-y;
+    background-position: center top;
+    background-size: 100% auto;
+}
+
+/* FOTO MAKANAN */
+.site-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image: url("../img/food-strip.png");
+    background-repeat: repeat-y;
+    background-position: center -8rem;
+    background-size: 100% auto;
+}
+
+/* Halaman memakai dekorasi bersama dari .site-background */
+.frame .deco-layer,
+.frame .review-food {
+    display: none;
+}
+
+/* Untuk layar HP */
+@media (max-width: 767px) {
+    .site-background::before {
+        background-size: 100% auto;
+    }
+
+    .site-background::after {
+        background-position: center -4rem;
+        background-size: 900px auto;
+        opacity: 0.55;
+    }
+}

@@ -7,14 +7,20 @@
         <link rel="stylesheet" href="{% static 'css/globals.css' %}">
         <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/background.css' %}">
         <link rel="stylesheet" href="{% static 'css/find.css' %}">
         <link rel="stylesheet" href="{% static 'css/input.css' %}">
         <link rel="stylesheet" href="{% static 'css/results.css' %}">
         <link rel="stylesheet" href="{% static 'css/review.css' %}">
         <link rel="stylesheet" href="{% static 'css/details.css' %}">
+        <link rel="stylesheet" href="{% static 'css/mealplan.css' %}">
+
+        {% block extra_css %}{% endblock extra_css %}
     </head>
     <body>
         <div class="frame" >
+            <!-- Background untuk semua halaman -->
+            {% include 'includes/bg_decor.html' %}
             {% block content %} {% endblock content %}
             <div class="group-wrapper" >
                 <div class="group-2" >
@@ -43,10 +49,15 @@
                         <a href="{% url 'recipefinder:find_recipe' %}">Find Recipe</a>
                     </div>
                     <div class="text-wrapper-9">
-                        Saved Recipe
+                        <a href="{% url 'saved_recipe' %}" class="text-wrapper-9">
+                            Saved Recipe
+                        </a>
                     </div>
                     <div class="text-wrapper-9">
-                        Meal Plan
+                        <a href="{% url 'mealplan:show_mealplan' %}"
+                            class="{% if request.resolver_match.app_name == 'mealplan' %}active{% endif %}">
+                            Meal Plan
+                        </a>
                     </div>
                     <div class="text-wrapper-9">
                         <a href="{% url 'review:list' %}">Review</a>

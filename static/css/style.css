@@ -23,34 +23,6 @@
   height: 62.4375rem;
 }
 
-.frame .nasgor {
-  position: absolute;
-  top: 35.8125rem;
-  left: 75.1875rem;
-  width: 25.8125rem;
-  height: 28.25rem;
-  aspect-ratio: 1;
-  object-fit: cover;
-}
-
-.frame .mie {
-  position: absolute;
-  top: 9.8125rem;
-  left: 55.0625rem;
-  width: 24.875rem;
-  height: 15.3125rem;
-  aspect-ratio: 0.99;
-}
-
-.frame .nasi-ayam {
-  position: absolute;
-  top: 9.8125rem;
-  left: 11rem;
-  width: 22.375rem;
-  height: 32.4375rem;
-  aspect-ratio: 0.97;
-}
-
 .frame .div-2 {
   position: relative;
   width: 64rem;
@@ -952,9 +924,15 @@
   filter: brightness(1.1);
 }
 
-/* Navbar: item aktif ditandai */
-.frame .text-wrapper-9.active {
+.frame .text-wrapper-9.active,
+.frame .navbar a.active {
   color: #ffffff;
+  font-weight: 700;
+}
+
+.frame .div-3 > .text-wrapper-10 {
+  color: var(--color-palette-primary-200);
+  font-weight: 500;
 }
 
 /* =========================================================

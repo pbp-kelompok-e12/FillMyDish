@@ -1,0 +1,173 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/saved_recipe.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<main class="sr-page">
+
+    <!-- SEARCH DAN FILTER -->
+    <div class="sr-toolbar">
+        <form class="sr-search" method="GET">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search Saved Recipe"
+                value="{{ search_query }}"
+                aria-label="Search saved recipes"
+            >
+        </form>
+
+        <nav class="sr-filters" aria-label="Meal category">
+            {% for category in categories %}
+            <a
+                href="?category={{ category.value }}&q={{ search_query|urlencode }}"
+                class="{% if current_category == category.value %}active{% endif %}"
+            >
+                {{ category.label }}
+            </a>
+            {% endfor %}
+        </nav>
+    </div>
+
+    <!-- RECIPE CARDS -->
+    <section class="sr-grid">
+        {% for recipe in recipes %}
+        <article class="sr-card">
+
+            <div class="sr-image">
+                {% if recipe.image_url %}
+                    <img src="{{ recipe.image_url }}" alt="{{ recipe.name }}">
+                {% endif %}
+            </div>
+
+            <div class="sr-card-info">
+                
+                <div class="sr-title-row">
+                    <div class="sr-title-category">
+                        <h3>{{ recipe.name }}</h3>
+
+                        <span class="sr-category">
+                            {{ recipe.get_meal_category_display }}
+                        </span>
+                    </div>
+
+                    {% if recipe.is_favorite %}
+                    <span class="sr-heart">♥</span>
+                    {% endif %}
+                </div>
+
+
+                <p>{{ recipe.description }}</p>
+            </div>
+
+            <div class="sr-actions">
+                <button 
+                    type="button" 
+                    class="sr-btn-edit"
+                    data-name="{{ recipe.name }}"
+                    data-category="{{ recipe.meal_category }}"
+                    data-favorite="{{ recipe.is_favorite|yesno:'true,false' }}"
+                    data-update-url="{% url 'update_saved_recipe' recipe.id %}"
+                >
+                    Edit
+                </button>
+
+                <button 
+                    type="button" 
+                    class="sr-btn-delete"
+                    data-delete-url="{% url 'delete_saved_recipe' recipe.id %}"
+                >
+                    Delete
+                </button>
+            </div>
+
+        </article>
+        {% empty %}
+        <p class="sr-empty">No saved recipes found.</p>
+        {% endfor %}
+    </section>
+
+        
+    <div id="sr-edit-modal" class="sr-modal" hidden>
+        <div class="sr-modal-content"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="sr-modal-title">
+
+            <button type="button"
+                    id="sr-close-modal"
+                    class="sr-modal-close">
+                &times;
+            </button>
+
+            <h2 id="sr-modal-title">Edit Saved Recipe</h2>
+
+            <div class="sr-recipe-preview">
+
+                <div class="sr-edit-photo">
+                    <img id="sr-edit-image" alt="" hidden>
+                </div>
+
+                <div class="sr-recipe-details">
+                    <h3 id="sr-edit-name"></h3>
+                    <p>Saved Recipe</p>
+                </div>
+
+            </div>
+
+
+            <form id="sr-edit-form">
+                {% csrf_token %}
+                <label class="sr-favorite-label">
+                    <input type="checkbox" id="sr-edit-favorite">
+                    Favorite Recipe
+                </label>
+
+                <p>Meal Category</p>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="breakfast">
+                    Breakfast
+                </label>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="lunch">
+                    Lunch
+                </label>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="dinner">
+                    Dinner
+                </label>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="snack">
+                    Snack
+                </label>
+
+                <label>
+                    <input type="radio" name="meal_category"
+                        value="uncategorized">
+                    Uncategorized
+                </label>
+
+                <button type="submit" class="sr-save-btn">
+                    Save Changes
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+</main>
+
+<script src="{% static 'js/saved_recipe.js' %}" defer></script>
+{% endblock content %}
