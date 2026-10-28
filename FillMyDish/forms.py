@@ -4,6 +4,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from .models import Profile, Connection
 
+# forms.py -> mendefinisikan form untuk pendaftaran, login, pengeditan profil, dan koneksi media 
+#             sosial. Formulir ini digunakan untuk memvalidasi input pengguna dan menyimpan data 
+#             ke model terkait.
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(

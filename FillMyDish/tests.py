@@ -5,6 +5,10 @@ from django.urls import reverse
 from .forms import ConnectionForm, ConnectionFormSet, ProfileForm, RegisterForm
 from .models import Connection, Profile
 
+# tests.py -> berisi unit test untuk model, form, dan view terkait profil pengguna, koneksi media 
+#             sosial, dan pendaftaran akun. Unit test ini memastikan bahwa model, form, dan view 
+#             berfungsi sesuai harapan, termasuk validasi input, penyimpanan data, dan pengalihan 
+#             halaman
 
 class ProfileModelTests(TestCase):
     def setUp(self):

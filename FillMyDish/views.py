@@ -11,6 +11,8 @@ from django.urls import reverse
 from .models import Profile
 from .forms import RegisterForm, LoginForm, ProfileForm, ConnectionFormSet
 
+# views.py -> menangani tampilan profil dan proses edit profil pengguna, serta proses login, logout, 
+#             dan pendaftaran akun baru. Juga menangani integrasi login dengan Google OAuth.
 
 def register_view(request):
     if request.user.is_authenticated:

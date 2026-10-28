@@ -17,6 +17,9 @@ from django.conf.urls.static import static
 from django.urls import path, include
 from FillMyDish import views
 
+# urls.py -> mendefinisikan URL routing untuk aplikasi FillMyDish, menghubungkan URL dengan 
+#            tampilan (views)
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.profile_view, name="profile"),
