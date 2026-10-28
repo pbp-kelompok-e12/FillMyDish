@@ -6,3 +6,4 @@ python-dotenv
 whitenoise
 requests
 Pillow
+strip-tags
