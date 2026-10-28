@@ -7,6 +7,9 @@
         <link rel="stylesheet" href="{% static 'css/globals.css' %}">
         <link rel="stylesheet" href="{% static 'css/styleguide.css' %}">
         <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <link rel="stylesheet" href="{% static 'css/background.css' %}">
+
+        {% block extra_css %}{% endblock extra_css %}
         <link rel="stylesheet" href="{% static 'css/find.css' %}">
         <link rel="stylesheet" href="{% static 'css/input.css' %}">
         <link rel="stylesheet" href="{% static 'css/results.css' %}">
@@ -15,6 +18,8 @@
     </head>
     <body>
         <div class="frame" >
+            <!-- Background untuk semua halaman -->
+            {% include 'includes/bg_decor.html' %}
             {% block content %} {% endblock content %}
             <div class="group-wrapper" >
                 <div class="group-2" >
