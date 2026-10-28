@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
     {% block content %}
-            {% include '_decor.html' %}
 
             <div class="div-2 find-page">
                <a class="back-btn" href="javascript:history.back()">Back</a>
@@ -22,6 +21,14 @@
                                 <ol>
                                     {% for step in steps %}
                                         <li>{{ step.step }}</li>
+                                        {% if step.ingredients %}
+                                            <h3 class="recipe-detail__steps-title">Ingredients:</h3>
+                                        {% endif %}
+                                        <ol>
+                                            {% for ingredient in step.ingredients %}
+                                                <li>{{ ingredient.name }}</li>
+                                            {% endfor %}
+                                        </ol>
                                     {% endfor %}
                                 </ol>
                             </div>

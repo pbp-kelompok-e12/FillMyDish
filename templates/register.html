@@ -4,9 +4,6 @@
 {% load static %}
 {# Memulai bagian konten yang mengisi blok pada template utama. #}
 {% block content %}
-{# Menyisipkan elemen dekorasi bersama dari partial. #}
-{% include 'partials/deco.html' %}
-<!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
 <div class="profile-page">
     <!-- Membuat form dan menetapkan tujuan serta cara pengiriman datanya. -->
     <form class="profile-form-card" method="post" action="{% url 'register' %}">

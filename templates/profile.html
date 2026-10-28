@@ -3,11 +3,10 @@
 {# Memuat dukungan tag static Django untuk aset statis. #}
 {% load static %}
 {# Memulai bagian konten yang mengisi blok pada template utama. #}
-{% block content %}
+{% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/profile-page.css' %}">
-{# Menyisipkan elemen dekorasi bersama dari partial. #}
-{% include 'partials/deco.html' %}
-<!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
+{% endblock extra_css %}
+{% block content %}
 <div class="profile-page">
     <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
     <div class="profile-card">
@@ -38,7 +37,7 @@
         <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="profile-bio">
             {# Menampilkan bagian berikut hanya jika kondisi Django terpenuhi. #}
-            {% if profile.bio %}{{ profile.bio }}{% else %}Biooo{% endif %}
+            {% if profile.bio %}{{ profile.bio }}{% else %}Tidak ada bio{% endif %}
         <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
         </div>
         <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->

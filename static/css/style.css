@@ -23,34 +23,6 @@
   height: 62.4375rem;
 }
 
-.frame .nasgor {
-  position: absolute;
-  top: 35.8125rem;
-  left: 75.1875rem;
-  width: 25.8125rem;
-  height: 28.25rem;
-  aspect-ratio: 1;
-  object-fit: cover;
-}
-
-.frame .mie {
-  position: absolute;
-  top: 9.8125rem;
-  left: 55.0625rem;
-  width: 24.875rem;
-  height: 15.3125rem;
-  aspect-ratio: 0.99;
-}
-
-.frame .nasi-ayam {
-  position: absolute;
-  top: 9.8125rem;
-  left: 11rem;
-  width: 22.375rem;
-  height: 32.4375rem;
-  aspect-ratio: 0.97;
-}
-
 .frame .div-2 {
   position: relative;
   width: 64rem;
@@ -686,10 +658,14 @@
 
 .connection-row {
   display: grid;
-  grid-template-columns: 1fr 2fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
   gap: 0.5rem;
   align-items: center;
   margin-bottom: 0.5rem;
+}
+
+.connection-row > .form-input {
+  min-width: 0;
 }
 
 .connection-fields {
@@ -1059,7 +1035,7 @@
   }
 
   .connection-row {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
   }
 
   .connection-row .form-check {
@@ -1070,7 +1046,7 @@
   }
 
   .connection-row .btn-remove-connection {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 1;
   }
 

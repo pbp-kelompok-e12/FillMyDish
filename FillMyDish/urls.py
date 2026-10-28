@@ -12,9 +12,9 @@ Class-based views
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path, include
 from FillMyDish import views
 
 # urls.py -> mendefinisikan URL routing untuk aplikasi FillMyDish, menghubungkan URL dengan 
@@ -22,7 +22,7 @@ from FillMyDish import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", views.profile_view, name="profile"),
+    path("profile/", views.profile_view, name="profile"),
     path("edit-profile/", views.edit_profile_view, name="edit_profile"),
     path("login/", views.login_view, name="login"),
     path("register/", views.register_view, name="register"),
@@ -32,6 +32,7 @@ urlpatterns = [
     path("", include("recipefinder.urls")),
     path("", include("main.urls")),
     path("review/", include("review.urls")),
+    path("saved-recipes/", include("saved_recipe.urls")),
 ]
 
 if settings.DEBUG:

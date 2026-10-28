@@ -19,11 +19,10 @@ from datetime import datetime, timedelta, timezone
 WIB = timezone(timedelta(hours=7))
 API_URL = "https://api.spoonacular.com/recipes/complexSearch"
 # Create your views here.
-# @login_required(login_url="")
 def find_recipe(request):
     return render(request, "find.html")
 
-# @login_required(login_url="")
+@login_required(login_url="/login")
 def input_ingredients(request):
     return render(request, "input.html")
 
@@ -34,7 +33,8 @@ def normalize(item):
         "image": item.get("image", ""),
         "summary": item.get("summary", ""),
         "instructions": item.get("analyzedInstructions"),
-        "nutrition": item.get("nutrition")
+        "nutrition": item.get("nutrition"),
+        "source": item.get("sourceUrl", "")
     }
 
 def split_csv(raw):
@@ -49,7 +49,7 @@ def get_recipe_cache():
             recipe_cache.refresh_from_db()
     return recipe_cache
     
-# @login_required(login_url="")
+@login_required(login_url="login")
 def show_recipes(request):
     ingredients_raw = request.GET.get("ingredients", "")
     tools_raw = request.GET.get("tools", "")
@@ -90,7 +90,7 @@ def show_recipes(request):
                 recipes = [normalize(x) for x in response.json().get("results", [])]
                 recipe_models = []
                 for r in recipes:
-                    Recipe.objects.update_or_create(id=r["id"], title=r["title"], image=r.get("image"), summary=r.get("summary"), instructions=r.get("instructions"), nutrients=r.get("nutrition"))
+                    Recipe.objects.update_or_create(id=r["id"], defaults={"title":r["title"], "image":r.get("image"), "summary":r.get("summary"), "instructions":r.get("instructions"), "nutrients":r.get("nutrition"), "source":r.get("source")})
                     recipe_models.append(get_object_or_404(Recipe, pk=r["id"]))
                 recipe_cache.recipes[key] = recipes
                 recipe_cache.save()
@@ -119,6 +119,7 @@ def show_recipe_details(request, recipe_id):
         "steps": steps,
         "title": recipe.title,
         "summary": recipe.summary,
-        "image": recipe.image
+        "image": recipe.image,
+        "source": recipe.source
     }
     return render(request, "details.html", context)
