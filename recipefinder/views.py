@@ -89,7 +89,7 @@ def show_recipes(request):
                 recipes = [normalize(x) for x in response.json().get("results", [])]
                 recipe_models = []
                 for r in recipes:
-                    Recipe.objects.update_or_create(id=r["id"], title=r["title"], image=r.get("image"), summary=r.get("summary"), instructions=r.get("instructions"), nutrients=r.get("nutrition"))
+                    Recipe.objects.update_or_create(id=r["id"], defaults={"title":r["title"], "image":r.get("image"), "summary":r.get("summary"), "instructions":r.get("instructions"), "nutrients":r.get("nutrition")})
                     recipe_models.append(get_object_or_404(Recipe, pk=r["id"]))
                 recipe_cache.recipes[key] = recipes
                 recipe_cache.save()
