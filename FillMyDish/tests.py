@@ -177,6 +177,16 @@ class ProfileViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(Profile.objects.filter(user=self.user).exists())
 
+    def test_public_profile_creates_profile_for_user_and_hides_edit_button(self):
+        visitor = User.objects.create_user(username="visitor", password=self.password)
+
+        response = self.client.get(reverse("user_profile", kwargs={"username": visitor.username}))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "@visitor")
+        self.assertTrue(Profile.objects.filter(user=visitor).exists())
+        self.assertNotContains(response, "profile-edit-btn")
+
     def test_edit_profile_get_displays_profile_form_and_connections(self):
         self.client.force_login(self.user)
 

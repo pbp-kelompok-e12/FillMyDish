@@ -90,15 +90,39 @@
         const card = document.createElement('article');
         card.className = 'review-card';
 
-        const name = document.createElement('h3');
+        const author = document.createElement('a');
+        author.className = 'review-card__author';
+        author.href = review.fields.profile_url;
+        const name = document.createElement('span');
         name.className = 'review-card__name';
-        name.textContent = review.fields.user;
+        name.textContent = review.fields.profile_username || review.fields.user;
+        const makeAvatarFallback = () => {
+            const fallback = document.createElement('span');
+            const words = name.textContent.trim().split(/\s+/).filter(Boolean);
+            fallback.className = 'review-card__avatar review-card__avatar--fallback';
+            fallback.textContent = words.length > 1
+                ? (words[0][0] + words[1][0]).toUpperCase()
+                : (words[0] || '?').slice(0, 2).toUpperCase();
+            fallback.setAttribute('aria-hidden', 'true');
+            return fallback;
+        };
+        if (review.fields.profile_image) {
+            const avatar = document.createElement('img');
+            avatar.className = 'review-card__avatar';
+            avatar.src = review.fields.profile_image;
+            avatar.alt = '';
+            avatar.addEventListener('error', () => avatar.replaceWith(makeAvatarFallback()), { once: true });
+            author.append(avatar);
+        } else {
+            author.append(makeAvatarFallback());
+        }
+        author.append(name);
 
         const message = document.createElement('p');
         message.className = 'review-card__message';
         message.textContent = review.fields.message;
 
-        card.append(name, message);
+        card.append(author, message);
 
         if (review.fields.is_owner) {
             const actions = document.createElement('div');

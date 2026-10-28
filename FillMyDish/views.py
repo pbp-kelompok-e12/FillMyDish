@@ -3,7 +3,7 @@ import secrets
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -148,7 +148,22 @@ def logout_view(request):
 @login_required(login_url="login")
 def profile_view(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
-    return render(request, "profile.html", {"profile": profile})
+    return render(request, "profile.html", {
+        "profile": profile,
+        "profile_user": request.user,
+        "is_own_profile": True,
+    })
+
+
+def user_profile_view(request, username):
+    User = get_user_model()
+    profile_user = get_object_or_404(User, username=username)
+    profile, _ = Profile.objects.get_or_create(user=profile_user)
+    return render(request, "profile.html", {
+        "profile": profile,
+        "profile_user": profile_user,
+        "is_own_profile": request.user.is_authenticated and request.user.pk == profile_user.pk,
+    })
 
 
 @login_required(login_url="login")

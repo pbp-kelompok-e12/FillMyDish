@@ -12,7 +12,7 @@
 /* Kartu yang menampilkan informasi akun. */
 .profile-card { /* Mengatur tampilan kartu profil. */
   position: relative; /* Menjadi acuan tombol edit. */
-  width: 42rem; /* Menetapkan lebar kartu desktop. */
+  width: min(54rem, 100%); /* Melebarkan kartu desktop tanpa melewati wadahnya. */
   min-height: 25.5rem; /* Menjaga tinggi minimum kartu. */
   margin-top: 16rem; /* Memberi jarak dari dekorasi atas. */
   padding: 2.4rem 3.2rem 2.2rem; /* Memberi ruang di dalam kartu. */
