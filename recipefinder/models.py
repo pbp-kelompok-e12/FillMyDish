@@ -8,6 +8,7 @@ class Recipe(models.Model):
     summary = models.TextField()
     nutrients = models.JSONField(default=dict)
     instructions = models.JSONField(default=dict)
+    source = models.URLField(blank=True, null=True)
     
 class RecipeCache(models.Model):
     id = models.IntegerField(primary_key=True)
