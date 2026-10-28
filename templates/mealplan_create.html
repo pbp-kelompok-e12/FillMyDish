@@ -11,7 +11,7 @@
             <h1 class="mealplan-title">Your Meal Plan</h1>
         </header>
 
-        <form class="mealplan-create-form" method="post">
+        <form class="mealplan-create-form" method="post" onsubmit="return false">
             {% csrf_token %}
 
             <h2 class="mealplan-form-title">Plan Title and Description</h2>
@@ -45,8 +45,11 @@
                 <a class="mealplan-cancel-link" href="{% url 'mealplan:show_mealplan' %}">
                     Cancel
                 </a>
-                <button class="search-btn mealplan-submit-btn" type="submit">
-                    Create Plan
+                <button class="search-btn mealplan-submit-btn" type="button">
+                    Add from Saved Recipe
+                </button>
+                <button class="search-btn mealplan-submit-btn" type="button">
+                    Add from Find Recipe
                 </button>
             </div>
         </form>
