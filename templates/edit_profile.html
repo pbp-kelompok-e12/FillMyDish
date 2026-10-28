@@ -1,122 +1,238 @@
+﻿<!-- Halaman ini menyediakan form untuk memperbarui informasi profil pengguna. -->
+<!-- Form mengirim data profil, foto, dan daftar koneksi sosial ke server Django. -->
+<!-- JavaScript di bagian bawah menangani penghapusan koneksi dan pratinjau foto baru. -->
+{# Menggunakan base.html sebagai kerangka utama halaman. #}
 {% extends 'base.html' %}
+{# Memuat dukungan tag static Django untuk aset statis. #}
 {% load static %}
+{# Memulai bagian konten yang mengisi blok pada template utama. #}
 {% block content %}
+{# Menyisipkan elemen dekorasi bersama dari partial. #}
 {% include 'partials/deco.html' %}
+<!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
 <div class="profile-page">
+    <!-- Membuat form edit profil. enctype memungkinkan berkas foto ikut terkirim saat form disubmit. -->
     <form class="profile-form-card" method="post" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
+        {# Menambahkan token keamanan untuk melindungi pengiriman form. #}
         {% csrf_token %}
+        <!-- Menampilkan judul bagian halaman. -->
         <h2 class="form-title">Edit Profile</h2>
 
+        {# Memeriksa error umum dari form profil maupun kumpulan form koneksi. #}
         {% if form.non_field_errors or formset.non_form_errors %}
+            <!-- Menampilkan pesan error umum dari kedua form agar pengguna tahu apa yang perlu diperbaiki. -->
             <div class="form-error">{{ form.non_field_errors }} {{ formset.non_form_errors }}</div>
+        {# Mengakhiri kondisi Django yang dibuka pada bagian sebelumnya. #}
         {% endif %}
 
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="form-group profile-image-group">
+            <!-- Menghubungkan label foto profil dengan input file Django. -->
             <label class="form-label" for="{{ form.profile_image.id_for_label }}">Profile Picture</label>
+            <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
             <div class="profile-image-picker">
+                {# Memeriksa apakah profil sudah memiliki foto untuk menentukan pratinjau yang ditampilkan. #}
                 {% if profile.profile_image %}
+                    <!-- Menampilkan foto profil saat ini; URL gambar berasal dari berkas yang tersimpan. -->
                     <img class="profile-image-preview" id="profile-image-preview" src="{{ profile.profile_image.url }}" alt="Current profile picture">
+                {# Menentukan tampilan alternatif ketika kondisi sebelumnya tidak terpenuhi. #}
                 {% else %}
+                    <!-- Menampilkan placeholder tanda tanya jika foto profil belum tersedia. -->
                     <div class="profile-image-preview profile-image-placeholder" id="profile-image-preview" aria-label="No profile picture">?</div>
+                {# Mengakhiri kondisi Django yang dibuka pada bagian sebelumnya. #}
                 {% endif %}
+                <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
                 <div class="profile-image-controls">
+                    {# Merender input unggah foto yang dibuat oleh Django. #}
                     {{ form.profile_image }}
+                    <!-- Menampilkan teks bantu atau elemen kecil di dalam komponen. -->
                     <span class="profile-image-hint">Pilih foto baru untuk mengganti foto profil.</span>
+                    {# Menampilkan setiap pesan validasi khusus untuk unggahan foto. #}
                     {% for error in form.profile_image.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                <!-- Menutup elemen HTML pembungkus bagian ini. -->
                 </div>
+            <!-- Menutup elemen HTML pembungkus bagian ini. -->
             </div>
+        <!-- Menutup elemen HTML pembungkus bagian ini. -->
         </div>
 
+        {# Mengulang semua kolom profil agar masing-masing dirender dengan label dan error. #}
         {% for field in form %}
+            {# Melewati kolom foto karena kolom itu sudah dirender terpisah di bagian pratinjau. #}
             {% if field.name != 'profile_image' %}
+            <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
             <div class="form-group">
+                <!-- Memberi keterangan pada kolom input yang terkait. -->
                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {# Menampilkan nilai dinamis yang disediakan Django. #}
                 {{ field }}
+                {# Menampilkan pesan validasi tepat di bawah kolom profil yang bermasalah. #}
                 {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+            <!-- Menutup elemen HTML pembungkus bagian ini. -->
             </div>
+            {# Mengakhiri kondisi Django yang dibuka pada bagian sebelumnya. #}
             {% endif %}
+        {# Mengakhiri pengulangan Django untuk daftar kolom atau koneksi. #}
         {% endfor %}
 
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="form-group">
+            <!-- Menampilkan teks bantu atau elemen kecil di dalam komponen. -->
             <span class="form-label">Connections</span>
+            {# Mengirim metadata jumlah formset yang dibutuhkan Django untuk memproses daftar koneksi. #}
             {{ formset.management_form }}
+            <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
             <div id="connection-list">
+                {# Mengulang semua form koneksi sosial yang sudah ada maupun form kosong. #}
                 {% for connection_form in formset %}
+                    <!-- Membuat satu baris koneksi; kelas existing ditambahkan jika koneksi ini sudah tersimpan. -->
                     <div class="connection-row{% if connection_form.instance.pk %} existing{% endif %}">
+                        {# Menampilkan nilai dinamis yang disediakan Django. #}
                         {{ connection_form.id }}
+                        {# Mengulang kolom yang perlu ditampilkan untuk koneksi tersebut. #}
                         {% for field in connection_form.visible_fields %}
+                            {# Melewati kolom foto karena kolom itu sudah dirender terpisah di bagian pratinjau. #}
                             {% if field.name != 'DELETE' %}
+                                {# Menampilkan nilai dinamis yang disediakan Django. #}
                                 {{ field }}
+                                {# Menampilkan pesan validasi tepat di bawah kolom profil yang bermasalah. #}
                                 {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                            {# Mengakhiri kondisi Django yang dibuka pada bagian sebelumnya. #}
                             {% endif %}
+                        {# Mengakhiri pengulangan Django untuk daftar kolom atau koneksi. #}
                         {% endfor %}
+                        {# Menampilkan kontrol hapus hanya untuk koneksi yang sudah tersimpan. #}
                         {% if connection_form.instance.pk %}
+                            <!-- Memberi keterangan pada kolom input yang terkait. -->
                             <label class="form-check">
+                                {# Merender checkbox Django untuk menandai koneksi tersimpan agar dihapus saat form disimpan. #}
                                 {{ connection_form.DELETE }} <span>Delete</span>
+                            <!-- Menutup elemen HTML pembungkus bagian ini. -->
                             </label>
+                        {# Mengakhiri kondisi Django yang dibuka pada bagian sebelumnya. #}
                         {% endif %}
+                        <!-- Tombol ini ditangani JavaScript: menghapus baris baru atau menandai koneksi lama untuk dihapus. -->
                         <button type="button" class="btn-remove-connection" aria-label="Remove connection">&times;</button>
+                    <!-- Menutup elemen HTML pembungkus bagian ini. -->
                     </div>
+                {# Mengakhiri pengulangan Django untuk daftar kolom atau koneksi. #}
                 {% endfor %}
+            <!-- Menutup elemen HTML pembungkus bagian ini. -->
             </div>
+            <!-- Menyediakan tombol untuk menambahkan baris koneksi dari template kosong. -->
             <button type="button" class="btn-add-connection" id="add-connection">
+                <!-- Menampilkan teks bantu atau elemen kecil di dalam komponen. -->
                 <span class="plus-sign">+</span> Add Connection
+            <!-- Menutup elemen HTML pembungkus bagian ini. -->
             </button>
+        <!-- Menutup elemen HTML pembungkus bagian ini. -->
         </div>
 
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="form-actions">
+            <!-- Membatalkan perubahan dan kembali ke halaman profil. -->
             <a class="btn-cancel" href="{% url 'profile' %}">Cancel</a>
+            <!-- Mengirim perubahan profil dan koneksi ke server untuk disimpan. -->
             <button type="submit" class="btn-submit">Update Profile</button>
+        <!-- Menutup elemen HTML pembungkus bagian ini. -->
         </div>
+    <!-- Menutup elemen HTML pembungkus bagian ini. -->
     </form>
 
+    <!-- Menyediakan markup baris koneksi baru; JavaScript dapat mengkloningnya tanpa meminta server. -->
     <template id="empty-connection-template">
+        <!-- Membuat satu baris koneksi; kelas existing ditambahkan jika koneksi ini sudah tersimpan. -->
         <div class="connection-row">
+            <!-- Input nama platform untuk koneksi baru; __prefix__ akan diganti indeks formset. -->
             <input type="text" name="connections-__prefix__-platform" class="form-input" placeholder="Platform (e.g. Instagram)">
+            <!-- Input URL koneksi baru dengan validasi format URL dari browser. -->
             <input type="url" name="connections-__prefix__-url" class="form-input" placeholder="https://instagram.com/...">
+            <!-- Tombol ini ditangani JavaScript: menghapus baris baru atau menandai koneksi lama untuk dihapus. -->
             <button type="button" class="btn-remove-connection" aria-label="Remove connection">&times;</button>
+        <!-- Menutup elemen HTML pembungkus bagian ini. -->
         </div>
+    <!-- Menutup elemen HTML pembungkus bagian ini. -->
     </template>
 
+    <!-- Memulai JavaScript yang memberi interaksi pada halaman. -->
     <script>
+        // Menjelaskan perilaku skrip pada bagian ini.
         // Tombol X: baris baru langsung dihapus dari DOM;
+        // Menjelaskan perilaku skrip pada bagian ini.
         // connection tersimpan dicentang checkbox DELETE-nya lalu disembunyikan.
+        // Membungkus kode agar variabelnya tidak mencemari skrip lain.
         (function () {
+            // Mengambil daftar koneksi agar klik tombol hapus dapat ditangani di satu tempat.
             var list = document.getElementById('connection-list');
+            // Memeriksa kondisi agar aksi hanya dilakukan pada keadaan yang sesuai.
             if (!list) return;
 
+            // Memasang satu handler klik pada daftar koneksi, termasuk tombol pada baris yang ditambahkan kemudian.
             list.addEventListener('click', function (e) {
+                // Mencari tombol hapus yang menjadi asal klik.
                 var btn = e.target.closest('.btn-remove-connection');
+                // Menghentikan handler jika klik bukan pada tombol hapus.
                 if (!btn) return;
+                // Menemukan baris koneksi yang menaungi tombol tersebut.
                 var row = btn.closest('.connection-row');
+                // Membedakan koneksi tersimpan dari baris baru karena cara penghapusannya berbeda.
                 if (row.classList.contains('existing')) {
+                    // Mengambil checkbox DELETE tersembunyi/khusus milik koneksi tersimpan.
                     var del = row.querySelector('input[name$="-DELETE"]');
+                    // Menandai checkbox DELETE agar Django menghapus koneksi saat form dikirim.
                     if (del) del.checked = true;
+                    // Menambahkan penanda bahwa baris ini sudah dipilih untuk dihapus.
                     row.classList.add('marked-delete');
+                    // Menyembunyikan koneksi yang ditandai hapus dari tampilan sebelum form dikirim.
                     row.style.display = 'none';
+                // Menjalankan langkah interaksi halaman yang telah disiapkan.
                 } else {
+                    // Menghapus langsung baris baru karena baris itu belum tersimpan di server.
                     row.remove();
+                // Menutup fungsi atau blok kode yang sedang dijalankan.
                 }
+            // Menutup fungsi atau blok kode yang sedang dijalankan.
             });
+        // Menutup fungsi atau blok kode yang sedang dijalankan.
         })();
+    // Menutup elemen HTML pembungkus bagian ini.
     </script>
+    <!-- Memulai JavaScript yang memberi interaksi pada halaman. -->
     <script>
+        // Membungkus kode agar variabelnya tidak mencemari skrip lain.
         (function () {
+            // Mengambil input unggah foto yang id-nya dibuat oleh Django.
             var input = document.getElementById('{{ form.profile_image.id_for_label }}');
+            // Mengambil elemen gambar/placeholder yang akan menampilkan pratinjau foto.
             var preview = document.getElementById('profile-image-preview');
+            // Memeriksa kondisi agar aksi hanya dilakukan pada keadaan yang sesuai.
             if (!input || !preview) return;
 
+            // Menunggu pengguna memilih atau mengganti berkas foto.
             input.addEventListener('change', function () {
+                // Mengambil berkas pertama yang dipilih pengguna.
                 var file = input.files && input.files[0];
+                // Mengabaikan pilihan kosong atau berkas yang bukan gambar.
                 if (!file || !file.type.startsWith('image/')) return;
+                // Membuat pembaca berkas untuk memuat gambar lokal di browser.
                 var reader = new FileReader();
+                // Menjalankan pembaruan pratinjau setelah berkas selesai dibaca.
                 reader.onload = function () {
+                    // Mengatur sumber gambar pratinjau ke data foto yang baru dibaca.
                     preview.src = reader.result;
+                    // Menghapus gaya placeholder agar foto baru tampil dengan benar.
                     preview.classList.remove('profile-image-placeholder');
+                    // Menghapus tanda tanya placeholder dari elemen pratinjau.
                     preview.textContent = '';
+                // Menutup fungsi atau blok kode yang sedang dijalankan.
                 };
+                // Membaca foto menjadi data URL yang dapat dipasang sebagai sumber gambar.
                 reader.readAsDataURL(file);
+            // Menutup fungsi atau blok kode yang sedang dijalankan.
             });
+        // Menutup fungsi atau blok kode yang sedang dijalankan.
         })();
+    // Menutup elemen HTML pembungkus bagian ini.
     </script>
+{# Mengakhiri bagian konten template ini. #}
 {% endblock content %}

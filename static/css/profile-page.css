@@ -1,0 +1,247 @@
+/* Layout utama halaman profil. */
+.profile-page { /* Membatasi dan memusatkan konten profil. */
+  position: relative; /* Menjadi acuan posisi tombol edit. */
+  width: 64rem; /* Menjaga lebar desain desktop. */
+  display: flex; /* Menyusun isi secara fleksibel. */
+  flex-direction: column; /* Menumpuk elemen profil secara vertikal. */
+  align-items: center; /* Memusatkan kartu profil. */
+  padding: 2rem 0 0; /* Memberi ruang di atas konten. */
+  z-index: 1; /* Menempatkan profil di atas dekorasi latar. */
+} /* Mengakhiri aturan layout profil. */
+
+/* Kartu yang menampilkan informasi akun. */
+.profile-card { /* Mengatur tampilan kartu profil. */
+  position: relative; /* Menjadi acuan tombol edit. */
+  width: 42rem; /* Menetapkan lebar kartu desktop. */
+  min-height: 25.5rem; /* Menjaga tinggi minimum kartu. */
+  margin-top: 16rem; /* Memberi jarak dari dekorasi atas. */
+  padding: 2.4rem 3.2rem 2.2rem; /* Memberi ruang di dalam kartu. */
+  background-color: #788a84; /* Memberi warna latar kartu. */
+  border-radius: 1rem 1rem 0 0; /* Membulatkan sudut atas kartu. */
+  box-shadow: none; /* Menghilangkan bayangan kartu. */
+  display: grid; /* Menyusun isi dengan area grid. */
+  grid-template-columns: 1fr 1fr; /* Membuat dua kolom seimbang. */
+  grid-template-areas: "avatar bio" "names socials"; /* Menentukan posisi bagian profil. */
+  column-gap: 2.5rem; /* Memberi jarak antar kolom. */
+  row-gap: 0.8rem; /* Memberi jarak antar baris. */
+} /* Mengakhiri aturan kartu profil. */
+
+/* Tombol menuju formulir edit profil. */
+.profile-edit-btn { /* Menata tombol Edit. */
+  position: absolute; /* Memposisikan tombol relatif ke kartu. */
+  top: -5.9rem; /* Meletakkan tombol di atas kartu. */
+  right: 0; /* Meratakan tombol ke sisi kanan. */
+  min-width: 12.5rem; /* Menjaga lebar minimum tombol. */
+  padding: 0.7rem 2rem; /* Memberi ruang klik yang nyaman. */
+  background-color: #ffca40; /* Memberi warna kuning tombol. */
+  border: 0.2rem solid #806a00; /* Menambahkan garis tepi tombol. */
+  border-radius: 999px; /* Membuat bentuk tombol pil. */
+  font-family: "Poppins", Helvetica, sans-serif; /* Mengikuti tipografi aplikasi. */
+  font-weight: 600; /* Menegaskan teks tombol. */
+  color: #222326; /* Menjaga kontras teks tombol. */
+  font-size: 1.4rem; /* Mengatur ukuran teks tombol. */
+  text-align: center; /* Memusatkan teks tombol. */
+} /* Mengakhiri aturan tombol Edit. */
+
+/* Area foto profil. */
+.profile-avatar { /* Menempatkan foto profil. */
+  grid-area: avatar; /* Mengisi area avatar di grid. */
+  display: flex; /* Mengatur posisi isi avatar. */
+  justify-content: flex-start; /* Meratakan avatar ke kiri. */
+  align-items: flex-start; /* Meratakan avatar ke atas. */
+} /* Mengakhiri aturan area avatar. */
+/* Foto atau placeholder avatar berbentuk lingkaran. */
+.avatar-circle { /* Menyamakan bentuk gambar avatar. */
+  width: 15.6rem; /* Mengatur lebar avatar desktop. */
+  height: 15.6rem; /* Mengatur tinggi avatar desktop. */
+  border-radius: 50%; /* Membentuk avatar menjadi lingkaran. */
+  background-color: var(--color-palette-base-50); /* Memberi latar avatar. */
+  object-fit: cover; /* Memotong gambar agar memenuhi lingkaran. */
+} /* Mengakhiri aturan avatar lingkaran. */
+
+/* Placeholder yang menampilkan inisial saat foto gagal dimuat. */
+.avatar-fallback { /* Menata inisial pengganti foto. */
+  display: grid; /* Memudahkan pemusatan inisial. */
+  place-items: center; /* Memusatkan inisial secara vertikal dan horizontal. */
+  color: #788a84; /* Memberi warna teks yang kontras. */
+  font-family: "Poppins", Helvetica, sans-serif; /* Mengikuti tipografi aplikasi. */
+  font-size: 3rem; /* Membuat inisial mudah terlihat. */
+  font-weight: 700; /* Menegaskan bentuk inisial. */
+} /* Mengakhiri aturan placeholder avatar. */
+
+/* Nama akun dan nama lengkap. */
+.profile-names { /* Menata identitas pengguna. */
+  grid-area: names; /* Mengisi area nama di grid. */
+  text-align: center; /* Memusatkan teks nama. */
+  width: 15.6rem; /* Menyelaraskan lebar dengan avatar. */
+  margin-top: -0.2rem; /* Merapikan jarak dari avatar. */
+} /* Mengakhiri aturan identitas. */
+
+/* Nama pengguna. */
+.profile-username { /* Menata nama pengguna. */
+  font-family: "Poppins", Helvetica, sans-serif; /* Mengikuti tipografi aplikasi. */
+  font-weight: 700; /* Menegaskan nama pengguna. */
+  font-size: 2.1rem; /* Mengatur ukuran nama pengguna. */
+  color: var(--color-palette-base-50); /* Menggunakan warna teks terang. */
+  line-height: normal; /* Menjaga tinggi baris alami. */
+} /* Mengakhiri aturan nama pengguna. */
+
+/* Nama lengkap pengguna. */
+.profile-fullname { /* Menata nama lengkap. */
+  margin-top: 0.25rem; /* Memberi jarak dari nama pengguna. */
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif; /* Mengikuti tipografi aplikasi. */
+  font-weight: 400; /* Menggunakan ketebalan normal. */
+  font-size: 1.125rem; /* Mengatur ukuran nama lengkap. */
+  color: var(--color-palette-font-50); /* Menggunakan warna teks terang. */
+  line-height: normal; /* Menjaga tinggi baris alami. */
+} /* Mengakhiri aturan nama lengkap. */
+
+/* Deskripsi singkat pemilik profil. */
+.profile-bio { /* Menata bio pengguna. */
+  grid-area: bio; /* Mengisi area bio di grid. */
+  min-height: 12rem; /* Menjaga keseimbangan tinggi kolom. */
+  padding-top: 0.8rem; /* Memberi jarak dari sisi atas. */
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif; /* Mengikuti tipografi aplikasi. */
+  font-size: 1.125rem; /* Mengatur ukuran teks bio. */
+  color: var(--color-palette-font-50); /* Menggunakan warna teks terang. */
+  line-height: 1.5; /* Membuat bio nyaman dibaca. */
+} /* Mengakhiri aturan bio. */
+
+/* Daftar tautan sosial. */
+.profile-socials { /* Menyusun tautan koneksi sosial. */
+  grid-area: socials; /* Mengisi area koneksi di grid. */
+  display: flex; /* Menyusun koneksi secara fleksibel. */
+  align-items: flex-end; /* Meratakan koneksi ke bawah. */
+  justify-content: space-between; /* Menyebar koneksi pada baris. */
+  flex-wrap: wrap; /* Membolehkan koneksi berpindah baris. */
+  gap: 0.5rem; /* Memberi jarak antar koneksi. */
+} /* Mengakhiri aturan daftar koneksi. */
+
+/* Tautan sosial berbentuk label pil. */
+.profile-socials .social-item { /* Menata setiap koneksi. */
+  display: inline-flex; /* Memusatkan isi label. */
+  align-items: center; /* Meratakan teks secara vertikal. */
+  justify-content: center; /* Meratakan teks secara horizontal. */
+  padding: 0.25rem 0.85rem; /* Memberi ruang di dalam label. */
+  background-color: rgba(245, 247, 248, 0.08); /* Memberi latar label lembut. */
+  border: 1px solid rgba(245, 247, 248, 0.4); /* Membatasi label. */
+  border-radius: 999px; /* Membentuk label pil. */
+  line-height: 1.25; /* Menjaga tinggi teks label. */
+  transition: background-color 0.15s ease, border-color 0.15s ease; /* Menghaluskan perubahan hover. */
+} /* Mengakhiri aturan label koneksi. */
+
+/* Gaya tautan sosial saat diarahkan. */
+.profile-socials a.social-item:hover { /* Memberi umpan balik hover. */
+  background-color: rgba(245, 247, 248, 0.18); /* Mencerahkan latar label. */
+  border-color: rgba(245, 247, 248, 0.7); /* Mencerahkan garis label. */
+} /* Mengakhiri aturan hover koneksi. */
+
+/* Gaya umum teks koneksi. */
+.social-item { /* Menyamakan tipografi koneksi. */
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif; /* Mengikuti tipografi aplikasi. */
+  font-size: 1rem; /* Mengatur ukuran teks koneksi. */
+  color: var(--color-palette-font-50); /* Menggunakan warna teks terang. */
+} /* Mengakhiri aturan teks koneksi. */
+
+/* Penataan profil untuk ponsel. */
+@media (max-width: 767px) { /* Menerapkan layout satu kolom di ponsel. */
+  .profile-page { /* Menyesuaikan lebar halaman profil. */
+    width: 100%; /* Memakai lebar layar yang tersedia. */
+    min-height: 0; /* Membiarkan tinggi mengikuti isi. */
+    padding: 1rem 0.5rem 2rem; /* Memberi ruang tepi di ponsel. */
+  } /* Mengakhiri penyesuaian halaman profil. */
+  .profile-card { /* Menyesuaikan kartu profil di ponsel. */
+    width: 100%; /* Memakai lebar wadah. */
+    margin-top: 5.5rem; /* Mengurangi jarak atas. */
+    padding: 2rem 1.25rem; /* Menyesuaikan ruang dalam kartu. */
+    grid-template-columns: 1fr; /* Menggunakan satu kolom. */
+    grid-template-areas: "avatar" "names" "bio" "socials"; /* Menyusun bagian secara vertikal. */
+    row-gap: 1.5rem; /* Memberi jarak antar bagian. */
+  } /* Mengakhiri penyesuaian kartu. */
+  .profile-names { /* Memusatkan identitas. */
+    width: auto; /* Membolehkan nama mengikuti isi. */
+    justify-self: center; /* Memusatkan area nama. */
+  } /* Mengakhiri penyesuaian nama. */
+  .profile-edit-btn { /* Menyesuaikan tombol edit. */
+    top: -2.75rem; /* Mendekatkan tombol ke kartu. */
+    font-size: 1rem; /* Mengurangi ukuran teks tombol. */
+    padding: 0.375rem 2rem; /* Menyesuaikan ruang tombol. */
+  } /* Mengakhiri penyesuaian tombol. */
+  .avatar-circle { /* Menyesuaikan ukuran avatar. */
+    width: 9rem; /* Mengurangi lebar avatar. */
+    height: 9rem; /* Mengurangi tinggi avatar. */
+  } /* Mengakhiri penyesuaian avatar. */
+  .profile-username { /* Menyesuaikan nama akun. */
+    font-size: 1.5rem; /* Mengurangi ukuran nama akun. */
+  } /* Mengakhiri penyesuaian nama akun. */
+  .profile-fullname { /* Menyesuaikan nama lengkap. */
+    font-size: 1rem; /* Mengurangi ukuran nama lengkap. */
+  } /* Mengakhiri penyesuaian nama lengkap. */
+  .profile-bio { /* Memusatkan dan mengecilkan bio. */
+    text-align: center; /* Memusatkan teks bio. */
+    font-size: 1rem; /* Menyesuaikan ukuran teks bio. */
+  } /* Mengakhiri penyesuaian bio. */
+  .profile-socials { /* Memusatkan daftar koneksi. */
+    justify-content: center; /* Memusatkan koneksi. */
+    gap: 1.5rem; /* Memberi jarak antar koneksi. */
+    flex-wrap: wrap; /* Membolehkan koneksi berpindah baris. */
+  } /* Mengakhiri penyesuaian daftar koneksi. */
+  .profile-socials .social-item { /* Menyesuaikan label koneksi. */
+    padding: 0.25rem 0.75rem; /* Mengurangi ruang label. */
+    font-size: 0.875rem; /* Mengurangi ukuran teks label. */
+  } /* Mengakhiri penyesuaian label koneksi. */
+} /* Mengakhiri aturan ponsel. */
+
+/* Tata letak tablet mempertahankan dua kolom. */
+@media (min-width: 768px) and (max-width: 1023px) { /* Menerapkan ukuran fleksibel pada tablet. */
+  .profile-page { /* Mengatur lebar halaman tablet. */
+    width: 100%; /* Memakai lebar layar. */
+    padding: 1rem 0 1.75rem; /* Memberi ruang vertikal. */
+  } /* Mengakhiri aturan halaman tablet. */
+  .profile-card { /* Mengatur ukuran kartu tablet. */
+    width: min(42rem, 48vw); /* Membatasi lebar kartu. */
+    min-height: 25.5vw; /* Menyesuaikan tinggi minimum kartu. */
+    margin-top: 12.5vw; /* Menyesuaikan jarak dekorasi. */
+    padding: 2.4vw 3.55vw 2.2vw; /* Menyesuaikan ruang dalam kartu. */
+    grid-template-columns: 1fr 1fr; /* Menjaga dua kolom. */
+    grid-template-areas: "avatar bio" "names socials"; /* Menjaga susunan desktop. */
+    column-gap: 2.8vw; /* Menyesuaikan jarak kolom. */
+    row-gap: 0.8vw; /* Menyesuaikan jarak baris. */
+  } /* Mengakhiri aturan kartu tablet. */
+  .profile-edit-btn { /* Menyesuaikan tombol edit tablet. */
+    top: -6.5vw; /* Mengatur posisi di atas kartu. */
+    min-width: 14vw; /* Menyesuaikan lebar tombol. */
+    padding: 0.7vw 2vw; /* Menyesuaikan ruang tombol. */
+    font-size: 1.55vw; /* Menyesuaikan teks tombol. */
+  } /* Mengakhiri aturan tombol tablet. */
+  .profile-avatar { /* Menata posisi avatar tablet. */
+    justify-content: flex-start; /* Meratakan avatar ke kiri. */
+  } /* Mengakhiri aturan avatar tablet. */
+  .avatar-circle { /* Mengatur ukuran avatar tablet. */
+    width: 17.3vw; /* Menyesuaikan lebar avatar. */
+    height: 17.3vw; /* Menyesuaikan tinggi avatar. */
+  } /* Mengakhiri ukuran avatar tablet. */
+  .profile-names { /* Mengatur area identitas tablet. */
+    width: 17.3vw; /* Menyesuaikan lebar identitas. */
+    justify-self: center; /* Memusatkan identitas. */
+  } /* Mengakhiri aturan identitas tablet. */
+  .profile-username { /* Mengatur ukuran nama akun tablet. */
+    font-size: 2.1vw; /* Menyesuaikan ukuran nama akun. */
+  } /* Mengakhiri aturan nama akun tablet. */
+  .profile-fullname, .profile-bio { /* Menyamakan ukuran teks isi tablet. */
+    font-size: 1.2vw; /* Menyesuaikan ukuran teks. */
+  } /* Mengakhiri ukuran teks tablet. */
+  .profile-bio { /* Mengatur area bio tablet. */
+    min-height: 13vw; /* Menyesuaikan tinggi area bio. */
+    padding-top: 0.9vw; /* Menyesuaikan jarak atas bio. */
+    text-align: left; /* Meratakan teks ke kiri. */
+  } /* Mengakhiri aturan bio tablet. */
+  .profile-socials { /* Mengatur koneksi sosial tablet. */
+    justify-content: space-between; /* Menyebar koneksi sosial. */
+    gap: 0.5vw; /* Menyesuaikan jarak koneksi. */
+  } /* Mengakhiri aturan koneksi tablet. */
+  .profile-socials .social-item { /* Menyesuaikan label koneksi tablet. */
+    padding: 0.25vw 0.85vw; /* Menyesuaikan ruang label. */
+    font-size: 1.1vw; /* Menyesuaikan ukuran teks label. */
+  } /* Mengakhiri aturan label tablet. */
+} /* Mengakhiri aturan tablet. */

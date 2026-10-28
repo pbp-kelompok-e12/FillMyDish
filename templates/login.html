@@ -1,39 +1,74 @@
+﻿{# Menggunakan base.html sebagai kerangka utama halaman. #}
 {% extends 'base.html' %}
+{# Memuat dukungan tag static Django untuk aset statis. #}
 {% load static %}
+{# Memulai bagian konten yang mengisi blok pada template utama. #}
 {% block content %}
+{# Menyisipkan elemen dekorasi bersama dari partial. #}
 {% include 'partials/deco.html' %}
+<!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
 <div class="profile-page">
+    <!-- Membuat form dan menetapkan tujuan serta cara pengiriman datanya. -->
     <form class="profile-form-card" method="post" action="{% url 'login' %}">
+        {# Menambahkan token keamanan untuk melindungi pengiriman form. #}
         {% csrf_token %}
+        <!-- Menampilkan judul bagian halaman. -->
         <h2 class="form-title">Login</h2>
 
+        {# Menampilkan bagian berikut hanya jika kondisi Django terpenuhi. #}
         {% if form.non_field_errors %}
+            <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
             <div class="form-error">{{ form.non_field_errors }}</div>
+        {# Mengakhiri percabangan kondisi Django. #}
         {% endif %}
 
+        {# Mengulang tampilan untuk setiap data dalam daftar. #}
         {% for field in form %}
+            <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
             <div class="form-group">
+                <!-- Memberi keterangan pada kolom input yang terkait. -->
                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {# Menampilkan bagian berikut hanya jika kondisi Django terpenuhi. #}
                 {% if field.name == 'password' or field.name == 'password1' or field.name == 'password2' %}
+                    <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
                     <div class="password-input-wrap">
+                        {# Menampilkan nilai dinamis yang disediakan Django. #}
                         {{ field }}
+                        <!-- Menyediakan tombol untuk menampilkan atau menyembunyikan kata sandi. -->
                         <button class="password-toggle" type="button" aria-controls="{{ field.id_for_label }}" aria-pressed="false">Show</button>
+                    <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
                     </div>
+                {# Menentukan tampilan alternatif ketika kondisi sebelumnya tidak terpenuhi. #}
                 {% else %}
+                    {# Menampilkan nilai dinamis yang disediakan Django. #}
                     {{ field }}
+                {# Mengakhiri percabangan kondisi Django. #}
                 {% endif %}
+                {# Mengulang tampilan untuk setiap data dalam daftar. #}
                 {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+            <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
             </div>
+        {# Mengakhiri pengulangan data. #}
         {% endfor %}
 
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="form-actions">
+            <!-- Menyediakan tautan navigasi atau aksi menuju halaman lain. -->
             <a class="btn-cancel" href="{% url 'register' %}">Register</a>
+            <!-- Menyediakan tombol untuk mengirim form. -->
             <button type="submit" class="btn-submit">Login</button>
+        <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
         </div>
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="form-group" style="text-align: center; margin-top: 1rem;">
+            <!-- Menyediakan tautan navigasi atau aksi menuju halaman lain. -->
             <a class="btn-cancel" href="{% url 'google_login' %}" style="display: inline-block; text-decoration: none;">Continue with Google</a>
+        <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
         </div>
+    <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
     </form>
+<!-- Menutup elemen HTML yang dibuka sebelumnya. -->
 </div>
+{# Mengakhiri bagian konten template ini. #}
 {% endblock content %}
 

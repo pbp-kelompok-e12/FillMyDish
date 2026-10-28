@@ -1,31 +1,64 @@
+﻿{# Menggunakan base.html sebagai kerangka utama halaman. #}
 {% extends 'base.html' %}
+{# Memuat dukungan tag static Django untuk aset statis. #}
 {% load static %}
+{# Memulai bagian konten yang mengisi blok pada template utama. #}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/profile-page.css' %}">
+{# Menyisipkan elemen dekorasi bersama dari partial. #}
 {% include 'partials/deco.html' %}
+<!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
 <div class="profile-page">
+    <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
     <div class="profile-card">
+        <!-- Menyediakan tautan navigasi atau aksi menuju halaman lain. -->
         <a class="profile-edit-btn" href="{% url 'edit_profile' %}">Edit</a>
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="profile-avatar">
+            {# Menampilkan bagian berikut hanya jika kondisi Django terpenuhi. #}
             {% if profile.profile_image %}
+                <!-- Menampilkan gambar profil beserta teks alternatifnya. -->
                 <img class="avatar-circle" src="{{ profile.profile_image.url }}" alt="{{ profile.username|default:user.username }} profile picture">
+            {# Menentukan tampilan alternatif ketika kondisi sebelumnya tidak terpenuhi. #}
             {% else %}
+                <!-- Menampilkan teks bantu atau elemen kecil di dalam komponen. -->
                 <span class="avatar-circle"></span>
+            {# Mengakhiri percabangan kondisi Django. #}
             {% endif %}
+        <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
         </div>
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="profile-names">
+            <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
             <div class="profile-username">@{{ profile.username|default:user.username }}</div>
+            <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
             <div class="profile-fullname">{{ profile.full_name|default:user.get_full_name|default:user.username }}</div>
+        <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
         </div>
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="profile-bio">
+            {# Menampilkan bagian berikut hanya jika kondisi Django terpenuhi. #}
             {% if profile.bio %}{{ profile.bio }}{% else %}Biooo{% endif %}
+        <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
         </div>
+        <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="profile-socials">
+            {# Mengulang tampilan untuk setiap data dalam daftar. #}
             {% for connection in profile.connections.all %}
+                <!-- Menyediakan tautan navigasi atau aksi menuju halaman lain. -->
                 <a class="social-item" href="{{ connection.url }}" target="_blank" rel="noopener noreferrer">{{ connection.platform }}</a>
+            {# Menampilkan isi ini jika daftar yang diulang kosong. #}
             {% empty %}
+                <!-- Menampilkan teks bantu atau elemen kecil di dalam komponen. -->
                 <span class="social-item empty">No connections yet</span>
+            {# Mengakhiri pengulangan data. #}
             {% endfor %}
+        <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
         </div>
+    <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
     </div>
+<!-- Menutup elemen HTML yang dibuka sebelumnya. -->
 </div>
+<script src="{% static 'js/profile-page.js' %}" defer></script>
+{# Mengakhiri bagian konten template ini. #}
 {% endblock content %}
