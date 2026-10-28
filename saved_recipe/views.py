@@ -1,40 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse, HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
-# Create your views here.
+from .models import SavedRecipe
+from .forms import SavedRecipeCreateForm
 
-from django.shortcuts import render
-
+# READ: Menampilkan resep tersimpan
+@login_required
 def saved_recipe_page(request):
-    recipes = [
-        {
-            "name": "Nasi Goreng",
-            "description": "Nasi goreng dengan telur.",
-            "category": "Breakfast",
-            "is_favorite": True,
-            "image": "img/nasgor-1.png",
-        },
-        {
-            "name": "Ayam Bakar",
-            "description": "Ayam bakar bumbu kecap.",
-            "category": "Lunch",
-            "is_favorite": False,
-            "image": "",
-        },
-        {
-            "name": "Pancake",
-            "description": "Pancake lembut dan manis.",
-            "category": "Snack",
-            "is_favorite": True,
-            "image": "",
-        },
-        {
-            "name": "Sup Ayam",
-            "description": "Sup ayam dengan sayuran.",
-            "category": "Dinner",
-            "is_favorite": False,
-            "image": "",
-        },
-    ]
+
+    recipes = SavedRecipe.objects.filter(
+        user=request.user
+    ).order_by("-created_at")
+
+    search_query = request.GET.get("q", "").strip()
+    current_category = request.GET.get("category", "all")
+
+    if current_category != "all":
+        recipes = recipes.filter(
+            meal_category=current_category
+        )
+
+    if search_query:
+        recipes = recipes.filter(
+            name__icontains=search_query
+        )
 
     categories = [
         {"value": "all", "label": "All"},
@@ -44,31 +35,78 @@ def saved_recipe_page(request):
         {"value": "snack", "label": "Snack"},
     ]
 
-    search_query = request.GET.get("q", "").strip()
-    current_category = request.GET.get("category", "all").lower()
-
-    if current_category != "all":
-        recipes = [
-            recipe for recipe in recipes
-            if recipe["category"].lower() == current_category
-        ]
-
-    if search_query:
-        recipes = [
-            recipe for recipe in recipes
-            if search_query.lower() in recipe["name"].lower()
-        ]
-
-    context = {
+    return render(request, "saved_recipe/saved_recipe.html", {
         "recipes": recipes,
         "categories": categories,
         "search_query": search_query,
         "current_category": current_category,
-    }
+    })
 
-    return render(
-        request,
-        "saved_recipe/saved_recipe.html",
-        context
+
+# UPDATE: Favorite dan Meal Category
+@login_required
+@require_POST
+def update_saved_recipe(request, pk):
+
+    recipe = get_object_or_404(
+        SavedRecipe,
+        pk=pk,
+        user=request.user
     )
+
+    category = request.POST.get("meal_category", "")
+    favorite = request.POST.get("is_favorite") == "true"
+
+    valid_categories = [
+        choice[0] for choice in SavedRecipe.CATEGORY_CHOICES
+    ]
+
+    if category not in valid_categories:
+        return JsonResponse(
+            {"error": "Invalid meal category"},
+            status=400
+        )
+
+    recipe.meal_category = category
+    recipe.is_favorite = favorite
+    recipe.save(update_fields=["meal_category", "is_favorite"])
+
+    return JsonResponse({
+        "success": True,
+        "category": recipe.get_meal_category_display(),
+        "is_favorite": recipe.is_favorite,
+    })
+
+
+# DELETE: Menghapus resep tersimpan
+@login_required
+@require_POST
+def delete_saved_recipe(request, pk):
+
+    recipe = get_object_or_404(
+        SavedRecipe,
+        pk=pk,
+        user=request.user
+    )
+
+    recipe.delete()
+
+    return JsonResponse({"success": True})
+
+
+# CREATE: Dipanggil dari halaman rekomendasi AI
+@login_required
+@require_POST
+def create_saved_recipe(request):
+
+    form = SavedRecipeCreateForm(request.POST)
+
+    if not form.is_valid():
+        return HttpResponseBadRequest(form.errors.as_json())
+
+    recipe = form.save(commit=False)
+    recipe.user = request.user
+    recipe.save()
+
+    return redirect("saved_recipe")
 

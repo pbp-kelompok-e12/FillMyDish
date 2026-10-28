@@ -1,39 +1,35 @@
+
 document.addEventListener("DOMContentLoaded", function () {
+
     const modal = document.getElementById("sr-edit-modal");
+    const form = document.getElementById("sr-edit-form");
     const closeButton = document.getElementById("sr-close-modal");
     const nameText = document.getElementById("sr-edit-name");
-    const modalImage = document.getElementById("sr-edit-image");
     const favoriteInput = document.getElementById("sr-edit-favorite");
-    const form = document.getElementById("sr-edit-form");
+    const modalImage = document.getElementById("sr-edit-image");
 
-    let activeCard = null;
+    if (!modal || !form) return;
+
+    const csrfToken = form.querySelector(
+        '[name="csrfmiddlewaretoken"]'
+    ).value;
+
     let activeButton = null;
 
+    // MEMBUKA POPUP EDIT
     document.querySelectorAll(".sr-btn-edit").forEach(button => {
+
         button.addEventListener("click", function () {
+
             activeButton = button;
-            activeCard = button.closest(".sr-card");
 
             nameText.textContent = button.dataset.name;
-            
-            // Ambil foto dari card yang sedang diedit
-            const cardImage = activeCard.querySelector(".sr-image img");
-
-            if (cardImage) {
-                modalImage.src = cardImage.src;
-                modalImage.alt = button.dataset.name;
-                modalImage.hidden = false;
-            } else {
-                modalImage.removeAttribute("src");
-                modalImage.alt = "";
-                modalImage.hidden = true;
-            }
-
 
             favoriteInput.checked =
                 button.dataset.favorite === "true";
 
             const category = button.dataset.category;
+
             const radio = form.querySelector(
                 `input[name="meal_category"][value="${category}"]`
             );
@@ -42,14 +38,30 @@ document.addEventListener("DOMContentLoaded", function () {
                 radio.checked = true;
             } else {
                 form.querySelector(
-                    'input[value="uncategorized"]'
+                    'input[name="meal_category"][value="uncategorized"]'
                 ).checked = true;
+            }
+
+            // Tampilkan foto resep jika tersedia
+            if (modalImage) {
+                const card = button.closest(".sr-card");
+                const cardImage = card.querySelector(".sr-image img");
+
+                if (cardImage) {
+                    modalImage.src = cardImage.src;
+                    modalImage.hidden = false;
+                } else {
+                    modalImage.removeAttribute("src");
+                    modalImage.hidden = true;
+                }
             }
 
             modal.hidden = false;
         });
     });
 
+
+    // MENUTUP POPUP
     function closeModal() {
         modal.hidden = true;
     }
@@ -64,8 +76,13 @@ document.addEventListener("DOMContentLoaded", function () {
         if (event.key === "Escape") closeModal();
     });
 
-    form.addEventListener("submit", function (event) {
+
+    // UPDATE KE DATABASE DJANGO
+    form.addEventListener("submit", async function (event) {
+
         event.preventDefault();
+
+        if (!activeButton) return;
 
         const category = form.querySelector(
             'input[name="meal_category"]:checked'
@@ -73,25 +90,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const favorite = favoriteInput.checked;
 
-        // Perbarui tampilan sementara
-        activeCard.querySelector(".sr-category").textContent =
-            category.charAt(0).toUpperCase() + category.slice(1);
+        const saveButton = form.querySelector(".sr-save-btn");
+        saveButton.disabled = true;
 
-        const titleRow = activeCard.querySelector(".sr-title-row");
-        let heart = titleRow.querySelector(".sr-heart");
+        try {
+            console.log("Update URL:", activeButton.dataset.updateUrl);
+            const response = await fetch(
+                activeButton.dataset.updateUrl,
+                {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken
+                    },
+                    mode: "same-origin",
+                    body: new URLSearchParams({
+                        meal_category: category,
+                        is_favorite: String(favorite)
+                    })
+                }
+            );
 
-        if (favorite && !heart) {
-            heart = document.createElement("span");
-            heart.className = "sr-heart";
-            heart.textContent = "♥";
-            titleRow.appendChild(heart);
-        } else if (!favorite && heart) {
-            heart.remove();
+            if (!response.ok) {
+                throw new Error("Update gagal");
+            }
+
+            // Reload untuk mengambil data terbaru dari Django
+            window.location.reload();
+
+        } catch (error) {
+            alert("Gagal menyimpan perubahan.");
+            saveButton.disabled = false;
         }
-
-        activeButton.dataset.category = category;
-        activeButton.dataset.favorite = String(favorite);
-
-        closeModal();
     });
+
+
+    // DELETE DARI DATABASE DJANGO
+    document.querySelectorAll(".sr-btn-delete").forEach(button => {
+
+        button.addEventListener("click", async function () {
+
+            const confirmed = confirm(
+                "Are you sure you want to delete this saved recipe?"
+            );
+
+            if (!confirmed) return;
+
+            button.disabled = true;
+
+            try {
+                const response = await fetch(
+                    button.dataset.deleteUrl,
+                    {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken
+                        },
+                        mode: "same-origin"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("Delete gagal");
+                }
+
+                window.location.reload();
+
+            } catch (error) {
+                alert("Gagal menghapus resep.");
+                button.disabled = false;
+            }
+        });
+    });
+
 });
