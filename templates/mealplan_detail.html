@@ -2,10 +2,6 @@
 {% load static %}
 
 {% block content %}
-    <div class="mealplan-decor" aria-hidden="true">
-        {% include '_decor.html' %}
-    </div>
-
     <main class="mealplan-page mealplan-detail-page">
         <header class="mealplan-detail-header">
             <a class="mealplan-edit-link" href="{% url 'mealplan:edit_mealplan' plan.id %}">Edit Your Plan</a>

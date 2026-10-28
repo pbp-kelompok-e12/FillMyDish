@@ -161,53 +161,6 @@
   min-height: 0;
 }
 
-.mealplan-decor {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
-  background-image: url("../img/mealplan-pattern.png");
-  background-repeat: repeat-y;
-  background-position: top center;
-  background-size: 100% auto;
-}
-
-.frame .mealplan-decor .deco-layer {
-  display: none;
-}
-
-.frame .mealplan-decor .review-food {
-  position: absolute;
-  z-index: 1;
-  height: auto;
-  pointer-events: none;
-}
-
-.frame .mealplan-decor .review-food--nasi-ayam {
-  top: 4.4rem;
-  left: 0;
-  width: 17rem;
-}
-
-.frame .mealplan-decor .review-food--mie {
-  top: 0;
-  left: 45.2rem;
-  width: 23.1rem;
-}
-
-.frame .mealplan-decor .review-food--nasgor {
-  top: 26.7rem;
-  right: -1rem;
-  width: 25.8rem;
-}
-
-.frame .mealplan-decor .review-food--salad {
-  top: 46.25rem;
-  left: 3.3rem;
-  width: 23.1rem;
-}
-
 .mealplan-detail-page {
   width: 64rem;
 }
@@ -368,31 +321,6 @@
 
   .plan-delete-form {
     align-self: center;
-  }
-
-  .frame .mealplan-decor .review-food--nasi-ayam {
-    top: 14vw;
-    left: 0;
-    width: clamp(7rem, 28vw, 17rem);
-  }
-
-  .frame .mealplan-decor .review-food--mie {
-    top: 0;
-    right: 0;
-    left: auto;
-    width: clamp(8rem, 37vw, 22rem);
-  }
-
-  .frame .mealplan-decor .review-food--nasgor {
-    top: 115vw;
-    right: -2rem;
-    width: clamp(7rem, 30vw, 20rem);
-  }
-
-  .frame .mealplan-decor .review-food--salad {
-    top: 135vw;
-    left: 0;
-    width: clamp(8rem, 38vw, 22rem);
   }
 
   .mealplan-create-form {

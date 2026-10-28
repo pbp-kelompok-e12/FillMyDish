@@ -12,13 +12,6 @@ Class-based views
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from FillMyDish.views import test
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', test, name='test'),
-    path("saved-recipes/", include("saved_recipe.urls")),
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
@@ -26,6 +19,7 @@ from FillMyDish import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+
     path("profile/", views.profile_view, name="profile"),
     path("edit-profile/", views.edit_profile_view, name="edit_profile"),
     path("login/", views.login_view, name="login"),
@@ -33,10 +27,12 @@ urlpatterns = [
     path("accounts/google/login/", views.google_login_view, name="google_login"),
     path("accounts/google/callback/", views.google_callback_view, name="google_callback"),
     path("logout/", views.logout_view, name="logout"),
+
     path("", include("recipefinder.urls")),
     path("", include("main.urls")),
     path("review/", include("review.urls")),
     path("", include("mealplan.urls")),
+    path("saved-recipes/", include("saved_recipe.urls")),
 ]
 
 if settings.DEBUG:
