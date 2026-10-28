@@ -20,8 +20,8 @@ def create_mealplan(request):
                 title=title,
                 description=description
             )
-        return redirect('mealplan: show_mealplans')
-    return render(request, 'create_plan.html')
+        return redirect('mealplan:show_mealplan')
+    return render(request, 'mealplan_create.html')
 
 @login_required(login_url='/login/')
 def mealplan_detail(request, plan_id):
