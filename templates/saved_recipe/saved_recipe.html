@@ -1,0 +1,82 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/saved_recipe.css' %}">
+{% endblock extra_css %}
+
+{% block content %}
+<main class="sr-page">
+
+    <!-- SEARCH DAN FILTER -->
+    <div class="sr-toolbar">
+        <form class="sr-search" method="GET">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search Saved Recipe"
+                value="{{ search_query }}"
+                aria-label="Search saved recipes"
+            >
+        </form>
+
+        <nav class="sr-filters" aria-label="Meal category">
+            {% for category in categories %}
+            <a
+                href="?category={{ category.value }}&q={{ search_query|urlencode }}"
+                class="{% if current_category == category.value %}active{% endif %}"
+            >
+                {{ category.label }}
+            </a>
+            {% endfor %}
+        </nav>
+    </div>
+
+    <!-- RECIPE CARDS -->
+    <section class="sr-grid">
+        {% for recipe in recipes %}
+        <article class="sr-card">
+
+            <div class="sr-image">
+                <!-- Foto resep akan dimasukkan di sini -->
+            </div>
+
+            <div class="sr-card-info">
+                
+                <div class="sr-title-row">
+                    <div class="sr-title-category">
+                        <h3>{{ recipe.name }}</h3>
+
+                        <span class="sr-category">
+                            {{ recipe.category }}
+                        </span>
+                    </div>
+
+                    {% if recipe.is_favorite %}
+                    <span class="sr-heart">♥</span>
+                    {% endif %}
+                </div>
+
+
+                <p>{{ recipe.description }}</p>
+            </div>
+
+            <div class="sr-actions">
+                <button type="button" class="sr-btn-edit">
+                    Edit
+                </button>
+
+                <button type="button" class="sr-btn-delete">
+                    Delete
+                </button>
+            </div>
+
+        </article>
+        {% empty %}
+        <p class="sr-empty">No saved recipes found.</p>
+        {% endfor %}
+    </section>
+
+</main>
+{% endblock content %}
