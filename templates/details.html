@@ -22,7 +22,9 @@
                                 <ol>
                                     {% for step in steps %}
                                         <li>{{ step.step }}</li>
-                                        <h3 class="recipe-detail__steps-title">Ingredients:</h3>
+                                        {% if step.ingredients %}
+                                            <h3 class="recipe-detail__steps-title">Ingredients:</h3>
+                                        {% endif %}
                                         <ol>
                                             {% for ingredient in step.ingredients %}
                                                 <li>{{ ingredient.name }}</li>
