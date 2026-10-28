@@ -13,6 +13,7 @@ import requests
 from django.views.decorators.http import require_POST
 
 from recipefinder.models import RecipeCache, Recipe
+from saved_recipe.models import SavedRecipe
 from .wordlist import EQUIPMENT
 from datetime import datetime, timedelta, timezone
 
@@ -114,12 +115,21 @@ def show_recipe_details(request, recipe_id):
     nutrition = recipe.nutrients.get("nutrients")
     instructions = recipe.instructions[0].get("steps")
     steps = [step for step in instructions]
+    already_saved = (
+        request.user.is_authenticated
+        and SavedRecipe.objects.filter(
+            user=request.user,
+            source_recipe=recipe
+        ).exists()
+    )
     context = {
         "nutrients": nutrition,
         "steps": steps,
         "title": recipe.title,
         "summary": recipe.summary,
         "image": recipe.image,
-        "source": recipe.source
+        "source": recipe.source,
+        "recipe_id": recipe.id,
+        "already_saved": already_saved,
     }
     return render(request, "details.html", context)

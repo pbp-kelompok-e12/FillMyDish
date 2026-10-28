@@ -38,6 +38,48 @@
                             <h1 class="recipe-detail__name">{{ title }}</h1>
                             <p class="recipe-detail__desc">{{ summary|striptags }}</p>
                         
+                            {% if user.is_authenticated %}
+
+                                {% if already_saved %}
+                                    <a
+                                        class="recipe-detail__save-btn recipe-detail__save-btn--saved"
+                                        href="{% url 'saved_recipe' %}"
+                                    >
+                                        ✓ Saved — View Saved Recipes
+                                    </a>
+
+                                {% else %}
+                                    <form
+                                        method="post"
+                                        action="{% url 'create_saved_recipe' %}"
+                                    >
+                                        {% csrf_token %}
+
+                                        <input
+                                            type="hidden"
+                                            name="recipe_id"
+                                            value="{{ recipe_id }}"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="recipe-detail__save-btn"
+                                        >
+                                            ♡ Save Recipe
+                                        </button>
+                                    </form>
+                                {% endif %}
+
+                            {% else %}
+                                <a
+                                    class="recipe-detail__save-btn"
+                                    href="{% url 'login' %}"
+                                >
+                                    Login to Save Recipe
+                                </a>
+                            {% endif %}
+
+
                             {% if nutrients %}
                                 <ul class="recipe-detail__nutrition" aria-label="Nutrition info">
                                     {% for nutrient in nutrients %}
