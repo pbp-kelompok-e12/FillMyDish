@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
     {% block content %}
-            {% include '_decor.html' %}
 
             <div class="div-2">
                 <section class="hero-find">
@@ -15,11 +14,16 @@
                         <span class="looking-for-the2" aria-hidden="true">Looking for the Best Recipe?</span>
                         <span class="looking-for-the3" aria-hidden="true">Looking for the Best Recipe?</span>
                     </h1>
-
-                    <!-- ganti URL sesuai nama url Django kamu -->
-                    <button class="find-btn" type="button" onclick="location.href='{% url "recipefinder:input_ingredients" %}'">
+                    
+                    <button
+                        class="find-btn"
+                        type="button"
+                        data-url="{% url 'recipefinder:input_ingredients' %}"
+                        onclick="window.location.href=this.dataset.url"
+                    >
                         Find Recipe
                     </button>
+
                 </section>
             </div>
 {% endblock content %}

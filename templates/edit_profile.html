@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-{% include 'partials/deco.html' %}
 <div class="profile-page">
     <form class="profile-form-card" method="post" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
         {% csrf_token %}

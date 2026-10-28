@@ -75,7 +75,7 @@ def review_edit(request, pk):
     else:
         form = ReviewForm(instance=review)
 
-    return render(request, 'review_edit.html', {'form':form})
+    return render(request, 'update_review.html', {'form':form})
 
 @login_required(login_url="/login")
 @require_POST
