@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
@@ -63,6 +62,14 @@
 
                 <p>{{ recipe.description }}</p>
             </div>
+            
+            {% if recipe.source_recipe_id %}
+                <a
+                    class="sr-card-view-link"
+                    href="{% url 'recipefinder:show_recipe_details' recipe.source_recipe_id %}"
+                    aria-label="View details for {{ recipe.name }}"
+                ></a>
+            {% endif %}
 
             <div class="sr-actions">
                 <button 

@@ -398,7 +398,39 @@
     margin: 0;
 }
 
+body:has(.sr-page) {
+    margin: 0;
+    padding-top: 0;
+}
 
+.frame:has(.sr-page) {
+    margin-top: 0;
+}
+
+/* Membuat card bisa diklik untuk View Details */
+.sr-card {
+    position: relative;
+}
+
+.sr-card-view-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    cursor: pointer;
+    border-radius: 12px;
+}
+
+.sr-card-view-link:focus-visible::after {
+    outline: 3px solid #F4CE14;
+    outline-offset: 3px;
+}
+
+/* Edit dan Delete tetap bisa diklik */
+.sr-actions {
+    position: relative;
+    z-index: 2;
+}
 
 
 /* RESPONSIVE */
