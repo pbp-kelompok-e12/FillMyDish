@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'review',
     'main',
     'recipefinder',
+    'mealplan',
 ]
 
 

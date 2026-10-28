@@ -25,11 +25,10 @@
     position: absolute;
     inset: 0;
 
-    background-image: url("../img/motif-tile.png");
-    background-repeat: repeat;
-    background-size: 320px 320px;
-
-    opacity: 0.4;
+    background-image: url("../img/mealplan-pattern.png");
+    background-repeat: repeat-y;
+    background-position: center top;
+    background-size: 100% auto;
 }
 
 /* FOTO MAKANAN */
@@ -40,17 +39,24 @@
 
     background-image: url("../img/food-strip.png");
     background-repeat: repeat-y;
-    background-position: center top;
+    background-position: center -8rem;
     background-size: 100% auto;
+}
+
+/* Halaman memakai dekorasi bersama dari .site-background */
+.frame .deco-layer,
+.frame .review-food {
+    display: none;
 }
 
 /* Untuk layar HP */
 @media (max-width: 767px) {
     .site-background::before {
-        background-size: 260px 260px;
+        background-size: 100% auto;
     }
 
     .site-background::after {
+        background-position: center -4rem;
         background-size: 900px auto;
         opacity: 0.55;
     }

@@ -22,6 +22,7 @@ from FillMyDish import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+
     path("profile/", views.profile_view, name="profile"),
     path("profile/<str:username>/", views.user_profile_view, name="user_profile"),
     path("edit-profile/", views.edit_profile_view, name="edit_profile"),
@@ -30,9 +31,11 @@ urlpatterns = [
     path("accounts/google/login/", views.google_login_view, name="google_login"),
     path("accounts/google/callback/", views.google_callback_view, name="google_callback"),
     path("logout/", views.logout_view, name="logout"),
+
     path("", include("recipefinder.urls")),
     path("", include("main.urls")),
     path("review/", include("review.urls")),
+    path("", include("mealplan.urls")),
     path("saved-recipes/", include("saved_recipe.urls")),
 ]
 
