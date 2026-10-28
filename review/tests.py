@@ -280,7 +280,7 @@ class ReviewUrlTests(TestCase):
         self.assertEqual(reverse('review:delete', args=[1]), '/review/1/delete/')
 
 
-# ---------------------------------------------------------------- Keamanan
+
 class ReviewSecurityTests(ReviewTestBase):
     def test_script_stored_and_returned_as_is(self):
         self.login('other')
