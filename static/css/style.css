@@ -924,9 +924,15 @@
   filter: brightness(1.1);
 }
 
-/* Navbar: item aktif ditandai */
-.frame .text-wrapper-9.active {
+.frame .text-wrapper-9.active,
+.frame .navbar a.active {
   color: #ffffff;
+  font-weight: 700;
+}
+
+.frame .div-3 > .text-wrapper-10 {
+  color: var(--color-palette-primary-200);
+  font-weight: 500;
 }
 
 /* =========================================================

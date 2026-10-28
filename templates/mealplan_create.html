@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <main class="mealplan-page">
+        <header class="mealplan-header">
+            <h1 class="mealplan-title">Your Meal Plan</h1>
+        </header>
+
+        <form class="mealplan-create-form" method="post">
+            {% csrf_token %}
+            
+            {% if error %}
+                <p role="alert">{{ error }}</p>
+            {% endif %}
+            
+            <h2 class="mealplan-form-title">Plan Title and Description</h2>
+
+            <div class="field-group">
+                <label class="field-label" for="plan-title">Title</label>
+                <input
+                    class="field-input"
+                    id="plan-title"
+                    name="title"
+                    type="text"
+                    maxlength="255"
+                    placeholder="Enter plan title"
+                    value="{{ title|default:'' }}"
+                    required
+                >
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="plan-description">
+                    Description <span>(optional)</span>
+                </label>
+                <textarea
+                    class="field-input plan-description-input"
+                    id="plan-description"
+                    name="description"
+                    placeholder="Enter plan description"
+                >{{ description|default:'' }}</textarea>
+            </div>
+
+            <div class="mealplan-form-actions">
+                <a class="mealplan-cancel-link" href="{% url 'mealplan:show_mealplan' %}">
+                    Cancel
+                </a>
+                <button class="search-btn mealplan-submit-btn" type="submit">
+                    Add
+                </button>
+            </div>
+        </form>
+    </main>
+{% endblock %}
