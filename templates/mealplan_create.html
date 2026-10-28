@@ -25,6 +25,7 @@
                     type="text"
                     maxlength="255"
                     placeholder="Enter plan title"
+                    value="{{ title|default:'' }}"
                     required
                 >
             </div>
@@ -38,7 +39,7 @@
                     id="plan-description"
                     name="description"
                     placeholder="Enter plan description"
-                ></textarea>
+                >{{ description|default:'' }}</textarea>
             </div>
 
             <div class="mealplan-form-actions">

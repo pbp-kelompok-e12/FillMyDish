@@ -1,21 +1,24 @@
-{% extends base.html %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
     <main class="mealplan-page mealplan-detail-page">
         <header class="mealplan-detail-header">
-            <a class="mealplan-edit-link" href="{% url 'mealplan:edit_mealplan' plan.id %}">Edit Your Plan</a>
             <h1 class="mealplan-detail-title">{{ plan.title }}</h1>
-            <p class="mealplan-detail-description"> {{plan.description|default:"No Description"}}</p>
+            <p class="mealplan-detail-description">
+                {{ plan.description|default:"No Description" }}
+            </p>
         </header>
 
-        <section class="recipe-grid" aria-label="Recipe in this meal plan">
-            {%vfor item in items %}
-                <a class="recipe-card mealplan-recipe-card"
-                    href="{% url 'recipefinder:show_recipe_details' item .recipe.id %}">
+        <section class="recipe-grid" aria-label="Recipes in this meal plan">
+            {% for item in items %}
+                <a
+                    class="recipe-card mealplan-recipe-card"
+                    href="{% url 'recipefinder:show_recipe_details' item.recipe.id %}"
+                >
                     <div class="recipe-card__img">
                         {% if item.recipe.image %}
-                            <img 
+                            <img
                                 src="{{ item.recipe.image }}"
                                 alt="{{ item.recipe.title }}"
                                 loading="lazy"
@@ -23,11 +26,15 @@
                         {% endif %}
                     </div>
 
-                    <h2 class="recipe-card__title">{{ item.recipe.titile }}</h2>
-                    <p class="recipe-card__summary">{{ item.recipe.summary|striptags|truncatewords:20 }}</p>
+                    <h2 class="recipe-card__title">{{ item.recipe.title }}</h2>
+                    <p class="recipe-card__summary">
+                        {{ item.recipe.summary|striptags|truncatewords:20 }}
+                    </p>
                 </a>
             {% empty %}
-                <p class="mealplan-empty-message">There are no recipesnin this plan yet.</p>
+                <p class="mealplan-empty-message">
+                    There are no recipes in this plan yet.
+                </p>
             {% endfor %}
         </section>
     </main>

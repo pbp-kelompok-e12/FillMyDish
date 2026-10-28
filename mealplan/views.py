@@ -12,15 +12,18 @@ def show_mealplan(request):
 @login_required(login_url='/login/')
 def create_mealplan(request):
     if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description', '')
-        if title:
-            MealPlan.objects.create(
-                user=request.user,
-                title=title,
-                description=description
-            )
-        return redirect('mealplan:show_mealplan')
+        title = request.POST.get('title', '').strip()
+        description = request.POST.get('description', '').strip()
+        
+        if not title:
+            return render(request, 'mealplan_create.html', 
+                          {'error': 'Plan title is required.',
+                           'title': title,
+                           'description': description,
+                           })
+        plan = MealPlan.objects.create(user=request.user, title=title, description=description)
+        request.session['mealplan_pending_plan_id'] = plan.id
+        return redirect('saved_recipe')
     return render(request, 'mealplan_create.html')
 
 @login_required(login_url='/login/')
@@ -44,6 +47,6 @@ def delete_item(request, item_id):
 @login_required(login_url='/login/')
 @require_POST
 def delete_mealplan(request, plan_id):
-    plan = get_object_or_404(MealPlan, id = plan_id, user=request.user)
+    plan = get_object_or_404(MealPlan, id=plan_id, user=request.user)
     plan.delete()
-    return redirect('mealplan:show_plans')
+    return redirect('mealplan:show_mealplan')
