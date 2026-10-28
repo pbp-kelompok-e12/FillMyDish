@@ -1,0 +1,253 @@
+/* =========================================================
+   HALAMAN FIND RECIPE: form + salad
+   ========================================================= */
+
+.frame .salad {
+  position: absolute;
+  width: 29.625rem;
+  height: 25.844rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+/* Form ada di alur normal, jadi tinggi halaman (dan posisi footer) ikut tinggi form */
+.frame .div-2.find-page {
+  height: auto;
+  padding-bottom: 4.4rem;     /* jarak form ke footer */
+}
+
+.find-card {
+  position: relative;
+  width: 53.625rem;
+  margin: 11.5rem 0 0 5.188rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2.4rem 6.5rem 2.4rem 3.6rem;
+  background-color: #f4ce14;
+  border-radius: 2rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.field-label {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #5c4b00;
+}
+
+.field-input {
+  width: 100%;
+  height: 3.2rem;
+  padding: 0 1rem;
+  background-color: #fff6a8;
+  border: 1px solid #d9b800;
+  border-radius: 0.6rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #3d3200;
+}
+
+.field-input::placeholder {
+  color: #7a6408;
+  opacity: 0.8;
+}
+
+.field-input:focus-visible {
+  outline: 2px solid #830000;
+  outline-offset: 2px;
+}
+
+.search-btn {
+  align-self: flex-end;
+  margin-right: -2.5rem;
+  padding: 0.8rem 1.8rem;
+  background-color: var(--color-palette-primary-500);
+  border: 0;
+  border-radius: 0.5rem;
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.search-btn:hover {
+  background-color: var(--color-palette-primary-600);
+}
+
+.search-btn:focus-visible {
+  outline: 3px solid #ffffff !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px #830000;
+}
+
+/* ---------- Desktop: layer makanan mengikuti tinggi halaman ---------- */
+@media (min-width: 1023.02px) {
+  .frame .div.food-layer {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Koordinat lama dikurangi offset layer (-9.8125rem / -11rem) */
+  .frame .food-layer .nasi-ayam { top: 0;     left: 0; }
+  .frame .food-layer .mie       { top: 0;     left: 44.0625rem; }
+  .frame .food-layer .nasgor    { top: 26rem; left: 64.1875rem; }
+
+  /* Salad menempel ke dasar halaman: ±9.4rem terlihat di atas footer, sisanya tertutup */
+  .frame .food-layer .salad {
+    top: auto;
+    bottom: -4.1rem;
+    left: 6.2rem;
+  }
+}
+
+/* ---------- Tablet & HP ---------- */
+@media (max-width: 1023px) {
+  .frame {
+    --salad-w: clamp(10rem, 45vw, 18rem);
+  }
+
+  .frame .div-2.find-page {
+    padding-bottom: calc(var(--salad-w) * 0.6);
+  }
+
+  .find-card {
+    width: 100%;
+    max-width: 40rem;
+    margin: 1rem auto 0;
+    padding: 1.5rem 1.25rem;
+    gap: 1.25rem;
+    border-radius: 1.5rem;
+  }
+
+  .field-group {
+    gap: 0.75rem;
+  }
+
+  .field-input {
+    height: 2.75rem;
+  }
+
+  .search-btn {
+    margin-right: 0;
+  }
+
+  .frame .salad {
+    top: auto;
+    bottom: 2.5rem;
+    left: -1rem;
+    width: var(--salad-w);
+    height: auto;
+    object-fit: contain;
+  }
+}
+/* =========================================================
+   POPUP KONFIRMASI
+   ========================================================= */
+
+.confirm-dialog {
+  width: min(32rem, calc(100vw - 2rem));
+  max-height: calc(100vh - 2rem);
+  padding: 2rem 2.25rem;
+  background-color: #830000;
+  color: #ffffff;
+  border: 0;
+  border-radius: 1.5rem;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.35);
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 700;
+  overflow-y: auto;
+}
+
+.confirm-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.confirm-title {
+  margin: 0 0 0.75rem;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 800;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.confirm-text {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.confirm-list {
+  margin: 0 0 1.75rem;
+  padding-left: 1.5rem;
+  list-style: decimal;
+  font-size: 1.125rem;
+}
+
+.confirm-list li {
+  margin-bottom: 1rem;          /* baris kosong antar item */
+  padding-left: 0.25rem;
+  overflow-wrap: anywhere;
+}
+
+.confirm-list li:last-child {
+  margin-bottom: 0;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.confirm-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.confirm-btn--yes {
+  background-color: #ffffff;
+  color: #830000;
+  border: 2px solid #ffffff;
+}
+
+.confirm-btn--yes:hover {
+  background-color: #ffcaca;
+  border-color: #ffcaca;
+}
+
+.confirm-btn--no {
+  background-color: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+
+.confirm-btn--no:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.confirm-btn:focus-visible {
+  outline: 3px solid #f4ce14 !important;
+  outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+  .confirm-dialog { padding: 1.5rem 1.25rem; }
+  .confirm-title  { font-size: 1.5rem; }
+  .confirm-actions { flex-direction: column-reverse; }
+  .confirm-btn { width: 100%; }
+}

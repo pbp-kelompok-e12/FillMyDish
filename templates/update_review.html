@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include '_decor.html' %}
+
+<div class="review-page review-page--form">
+    <form class="review-form" method="post">
+        {% csrf_token %}
+        <h2 class="review-form__title">Edit Yours</h2>
+
+        <div class="review-form__field">
+            <label for="{{ form.message.id_for_label }}">Message</label>
+            {{ form.message }}
+            {% for error in form.message.errors %}
+            <p class="review-form__error" style="display:block">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="review-form__actions">
+            <a class="review-form__cancel" href="{% url 'review:list' %}">Cancel</a>
+            <button type="submit" class="review-form__submit">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

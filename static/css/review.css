@@ -1,0 +1,425 @@
+.frame {
+  --review-card-bg: #fffbe6;
+  --review-gold: #a07f00;
+  --review-brown: #4a3c00;
+  --review-yellow: #f5d016;
+  --review-input-bg: #fff8c0;
+}
+
+
+.frame .deco-layer.deco-layer--full {
+  height: auto;
+  bottom: 12.3125rem;
+}
+
+.frame .review-food {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+}
+
+.frame .review-food--nasi-ayam {
+  top: 4.4rem;
+  left: 0;
+  width: 17rem;
+}
+
+.frame .review-food--mie {
+  top: 0;
+  left: 45.2rem;
+  width: 23.1rem;
+}
+
+.frame .review-food--nasgor {
+  top: 26.7rem;
+  right: -1rem;
+  width: 25.8rem;
+}
+
+.frame .review-food--salad {
+  top: 46.25rem;
+  left: 3.3rem;
+  width: 23.1rem;
+}
+
+.frame .review-page {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.frame .review-page--list {
+  min-height: 71.8rem;   
+}
+
+.frame .review-page--form {
+  min-height: 42.2rem;   
+}
+
+
+
+.frame .review-header {
+  margin-top: 15.5rem;
+  text-align: center;
+}
+
+.frame .review-title {
+  margin: 0;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 800;
+  font-size: 5rem;
+  line-height: 1.2;
+  white-space: nowrap;
+  background: linear-gradient(
+    180deg,
+    rgba(180, 60, 60, 1) 0%,
+    rgba(114, 0, 0, 1) 70%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--color-palette-primary-600);
+}
+
+.frame .review-subtitle {
+  margin: 0.5rem 0 0;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: var(--color-palette-primary-600);
+}
+
+
+
+.frame .review-body {
+  display: flex;
+  flex-direction: column;
+  width: 59.5rem;
+  margin-top: 8rem;
+  padding-bottom: 3.5rem;
+}
+
+.frame .review-list {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+
+.frame .review-add {
+  order: 2;
+  align-self: flex-end;
+  margin-top: 2.5rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  color: var(--review-gold);
+  text-decoration: none;
+  padding: 0.6rem 1.75rem;
+  background-color: var(--review-yellow);
+  border: 0;
+  border-radius: 999px;
+  color: var(--review-brown);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.15);
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.frame .review-add:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.frame .review-card {
+  min-height: 6.25rem;
+  padding: 1.25rem 2rem;
+  background-color: var(--review-card-bg);
+  border-radius: 0.5rem;
+}
+
+.frame .review-card__name {
+  margin: 0;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--review-brown);
+}
+
+.frame .review-card__message {
+  margin: 0.4rem 0 0;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 500;
+  font-size: 1.375rem;
+  color: var(--review-gold);
+  overflow-wrap: anywhere;
+}
+
+.frame .review-card__actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 1rem;
+}
+
+.frame .review-card__actions a,
+.frame .review-card__actions button {
+  padding: 0;
+  background: none;
+  border: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-palette-primary-600);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+
+
+.frame .review-form {
+  width: 53rem;
+  margin-top: 11rem;
+  padding: 2.5rem 3.75rem 2.4rem;
+  background-color: var(--review-yellow);
+  border-radius: 1.25rem;
+}
+
+.frame .review-form__title {
+  margin: 0 0 1.5rem;
+  text-align: center;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 2.75rem;
+  color: var(--review-brown);
+}
+
+.frame .review-form__field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--review-brown);
+}
+
+.frame .review-form__field textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 10.3rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--review-input-bg);
+  border: 1px solid var(--review-gold);
+  border-radius: 0.5rem;
+  resize: vertical;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 1rem;
+  color: var(--review-brown);
+}
+
+.frame .review-form__field textarea::placeholder {
+  color: var(--review-gold);
+}
+
+.frame .review-form__error {
+  margin: 0.4rem 0 0;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 0.9375rem;
+  color: var(--color-palette-primary-600);
+}
+
+.frame .review-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.frame .review-form__cancel {
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-palette-primary-600);
+  text-decoration: none;
+}
+
+.frame .review-form__cancel:hover {
+  text-decoration: underline;
+}
+
+.frame .review-form__submit {
+  width: 9.75rem;
+  height: 3rem;
+  background-color: var(--color-palette-primary-600);
+  border: 1px solid var(--color-palette-primary-600);
+  border-radius: 0.4rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.frame .review-form__submit:hover {
+  filter: brightness(1.15);
+}
+.frame .review-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 20;              
+  padding: 1rem;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.frame .review-modal.is-open {
+  display: flex;
+}
+
+.frame .review-modal .review-form {
+  margin: auto;              
+}
+
+.frame .review-form__error {
+  display: none;             
+}
+
+.frame .review-add,
+.frame .review-form__cancel {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.frame .review-card__message {
+  white-space: pre-line;
+}
+
+.review-toast {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 30;
+  max-width: calc(100vw - 2rem);
+  padding: 0.75rem 1.25rem;
+  background-color: var(--color-palette-secondary-800);
+  border-radius: 0.5rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 1rem;
+  color: var(--color-palette-font-50);
+}
+
+.review-toast--error {
+  background-color: var(--color-palette-primary-600);
+}
+
+@media (max-width: 1023px) {
+  .frame .deco-layer.deco-layer--full {
+    bottom: 8rem; /* kira-kira tinggi footer mobile */
+  }
+
+  .frame .review-food--nasi-ayam {
+    top: 14vw;
+    left: 0;
+    width: clamp(7rem, 28vw, 17rem);
+  }
+
+  .frame .review-food--mie {
+    top: 0;
+    left: auto;
+    right: 0;
+    width: clamp(8rem, 37vw, 22rem);
+  }
+
+  .frame .review-food--nasgor {
+    top: 115vw;
+    right: -2rem;
+    width: clamp(7rem, 30vw, 20rem);
+  }
+
+  .frame .review-food--salad {
+    top: 135vw;
+    left: 0;
+    width: clamp(8rem, 38vw, 22rem);
+  }
+
+
+  .frame .review-page--list,
+  .frame .review-page--form {
+    min-height: calc(177vw - 5.5rem);
+  }
+
+
+  .frame .review-header {
+    margin-top: clamp(5rem, 22vw, 12rem);
+  }
+
+  .frame .review-title {
+    font-size: clamp(1.25rem, 6.5vw, 4rem);
+    white-space: normal;
+    text-wrap: balance;
+  }
+
+  .frame .review-subtitle {
+    font-size: clamp(0.875rem, 3.4vw, 1.5rem);
+  }
+
+  .frame .review-body {
+    width: 100%;
+    margin-top: clamp(1.5rem, 6vw, 4rem);
+    padding-bottom: 2rem;
+  }
+
+  .frame .review-add {
+    order: 0;
+    margin: 0 0 1rem;
+    font-size: clamp(1rem, 3.2vw, 1.375rem);
+  }
+
+  .frame .review-list {
+    gap: 1rem;
+  }
+
+  .frame .review-card {
+    min-height: 4.5rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .frame .review-card__name {
+    font-size: clamp(1rem, 3.2vw, 1.25rem);
+  }
+
+  .frame .review-card__message {
+    font-size: clamp(0.9375rem, 3vw, 1.25rem);
+  }
+
+ 
+  .frame .review-form {
+    box-sizing: border-box;
+    width: min(100%, 36rem);
+    margin-top: clamp(5rem, 16vw, 10rem);
+    padding: clamp(1.25rem, 5vw, 2.5rem);
+    border-radius: 1rem;
+  }
+
+  .frame .review-form__title {
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+  }
+
+  .frame .review-form__field textarea {
+    height: clamp(8rem, 30vw, 12rem);
+  }
+
+  .frame .review-form__submit {
+    width: clamp(7rem, 26vw, 9.75rem);
+  }
+}

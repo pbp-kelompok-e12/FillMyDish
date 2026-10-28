@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% include 'partials/deco.html' %}
+<div class="profile-page">
+    <form class="profile-form-card" method="post" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
+        {% csrf_token %}
+        <h2 class="form-title">Edit Profile</h2>
+
+        {% if form.non_field_errors or formset.non_form_errors %}
+            <div class="form-error">{{ form.non_field_errors }} {{ formset.non_form_errors }}</div>
+        {% endif %}
+
+        <div class="form-group profile-image-group">
+            <label class="form-label" for="{{ form.profile_image.id_for_label }}">Profile Picture</label>
+            <div class="profile-image-picker">
+                {% if profile.profile_image %}
+                    <img class="profile-image-preview" id="profile-image-preview" src="{{ profile.profile_image.url }}" alt="Current profile picture">
+                {% else %}
+                    <div class="profile-image-preview profile-image-placeholder" id="profile-image-preview" aria-label="No profile picture">?</div>
+                {% endif %}
+                <div class="profile-image-controls">
+                    {{ form.profile_image }}
+                    <span class="profile-image-hint">Pilih foto baru untuk mengganti foto profil.</span>
+                    {% for error in form.profile_image.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                </div>
+            </div>
+        </div>
+
+        {% for field in form %}
+            {% if field.name != 'profile_image' %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+            </div>
+            {% endif %}
+        {% endfor %}
+
+        <div class="form-group">
+            <span class="form-label">Connections</span>
+            {{ formset.management_form }}
+            <div id="connection-list">
+                {% for connection_form in formset %}
+                    <div class="connection-row{% if connection_form.instance.pk %} existing{% endif %}">
+                        {{ connection_form.id }}
+                        {% for field in connection_form.visible_fields %}
+                            {% if field.name != 'DELETE' %}
+                                {{ field }}
+                                {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if connection_form.instance.pk %}
+                            <label class="form-check">
+                                {{ connection_form.DELETE }} <span>Delete</span>
+                            </label>
+                        {% endif %}
+                        <button type="button" class="btn-remove-connection" aria-label="Remove connection">&times;</button>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="btn-add-connection" id="add-connection">
+                <span class="plus-sign">+</span> Add Connection
+            </button>
+        </div>
+
+        <div class="form-actions">
+            <a class="btn-cancel" href="{% url 'profile' %}">Cancel</a>
+            <button type="submit" class="btn-submit">Update Profile</button>
+        </div>
+    </form>
+
+    <template id="empty-connection-template">
+        <div class="connection-row">
+            <input type="text" name="connections-__prefix__-platform" class="form-input" placeholder="Platform (e.g. Instagram)">
+            <input type="url" name="connections-__prefix__-url" class="form-input" placeholder="https://instagram.com/...">
+            <button type="button" class="btn-remove-connection" aria-label="Remove connection">&times;</button>
+        </div>
+    </template>
+
+    <script>
+        // Tombol X: baris baru langsung dihapus dari DOM;
+        // connection tersimpan dicentang checkbox DELETE-nya lalu disembunyikan.
+        (function () {
+            var list = document.getElementById('connection-list');
+            if (!list) return;
+
+            list.addEventListener('click', function (e) {
+                var btn = e.target.closest('.btn-remove-connection');
+                if (!btn) return;
+                var row = btn.closest('.connection-row');
+                if (row.classList.contains('existing')) {
+                    var del = row.querySelector('input[name$="-DELETE"]');
+                    if (del) del.checked = true;
+                    row.classList.add('marked-delete');
+                    row.style.display = 'none';
+                } else {
+                    row.remove();
+                }
+            });
+        })();
+    </script>
+    <script>
+        (function () {
+            var input = document.getElementById('{{ form.profile_image.id_for_label }}');
+            var preview = document.getElementById('profile-image-preview');
+            if (!input || !preview) return;
+
+            input.addEventListener('change', function () {
+                var file = input.files && input.files[0];
+                if (!file || !file.type.startsWith('image/')) return;
+                var reader = new FileReader();
+                reader.onload = function () {
+                    preview.src = reader.result;
+                    preview.classList.remove('profile-image-placeholder');
+                    preview.textContent = '';
+                };
+                reader.readAsDataURL(file);
+            });
+        })();
+    </script>
+{% endblock content %}

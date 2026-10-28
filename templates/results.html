@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block content %}
+        {% include '_decor.html' %}
+            <div class="div-2 find-page">
+               <a class="back-btn" href="javascript:history.back()">Back</a>
+
+               {% if error %}
+                   <p class="results-status" role="alert">{{ error }}</p>
+               {% elif not ingredients %}
+                   <p class="results-status">No ingredients were entered.</p>
+               {% elif not recipes %}
+                   <p class="results-status">No recipes found for {{ ingredients|join:", " }}.</p>
+               {% else %}
+                   <section class="recipe-grid" aria-label="Recipe results">
+                       {% for r in recipes %}
+                            <a class="recipe-card" href="{% url 'recipefinder:show_recipe_details' r.id %}">
+                               <div class="recipe-card__img">
+                                   {% if r.image %}
+                                       <img src="{{ r.image }}" alt="{{ r.title }}" loading="lazy">
+                                   {% endif %}
+                               </div>
+                               <h3 class="recipe-card__title">{{ r.title }}</h3>
+                               <p class="recipe-card__summary">{{ r.summary|striptags|truncatewords:25 }}</p>
+                           </a>
+                       {% endfor %}
+                   </section>
+               {% endif %}
+            </div>
+{% endblock content %}
