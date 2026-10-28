@@ -19,8 +19,8 @@ Platform yang memberikan rekomendasi resep berdasarkan bahan makanan dan alat ma
 ### Modul: 
 1. Profile: Nadhif
 2. Input bahan: Ridho
-3. Simpan resep: Rona
-4. Meal plan : Naira
+3. Simpan resep: Naira
+4. Meal plan : Rona
 5. Review/Feedback terkait website kita: Parsya
    
 ### User Roles:
