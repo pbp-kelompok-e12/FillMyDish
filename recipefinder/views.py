@@ -54,11 +54,11 @@ def get_recipe_cache():
 def suspicious(ingredients):
     vowels = ["a", "e", "i", "o", "u", "y"]
     flagged = False
-    no_vowel = True
     for ingredient in ingredients:
+        no_vowel = True
         for vowel in vowels:
             no_vowel = no_vowel and (vowel not in ingredient)
-        flagged = no_vowel or len(ingredient) > 50 or len(ingredient) == 1
+        flagged = flagged or no_vowel or len(ingredient) > 50 or len(ingredient) == 1
     return flagged
         
 @login_required(login_url="login")
