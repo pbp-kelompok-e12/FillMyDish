@@ -407,7 +407,6 @@ body:has(.sr-page) {
     margin-top: 0;
 }
 
-/* Membuat card bisa diklik untuk View Details */
 .sr-card {
     position: relative;
 }
@@ -426,10 +425,80 @@ body:has(.sr-page) {
     outline-offset: 3px;
 }
 
-/* Edit dan Delete tetap bisa diklik */
 .sr-actions {
     position: relative;
     z-index: 2;
+}
+
+
+.sr-grid {
+    align-items: stretch;
+}
+
+.sr-card {
+    height: 100%;
+}
+
+.sr-image {
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.sr-image img {
+    display: block;
+}
+
+.sr-title-category {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.sr-title-category h3 {
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.sr-category {
+    margin-top: 0;
+}
+
+.sr-card-info .sr-description {
+    color: white;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.45;
+    margin: 12px 0 16px;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+}
+
+.sr-actions {
+    margin-top: auto;
+    padding-top: 8px;
+}
+
+.sr-image-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    font-size: 13px;
+    color: #71817B;
+    text-align: center;
 }
 
 
