@@ -1,6 +1,6 @@
 ﻿{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <meta charset="utf-8" />
@@ -24,21 +24,21 @@
             {% block content %} {% endblock content %}
             <div class="group-wrapper" >
                 <div class="group-2" >
-                    <div class="text-wrapper-6" >
-                        Kelompok 12 PBP E
+                <div class="text-wrapper-6" >
+                    PBP E Group 12
                     </div>
                     <div class="text-wrapper-7" >
-                        Fakultas Ilmu Komputer
+                    Faculty of Computer Science
                     </div>
                     <div class="text-wrapper-8" >
-                        Universitas Indonesia
+                    University of Indonesia
                     </div>
                 </div>
             </div>
 
             <div class="div-3" id="site-nav" >
                 <span class="brand"><a href="{% url 'main:show_main' %}"> FilMyDish </a></span>
-                <button class="hamburger" type="button" aria-label="Buka menu" aria-expanded="false" aria-controls="site-nav">
+                <button class="hamburger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="site-nav">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -78,6 +78,22 @@
         </div>
 
         <script>
+            (function () {
+                document.addEventListener('click', function (event) {
+                    var button = event.target.closest('.password-toggle');
+                    if (!button) return;
+
+                    var input = document.getElementById(button.getAttribute('aria-controls'));
+                    if (!input) return;
+
+                    var showPassword = input.type === 'password';
+                    input.type = showPassword ? 'text' : 'password';
+                    button.textContent = showPassword ? 'Hide' : 'Show';
+                    button.setAttribute('aria-pressed', String(showPassword));
+                    button.setAttribute('aria-label', showPassword ? 'Hide password' : 'Show password');
+                });
+            })();
+
             (function () {
                 var nav = document.getElementById('site-nav');
                 var btn = nav.querySelector('.hamburger');

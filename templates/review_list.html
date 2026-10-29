@@ -30,7 +30,7 @@
                 {% endfor %}
             </div>
         </div>
-        
+
         <div class="review-form__field">
             <label for="{{ form.message.id_for_label }}">Message</label>
             {{ form.message }}
@@ -100,12 +100,35 @@
         const card = document.createElement('article');
         card.className = 'review-card';
 
+        const author = document.createElement('a');
+        author.className = 'review-card__author';
+        author.href = review.fields.profile_url;
+        const name = document.createElement('span');
         const header = document.createElement('div');
         header.className = 'review-card__header';
-
-        const name = document.createElement('h3');
         name.className = 'review-card__name';
-        name.textContent = review.fields.user;
+        name.textContent = review.fields.profile_username || review.fields.user;
+        const makeAvatarFallback = () => {
+            const fallback = document.createElement('span');
+            const words = name.textContent.trim().split(/\s+/).filter(Boolean);
+            fallback.className = 'review-card__avatar review-card__avatar--fallback';
+            fallback.textContent = words.length > 1
+                ? (words[0][0] + words[1][0]).toUpperCase()
+                : (words[0] || '?').slice(0, 2).toUpperCase();
+            fallback.setAttribute('aria-hidden', 'true');
+            return fallback;
+        };
+        if (review.fields.profile_image) {
+            const avatar = document.createElement('img');
+            avatar.className = 'review-card__avatar';
+            avatar.src = review.fields.profile_image;
+            avatar.alt = '';
+            avatar.addEventListener('error', () => avatar.replaceWith(makeAvatarFallback()), { once: true });
+            author.append(avatar);
+        } else {
+            author.append(makeAvatarFallback());
+        }
+        author.append(name);
 
         const rating = Math.max(0, Math.min(5, Number(review.fields.rating) || 0));
         const stars = document.createElement('span');
@@ -113,7 +136,7 @@
         stars.textContent = '★'.repeat(rating) + '☆'.repeat(5 - rating);
         stars.setAttribute('aria-label', `${rating} dari 5 bintang`);
 
-        header.append(name, stars);
+        header.append(author, stars);
 
         const message = document.createElement('p');
         message.className = 'review-card__message';

@@ -1,5 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+
+# models.py -> mendefinisikan model Profile dan Connection untuk menyimpan informasi profil pengguna 
+#              dan koneksi media sosial mereka
 
 class User(AbstractUser):
     is_moderator = models.BooleanField(default=False)

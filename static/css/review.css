@@ -143,7 +143,38 @@
   border-radius: 0.5rem;
 }
 
+.frame .review-card__author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--review-brown);
+  text-decoration: none;
+}
+
+.frame .review-card__author:hover .review-card__name {
+  text-decoration: underline;
+}
+
+.frame .review-card__avatar {
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.frame .review-card__avatar--fallback {
+  display: grid;
+  place-items: center;
+  background-color: var(--color-palette-primary-600);
+  color: #ffffff;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .frame .review-card__name {
+  display: inline-block;
   margin: 0;
   font-family: "Poppins", Helvetica, sans-serif;
   font-weight: 600;
@@ -482,6 +513,7 @@
     width: clamp(7rem, 26vw, 9.75rem);
   }
 }
+
 .frame .review-card {
   position: relative; /* anchors the badge to the card's corner */
 }
