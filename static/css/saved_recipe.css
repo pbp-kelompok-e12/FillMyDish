@@ -279,6 +279,13 @@
     font-size: 13px;
 }
 
+.sr-plan-status {
+    flex: 1 1 100%;
+    color: var(--sr-dark);
+    font-size: 14px;
+    font-weight: 600;
+}
+
 .sr-save-plan-modal[hidden] {
     display: none !important;
 }
