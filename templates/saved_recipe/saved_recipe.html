@@ -39,7 +39,11 @@
 
             <div class="sr-image">
                 {% if recipe.image_url %}
-                    <img src="{{ recipe.image_url }}" alt="{{ recipe.name }}">
+                    <img src="{{ recipe.image_url }}" alt="{{ recipe.name }}" loading="lazy">
+                {% else %}
+                    <span class="sr-image-placeholder">
+                        No photo available
+                    </span>
                 {% endif %}
             </div>
 
@@ -60,7 +64,9 @@
                 </div>
 
 
-                <p>{{ recipe.description }}</p>
+                <p class="sr-description">
+                    {{ recipe.description|striptags|truncatewords:25 }}
+                </p>
             </div>
             
             {% if recipe.source_recipe_id %}

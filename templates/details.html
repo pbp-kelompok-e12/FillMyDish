@@ -41,9 +41,7 @@
                         </div>
                         <div class="recipe-detail__right">
                             <h1 class="recipe-detail__name">{{ title }}</h1>
-                            <p class="recipe-detail__desc">{{ summary|striptags }}</p>
-                        
-                            {% if user.is_authenticated %}
+                                                        {% if user.is_authenticated %}
 
                                 {% if already_saved %}
                                     <a
@@ -70,7 +68,7 @@
                                             type="submit"
                                             class="recipe-detail__save-btn"
                                         >
-                                            ♡ Save Recipe
+                                            💾 Save Recipe
                                         </button>
                                     </form>
                                 {% endif %}
@@ -83,6 +81,9 @@
                                     Login to Save Recipe
                                 </a>
                             {% endif %}
+                            <p class="recipe-detail__desc">{{ summary|striptags }}</p>
+                        
+
 
 
                             {% if nutrients %}
