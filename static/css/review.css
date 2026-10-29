@@ -482,7 +482,6 @@
     width: clamp(7rem, 26vw, 9.75rem);
   }
 }
-<<<<<<< HEAD
 .frame .review-card {
   position: relative; /* anchors the badge to the card's corner */
 }
@@ -512,7 +511,7 @@
 .frame .review-card__status--cleared {
   background-color: #2e7d32;
   color: #fff;
-=======
+}
 
 .frame .review-card .review-card__name {
   display: block !important;
@@ -520,5 +519,4 @@
   opacity: 1 !important;
   color: #4a3c00 !important;
   -webkit-text-fill-color: #4a3c00 !important;
->>>>>>> review-page
 }
