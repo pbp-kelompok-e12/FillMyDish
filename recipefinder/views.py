@@ -55,10 +55,11 @@ def suspicious(ingredients):
     vowels = ["a", "e", "i", "o", "u", "y"]
     flagged = False
     for ingredient in ingredients:
+        text = ingredient.lower()
         no_vowel = True
         for vowel in vowels:
-            no_vowel = no_vowel and (vowel not in ingredient)
-        flagged = flagged or no_vowel or len(ingredient) > 50 or len(ingredient) == 1
+            no_vowel = no_vowel and (vowel not in text)
+        flagged = flagged or no_vowel or len(text) > 50 or len(text) == 1
     return flagged
         
 @login_required(login_url="login")
