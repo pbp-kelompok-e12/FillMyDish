@@ -9,7 +9,7 @@ from django.utils.html import strip_tags
 from recipefinder.models import Recipe
 
 # READ: Menampilkan resep tersimpan
-@login_required
+@login_required(login_url="/login")
 def saved_recipe_page(request):
 
     recipes = SavedRecipe.objects.filter(
@@ -55,7 +55,7 @@ def saved_recipe_page(request):
 
 
 # UPDATE: Favorite dan Meal Category
-@login_required
+@login_required(login_url="/login")
 @require_POST
 def update_saved_recipe(request, pk):
 
@@ -90,7 +90,7 @@ def update_saved_recipe(request, pk):
 
 
 # DELETE: Menghapus resep tersimpan
-@login_required
+@login_required(login_url="/login")
 @require_POST
 def delete_saved_recipe(request, pk):
 
@@ -107,7 +107,7 @@ def delete_saved_recipe(request, pk):
 
 # CREATE: Dipanggil dari halaman rekomendasi AI
 
-@login_required
+@login_required(login_url="/login")
 @require_POST
 def create_saved_recipe(request):
 
