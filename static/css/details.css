@@ -114,6 +114,22 @@
     color: #F5F7F8;
 }
 
+.recipe-detail__right > form {
+    margin-top: 18px;
+}
+
+.recipe-detail__right > a.recipe-detail__save-btn {
+    margin-top: 18px;
+}
+
+.recipe-detail__desc {
+    margin-top: 22px;
+}
+
+a.recipe-detail__save-btn.recipe-detail__save-btn--saved {
+    color: #45474B;
+}
+
 @media (max-width: 1023px) {
   .recipe-detail {
     grid-template-columns: 1fr;
