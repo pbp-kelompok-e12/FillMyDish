@@ -14,13 +14,19 @@ from moderation.models import SuspiciousRequest
 # Create your views here.
 
 def show_logs(request):
+    if not request.user.is_moderator:
+        return redirect("main:show_main")
     return render(request, "logs.html")
 
 def logs_list(request):
+    if not request.user.is_moderator:
+        return redirect("main:show_main")
     logs = SuspiciousRequest.objects.all()
     return render(request, 'logs/_logs.html', {'logs': logs})
 
 def review(request, log_id):
+    if not request.user.is_moderator:
+        return redirect("main:show_main")
     log = get_object_or_404(SuspiciousRequest, pk=log_id)
     is_htmx = request.headers.get('HX-Request')
 
