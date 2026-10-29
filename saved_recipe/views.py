@@ -5,6 +5,8 @@ from django.views.decorators.http import require_POST
 
 from .models import SavedRecipe
 from .forms import SavedRecipeCreateForm
+from django.utils.html import strip_tags
+from recipefinder.models import Recipe
 
 # READ: Menampilkan resep tersimpan
 @login_required
@@ -35,11 +37,20 @@ def saved_recipe_page(request):
         {"value": "snack", "label": "Snack"},
     ]
 
+    mealplan_draft = request.session.get("mealplan_draft")
+    draft_recipe_ids = (
+        mealplan_draft.get("recipe_ids", [])
+        if mealplan_draft
+        else []
+    )
+
     return render(request, "saved_recipe/saved_recipe.html", {
         "recipes": recipes,
         "categories": categories,
         "search_query": search_query,
         "current_category": current_category,
+        "mealplan_draft": mealplan_draft,
+        "draft_recipe_ids": draft_recipe_ids,
     })
 
 
@@ -95,18 +106,49 @@ def delete_saved_recipe(request, pk):
 
 
 # CREATE: Dipanggil dari halaman rekomendasi AI
+
 @login_required
 @require_POST
 def create_saved_recipe(request):
 
+    # Jika tombol berasal dari halaman Details
+    if "recipe_id" in request.POST:
+        recipe_id = request.POST.get("recipe_id", "").strip()
+
+        if not recipe_id.isdecimal():
+            return HttpResponseBadRequest("Invalid recipe ID")
+
+        # Ambil resep asli dari database
+        source = get_object_or_404(
+            Recipe,
+            pk=int(recipe_id)
+        )
+
+        # Simpan jika belum pernah disimpan user ini
+        SavedRecipe.objects.get_or_create(
+            user=request.user,
+            source_recipe=source,
+            defaults={
+                "name": source.title[:200],
+                "description": strip_tags(source.summary or ""),
+                "image_url": source.image or "",
+            },
+        )
+
+        return redirect("saved_recipe")
+
+    # Pertahankan fitur Create lama
     form = SavedRecipeCreateForm(request.POST)
 
     if not form.is_valid():
-        return HttpResponseBadRequest(form.errors.as_json())
+        return HttpResponseBadRequest(
+            form.errors.as_json()
+        )
 
     recipe = form.save(commit=False)
     recipe.user = request.user
     recipe.save()
 
     return redirect("saved_recipe")
+
 

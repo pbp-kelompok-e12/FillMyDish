@@ -1,5 +1,14 @@
 from django.urls import path
-from mealplan.views import show_mealplan, create_mealplan, mealplan_detail, delete_mealplan, delete_item
+from mealplan.views import (
+    show_mealplan,
+    create_mealplan,
+    mealplan_detail,
+    delete_mealplan,
+    toggle_draft_recipe,
+    save_mealplan_draft,
+    cancel_mealplan_draft,
+    delete_item
+)
 
 app_name = 'mealplan'
 
@@ -8,5 +17,8 @@ urlpatterns = [
     path('plan/create/', create_mealplan, name='create_mealplan'),
     path('plan/<int:plan_id>/', mealplan_detail, name='mealplan_detail'),
     path('plan/<int:plan_id>/delete/', delete_mealplan, name='delete_mealplan'),
+    path('plan/draft/recipe/<int:recipe_id>/toggle', toggle_draft_recipe, name='toggle_draft_recipe',),
+    path('plan/draft/save/', save_mealplan_draft, name='save_mealplan_draft'),
+    path('plan/draft/cancel', cancel_mealplan_draft, name='cancel_mealplan_draft',),
     path('plan/item/<int:item_id>/delete/', delete_item, name='delete_item'),
 ]

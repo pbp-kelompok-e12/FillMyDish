@@ -65,6 +65,9 @@
                 </div>
 
                 {% if user.is_authenticated %}
+                    {% if user.is_moderator %}
+                    <a class="text-wrapper-10" href="{% url 'moderation:show_logs' %}">Logs</a>
+                    {% endif %}
                     <a class="text-wrapper-10" href="{% url 'logout' %}">Logout</a>
                 {% else %}
                     <a class="text-wrapper-10" href="{% url 'login' %}">Login</a>

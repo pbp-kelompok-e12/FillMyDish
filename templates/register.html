@@ -11,11 +11,13 @@
         {% endif %}
 
         {% for field in form %}
+            {% if field.name != "moderator_key" %}
             <div class="form-group">
                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {{ field }}
                 {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
             </div>
+            {% endif %}
         {% endfor %}
 
         <div class="form-actions">

@@ -80,6 +80,56 @@
   margin-top: 0.5rem;
 }
 
+/* Save Recipe Button */
+.recipe-detail__save-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 24px;
+    padding: 12px 24px;
+
+    border: none;
+    border-radius: 12px;
+
+    background-color: #F4CE14;
+    color: #45474B;
+
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.recipe-detail__save-btn:hover {
+    background-color: #E8BE00;
+}
+
+.recipe-detail__save-btn--saved {
+    background-color: #F5F7F8;
+}
+
+.recipe-detail__save-btn--saved:hover {
+    background-color: #45474B;
+    color: #F5F7F8;
+}
+
+.recipe-detail__right > form {
+    margin-top: 18px;
+}
+
+.recipe-detail__right > a.recipe-detail__save-btn {
+    margin-top: 18px;
+}
+
+.recipe-detail__desc {
+    margin-top: 22px;
+}
+
+a.recipe-detail__save-btn.recipe-detail__save-btn--saved {
+    color: #45474B;
+}
+
 @media (max-width: 1023px) {
   .recipe-detail {
     grid-template-columns: 1fr;
@@ -95,4 +145,27 @@
   .recipe-detail__right { order: -1; padding-top: 0; }
   .recipe-detail__steps { font-size: 1.05rem; }
   .recipe-detail__desc  { font-size: 1.05rem; }
+}
+
+a.recipe-detail__save-btn.recipe-detail__save-btn--saved,
+a.recipe-detail__save-btn.recipe-detail__save-btn--saved:visited {
+    color: #45474B;
+}
+
+a.recipe-detail__save-btn.recipe-detail__save-btn--saved:hover {
+    color: #FFFFFF;
+}
+
+a.recipe-detail__action-btn,
+a.recipe-detail__action-btn:visited {
+    color: #FFFFFF;
+}
+
+a.recipe-detail__action-btn:hover {
+    color: #FFFFFF;
+}
+
+.recipe-detail__action-btn {
+    background-color: rgba(114, 0, 0, 0.8);
+    width: fit-content;
 }

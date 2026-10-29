@@ -13,6 +13,8 @@ import requests
 from django.views.decorators.http import require_POST
 
 from recipefinder.models import RecipeCache, Recipe
+from moderation.models import SuspiciousRequest
+from saved_recipe.models import SavedRecipe
 from .wordlist import EQUIPMENT
 from datetime import datetime, timedelta, timezone
 
@@ -48,7 +50,18 @@ def get_recipe_cache():
         if updated:
             recipe_cache.refresh_from_db()
     return recipe_cache
-    
+
+def suspicious(ingredients):
+    vowels = ["a", "e", "i", "o", "u", "y"]
+    flagged = False
+    for ingredient in ingredients:
+        text = ingredient.lower()
+        no_vowel = True
+        for vowel in vowels:
+            no_vowel = no_vowel and (vowel not in text)
+        flagged = flagged or no_vowel or len(text) > 50 or len(text) == 1
+    return flagged
+        
 @login_required(login_url="login")
 def show_recipes(request):
     ingredients_raw = request.GET.get("ingredients", "")
@@ -63,7 +76,9 @@ def show_recipes(request):
             error = f"{tool} is not recognized as a tool by the API, please try again without it\n"
         elif tool not in EQUIPMENT and error is not None:
             error += f"{tool} is not recognized as a tool by the API, please try again without it\n"
-    if ingredients and error is None:
+    if suspicious(ingredients):
+        SuspiciousRequest.objects.create(user=request.user, arguments=ingredients)
+    elif ingredients and error is None:
         key = "recipes:" + "|".join([
             ",".join(sorted(i.lower() for i in ingredients)),
             ",".join(sorted(e.lower() for e in exclude)),
@@ -114,12 +129,21 @@ def show_recipe_details(request, recipe_id):
     nutrition = recipe.nutrients.get("nutrients")
     instructions = recipe.instructions[0].get("steps")
     steps = [step for step in instructions]
+    already_saved = (
+        request.user.is_authenticated
+        and SavedRecipe.objects.filter(
+            user=request.user,
+            source_recipe=recipe
+        ).exists()
+    )
     context = {
         "nutrients": nutrition,
         "steps": steps,
         "title": recipe.title,
         "summary": recipe.summary,
         "image": recipe.image,
-        "source": recipe.source
+        "source": recipe.source,
+        "recipe_id": recipe.id,
+        "already_saved": already_saved,
     }
     return render(request, "details.html", context)
