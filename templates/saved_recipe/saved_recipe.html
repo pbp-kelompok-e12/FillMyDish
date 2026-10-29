@@ -32,6 +32,36 @@
         </nav>
     </div>
 
+    {% if mealplan_draft %}
+        <section class="sr-plan-draft">
+            <div>
+                <p class="sr-plan-draft__label">Creating Meal Plan</p>
+                <h2>{{ mealplan_draft.title }}</h2>
+                <p>Select recipes to add to this plan.</p>
+            </div>
+
+            <p id="sr-plan-error" class="sr-plan-error" role="alert"></p>
+            
+            <div class="sr-plan-draft__actions">
+                <form method="POST" action="{% url 'mealplan:cancel_mealplan_draft' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="sr-plan-cancel">
+                        Cancel Plan
+                    </button>
+                </form>
+
+                <button 
+                type="button" 
+                id="sr-save-mealplan" 
+                data-save-url="{% url 'mealplan:save_mealplan_draft' %}"
+                class="sr-plan-save"
+                >
+                    Save This Plan
+                </button>
+            </div>
+        </section>
+    {% endif %}
+
     <!-- RECIPE CARDS -->
     <section class="sr-grid">
         {% for recipe in recipes %}
@@ -78,6 +108,21 @@
             {% endif %}
 
             <div class="sr-actions">
+                {% if mealplan_draft %}
+                    <button
+                        type="button"
+                        class="sr-btn-add-to-plan{% if recipe.id in draft_recipe_ids %} is-added{% endif %}"
+                        data-toggle-url="{% url 'mealplan:toggle_draft_recipe' recipe.id %}"
+                        data-added="{% if recipe.id in draft_recipe_ids %}true{% else %}false{% endif %}"
+                    >
+                        {% if recipe.id in draft_recipe_ids %}
+                            Added to Plan
+                        {% else %}
+                            Add to Plan
+                        {% endif %}        
+                    </button>
+                {% endif %}
+                
                 <button 
                     type="button" 
                     class="sr-btn-edit"

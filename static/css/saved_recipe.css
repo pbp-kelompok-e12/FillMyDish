@@ -187,10 +187,97 @@
     background: #830000;
 }
 
+.sr-btn-add-to-plan {
+    color: var(--sr-dark);
+    border: 1px solid var(--sr-dark);
+}
+
+.sr-btn-add-to-plan:hover {
+    color: white;
+    border-color: #45474B;
+    background: #45474B;
+}
+
+.sr-btn-add-to-plan.is-added {
+    background: var(--sr-dark);
+    border-color: var(--sr-dark);
+    color: white;
+}
+
+.sr-btn-add-to-plan.is-added:hover {
+    background: #35463f;
+    border-color: #35463f;
+}
+
 .sr-empty {
     color: var(--sr-dark);
 }
 
+.sr-plan-draft {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin-bottom: 28px;
+    padding: 20px 24px;
+    border-radius: 16px;
+    background: var(--sr-yellow);
+    color: #45474B;
+}
+
+.sr-plan-draft h2,
+.sr-plan-draft p {
+    margin: 0;
+}
+
+.sr-plan-draft .sr-plan-draft__label {
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.sr-plan-draft__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sr-plan-draft__actions form {
+    margin: 0;
+}
+
+.sr-plan-draft__actions button {
+    padding: 9px 14px;
+    border: 1px solid var(--sr-dark);
+    border-radius: 8px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sr-plan-cancel {
+    background: white;
+    color: #830000;
+}
+
+.sr-plan-save {
+    background: var(--sr-dark);
+    color: white;
+}
+
+.sr-plan-draft__actions button:hover {
+    filter: brightness(0.92);
+}
+
+.sr-plan-error {
+    flex: 1 1 100%;
+    color: #830000;
+    font-size: 13px;
+}
 
 
 
@@ -518,6 +605,16 @@ body:has(.sr-page) {
     .sr-toolbar {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .sr-plan-draft {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 18px;
+    }
+
+    .sr-plan-draft__actions {
+        flex-wrap: wrap;
     }
 
     .sr-grid {

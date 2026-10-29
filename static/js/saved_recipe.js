@@ -162,4 +162,93 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // Add or remove a recipe from the meal plan draft
+    document.querySelectorAll(".sr-btn-add-to-plan").forEach(button => {
+        button.addEventListener("click", async function () {
+            button.disabled = true;
+
+            try {
+                const response = await fetch(button.dataset.toggleUrl, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken
+                    },
+                    mode: "same-origin"
+                });
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message || "Could not update the meal plan."
+                    );
+                }
+
+                button.dataset.added = String(result.added);
+                button.textContent = result.added
+                    ? "Added to Plan"
+                    : "Add to Plan";
+                button.classList.toggle("is-added", result.added);
+            } catch (error) {
+                const errorMessage =
+                    document.getElementById("sr-plan-error");
+
+                if (errorMessage) {
+                    errorMessage.textContent =
+                        error.message || "Could not connect to the server.";
+                } else {
+                    alert(error.message || "Could not update the meal plan.");
+                }
+            } finally {
+                button.disabled = false;
+            }
+        });
+    });
+
+    // Save the selected recipes and create the plan
+    const saveMealplanButton =
+        document.getElementById("sr-save-mealplan");
+
+    if (saveMealplanButton) {
+        saveMealplanButton.addEventListener("click", async function () {
+            if (!window.confirm("Are you sure you want to save this plan?")) {
+                return;
+            }
+
+            saveMealplanButton.disabled = true;
+
+            try {
+                const response = await fetch(
+                    saveMealplanButton.dataset.saveUrl,
+                    {
+                        method: "POST",
+                        headers: {
+                            "X-CSRFToken": csrfToken
+                        },
+                        mode: "same-origin"
+                    }
+                );
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(result.message || "Could not save the plan.");
+                }
+
+                window.location.href = result.redirect_url;
+            } catch (error) {
+                const errorMessage =
+                    document.getElementById("sr-plan-error");
+
+                if (errorMessage) {
+                    errorMessage.textContent =
+                        error.message || "Could not connect to the server.";
+                } else {
+                    alert(error.message || "Could not save the plan.");
+                }
+
+                saveMealplanButton.disabled = false;
+            }
+        });
+    }
 });
