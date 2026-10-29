@@ -113,6 +113,7 @@ def cancel_mealplan_draft(request):
     request.session.pop("mealplan_draft", None)
     return redirect("mealplan:show_mealplan")
 
+@login_required(login_url='/login/')
 def mealplan_detail(request, plan_id):
     plan = get_object_or_404(MealPlan, id=plan_id, user=request.user)
     items = plan.items.all()
@@ -122,6 +123,7 @@ def mealplan_detail(request, plan_id):
     }
     return render(request, 'mealplan_detail.html', context)
 
+@login_required(login_url='/login/')
 @require_POST
 def delete_item(request, item_id):
     item = get_object_or_404(MealPlanItem, id=item_id, meal_plan__user=request.user)
@@ -129,6 +131,7 @@ def delete_item(request, item_id):
     item.delete()
     return JsonResponse({"message": "Item deleted successfully"}, status=200)
 
+@login_required(login_url='/login/')
 @require_POST
 def delete_mealplan(request, plan_id):
     plan = get_object_or_404(MealPlan, id=plan_id, user=request.user)
