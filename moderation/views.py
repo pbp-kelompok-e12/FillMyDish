@@ -12,18 +12,20 @@ from django.views.decorators.http import require_POST
 
 from moderation.models import SuspiciousRequest
 # Create your views here.
-
+@login_required(login_url="/login")
 def show_logs(request):
     if not request.user.is_moderator:
         return redirect("main:show_main")
     return render(request, "logs.html")
 
+@login_required(login_url="/login")
 def logs_list(request):
     if not request.user.is_moderator:
         return redirect("main:show_main")
     logs = SuspiciousRequest.objects.all()
     return render(request, 'logs/_logs.html', {'logs': logs})
 
+@login_required(login_url="/login")
 def review(request, log_id):
     if not request.user.is_moderator:
         return redirect("main:show_main")
