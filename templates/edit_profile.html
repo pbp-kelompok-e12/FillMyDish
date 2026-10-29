@@ -43,7 +43,7 @@
                     {# Merender input unggah foto yang dibuat oleh Django. #}
                     {{ form.profile_image }}
                     <!-- Menampilkan teks bantu atau elemen kecil di dalam komponen. -->
-                    <span class="profile-image-hint">Pilih foto baru untuk mengganti foto profil.</span>
+                    <span class="profile-image-hint">Choose a new photo to update your profile picture.</span>
                     {# Menampilkan setiap pesan validasi khusus untuk unggahan foto. #}
                     {% for error in form.profile_image.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
                 <!-- Menutup elemen HTML pembungkus bagian ini. -->

@@ -21,7 +21,7 @@
             {# Menentukan tampilan alternatif ketika kondisi sebelumnya tidak terpenuhi. #}
             {% else %}
                 <!-- Menampilkan teks bantu atau elemen kecil di dalam komponen. -->
-                <span class="avatar-circle avatar-fallback" data-profile-name="{{ profile.full_name|default:profile_user.get_full_name|default:profile.username|default:profile_user.username }}" aria-label="Inisial foto profil"></span>
+                <span class="avatar-circle avatar-fallback" data-profile-name="{{ profile.full_name|default:profile_user.get_full_name|default:profile.username|default:profile_user.username }}" aria-label="Profile picture initials"></span>
             {# Mengakhiri percabangan kondisi Django. #}
             {% endif %}
         <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
@@ -37,7 +37,7 @@
         <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
         <div class="profile-bio">
             {# Menampilkan bagian berikut hanya jika kondisi Django terpenuhi. #}
-            {% if profile.bio %}{{ profile.bio }}{% else %}Tidak ada bio{% endif %}
+            {% if profile.bio %}{{ profile.bio }}{% else %}No bio yet{% endif %}
         <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
         </div>
         <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
