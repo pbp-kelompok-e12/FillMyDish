@@ -1,6 +1,7 @@
 from django import forms
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.exceptions import ValidationError
 from .models import Profile, Connection, User
 from django.conf import settings
 
@@ -85,6 +86,13 @@ class LoginForm(AuthenticationForm):
         }),
         label="Password",
     )
+    def confirm_login_allowed(self, user):
+        super().confirm_login_allowed(user)
+        if user.is_banned:
+            raise ValidationError(
+                "This account has been banned.",
+                code="banned",
+            )
 
 
 class ConnectionForm(forms.ModelForm):
