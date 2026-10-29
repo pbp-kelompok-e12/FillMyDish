@@ -162,7 +162,20 @@
 }
 
 .mealplan-detail-page {
-  width: 64rem;
+  width: 100%;
+  max-width: 1100px;
+  padding-right: 32px;
+  padding-left: 32px;
+  box-sizing: border-box;
+}
+
+.mealplan-detail-page .recipe-grid {
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+  gap: 24px;
+  margin-top: 0;
 }
 
 .mealplan-detail-header {
@@ -170,7 +183,7 @@
   flex-direction: column;
   align-items: flex-end;
   width: 100%;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   text-align: right;
 }
 
@@ -205,6 +218,95 @@
 
 .mealplan-recipe-card {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #6e8b82;
+  color: #f1f5f4;
+  text-decoration: none;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 12%);
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  box-sizing: border-box;
+}
+
+.mealplan-recipe-card:hover {
+  background-color: #495e57;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 16%);
+  transform: translateY(-2px);
+}
+
+.mealplan-recipe-card:focus-visible {
+  outline: 3px solid #830000;
+  outline-offset: 3px;
+}
+
+.mealplan-recipe-card .recipe-card__img {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f1f5f4;
+}
+
+.mealplan-recipe-card__image-placeholder {
+  padding: 12px;
+  color: #71817b;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: 13px;
+  text-align: center;
+}
+
+.mealplan-recipe-card .recipe-card__img img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mealplan-recipe-card .recipe-card__title {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.mealplan-recipe-card .recipe-card__category {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: #fff;
+  color: #6e8b82;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: 11px;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.mealplan-recipe-card .recipe-card__summary {
+  display: -webkit-box;
+  margin: 12px 0 16px;
+  overflow: hidden;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
 }
 
 .mealplan-empty-message {
@@ -261,6 +363,84 @@
   margin-right: 0;
 }
 
+/* Delete plan confirmation popover */
+.delete-modal[popover] {
+  position: fixed;
+  inset: 0;
+  width: min(42rem, calc(100vw - 2rem));
+  max-width: none;
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.delete-modal::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
+
+.delete-modal__content {
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-radius: 1rem;
+  background: #650f06;
+  color: #f8f9fa;
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 30%);
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+}
+
+.delete-modal__content h2 {
+  margin: 0 0 1.25rem;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  text-align: center;
+}
+
+.delete-modal__content > p {
+  font-size: 1.2rem;
+}
+
+.delete-modal__error {
+  color: #ffd4d0;
+}
+
+.delete-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.delete-modal__actions button {
+  min-width: 7.5rem;
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 0.4rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.delete-modal__actions button:hover {
+  filter: brightness(0.9);
+}
+
+.delete-modal__cancel {
+  background: #e8aaa5;
+  color: #4b100b;
+}
+
+.delete-modal__confirm {
+  background: #fff;
+  color: #650f06;
+}
+
+.delete-modal__actions button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 @media (max-width: 1023px) {
   .mealplan-page {
     width: 100%;
@@ -271,6 +451,9 @@
 
   .mealplan-detail-page {
     width: 100%;
+    max-width: 1100px;
+    padding-right: 32px;
+    padding-left: 32px;
   }
 
   .mealplan-header {
@@ -334,7 +517,14 @@
 
 }
 
-@media (max-width: 599px) {
+@media (max-width: 900px) {
+  .mealplan-detail-page .recipe-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
   .mealplan-page {
     margin-top: 7.5rem;
     margin-bottom: 4rem;
@@ -343,6 +533,20 @@
 
   .mealplan-header {
     margin-bottom: 1.25rem;
+  }
+
+  .mealplan-recipe-card {
+    padding: 16px;
+  }
+
+  .mealplan-detail-page .recipe-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mealplan-detail-page {
+    padding-right: 16px;
+    padding-left: 16px;
   }
 
   .plan-card {
@@ -364,12 +568,26 @@
     padding: 0.55rem 0.85rem;
     font-size: 0.9rem;
   }
+
+  .delete-modal__content > p {
+    font-size: 1rem;
+  }
+
+  .delete-modal__actions {
+    gap: 0.65rem;
+  }
+
+  .delete-modal__actions button {
+    min-width: 6.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .plan-card,
+  .mealplan-recipe-card,
   .delete-btn,
-  .make-new-link {
+  .make-new-link,
+  .delete-modal__actions button {
     transition: none;
   }
 }

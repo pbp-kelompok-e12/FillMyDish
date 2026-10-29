@@ -22,6 +22,7 @@
         {# Mengulang tampilan untuk setiap data dalam daftar. #}
         {% for field in form %}
             <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
+            {% if field.name != "moderator_key" %}
             <div class="form-group">
                 <!-- Memberi keterangan pada kolom input yang terkait. -->
                 <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
@@ -45,7 +46,9 @@
                 {% for error in field.errors %}<div class="form-error">{{ error }}</div>{% endfor %}
             <!-- Menutup elemen HTML yang dibuka sebelumnya. -->
             </div>
+
         {# Mengakhiri pengulangan data. #}
+            {% endif %}
         {% endfor %}
 
         <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->

@@ -37,6 +37,7 @@ urlpatterns = [
     path("review/", include("review.urls")),
     path("", include("mealplan.urls")),
     path("saved-recipes/", include("saved_recipe.urls")),
+    path("", include("moderation.urls")),
 ]
 
 if settings.DEBUG:

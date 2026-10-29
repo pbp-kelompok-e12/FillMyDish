@@ -12,15 +12,18 @@
 
         <div class="mealplan-list">
             {% for plan in plans %}
-                <article class="plan-card">
+                <article class="plan-card" data-plan-card>
                     <a href="{% url 'mealplan:mealplan_detail' plan.id %}" class="plan-info">
                         <h2 class="plan-card-title">{{ plan.title }}</h2>
                         <p class="plan-card-desc">{{ plan.description|default:"No Description" }}</p>
                     </a>
-                    <form action="{% url 'mealplan:delete_mealplan' plan.id %}" method="POST" class="plan-delete-form">
-                        {% csrf_token %}
-                        <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this plan?')">Delete</button>
-                    </form>
+                    <button 
+                        type="button"
+                        class="delete-btn"
+                        data-delete-url="{% url 'mealplan:delete_mealplan' plan.id %}"
+                        data-plan-title="{{plan.title}}">
+                        Delete
+                    </button>
                 </article>
             {% empty %}
                 <article class="plan-card empty-card">
@@ -29,5 +32,116 @@
             {% endfor %}
         </div>
     </main>
+
+    <form id="csrf-token-form" hidden>
+        {% csrf_token %}
+    </form>
+    
+    <div 
+        id="delete-plan-modal"
+        class="delete-modal"
+        popover="auto"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="delete-plan-title"
+    >
+        <div class="delete-modal__content">
+            <h2 id="delete-plan-title">Delete Plan</h2>
+            <p>Are you sure you want to delete this plan? 
+                <strong id="delete-plan-name"></strong>
+            </p>
+            <p id="delete-plan-error" class="delete-modal__error" role="alert"></p>
+
+            <div class="delete-modal__actions">
+                <button type="button" class="delete-modal__cancel" popovertarget="delete-plan-modal" popovertargetaction="hide">
+                    Cancel
+                </button>
+                <button type="button" id="confirm-delete-plan" class="delete-modal__confirm">
+                    Yes, Delete
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let currentDeleteButton = null;
+        let currentDeleteUrl = "";
+
+        function getCookie(name) {
+            let cookieValue = null;
+
+            if (document.cookie && document.cookie !== ""){
+                const cookies = document.cookie.split(";");
+
+                for (let i = 0; i < cookies.length; i++){
+                    const cookie = cookies[i].trim();
+
+                    if (cookie.substring(0, name.length + 1) === name + "="){
+                        cookieValue = decodeURIComponent(
+                            cookie.substring(name.length + 1)
+                        );
+                        break;
+                    }
+                }
+            }
+
+            return cookieValue;
+        }
+        const deletePlanModal = document.getElementById("delete-plan-modal");
+        const deletePlanName = document.getElementById("delete-plan-name");
+        const deletePlanError = document.getElementById("delete-plan-error");
+        const confirmDeletePlanButton = document.getElementById("confirm-delete-plan");
+
+        document.querySelectorAll("[data-delete-url]").forEach((button) => {
+            button.addEventListener("click", () => {
+                currentDeleteButton = button;
+                currentDeleteUrl = button.dataset.deleteUrl;
+                deletePlanName.textContent = button.dataset.planTitle;
+                deletePlanError.textContent = "";
+                deletePlanModal.showPopover();
+            });
+        });
+
+        confirmDeletePlanButton.addEventListener("click", async function () {
+            if (!currentDeleteButton || !currentDeleteUrl) return;
+
+            const button = currentDeleteButton;
+            const planCard = button.closest("[data-plan-card]");
+            this.disabled = true;
+
+            try{
+                const response = await fetch(currentDeleteUrl, {
+                    method: "POST",
+                    headers: {"X-CSRFToken": getCookie("csrftoken"),},
+                });
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok){
+                    throw new Error(result.message || "The plan could not be deleted.");
+                }
+
+                planCard.remove();
+                deletePlanModal.hidePopover();
+
+                const mealplanList = document.querySelector(".mealplan-list");
+                const remainingPlanCards = mealplanList.querySelectorAll("[data-plan-card]");
+
+                if (remainingPlanCards.length === 0){
+                    const emptyCard = document.createElement("article");
+                    emptyCard.className = "plan-card empty-card";
+                    emptyCard.innerHTML = '<h2 class="plan-card-empty">No Meal Plan yet. Click "Make a New One" to create one.</h2>';
+                    mealplanList.appendChild(emptyCard);
+                }
+
+                currentDeleteButton = null;
+                currentDeleteUrl = "";
+            } catch(error){
+                deletePlanError.textContent = error.message || "Could not connect to the server.";
+            } finally{
+                this.disabled = false;
+            }
+        });
+    </script>
 {% endblock %}
 
