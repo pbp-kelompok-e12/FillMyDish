@@ -12,25 +12,42 @@
 
         <section class="recipe-grid" aria-label="Recipes in this meal plan">
             {% for item in items %}
-                <a
-                    class="recipe-card mealplan-recipe-card"
-                    href="{% url 'recipefinder:show_recipe_details' item.recipe.id %}"
-                >
+                {% if item.recipe.source_recipe_id %}
+                    <a
+                        class="recipe-card mealplan-recipe-card"
+                        href="{% url 'recipefinder:show_recipe_details' item.recipe.source_recipe_id %}"
+                        aria-label="View details for {{ item.recipe.name }}"
+                    >
+                {% else %}
+                    <article class="recipe-card mealplan-recipe-card">
+                {% endif %}
                     <div class="recipe-card__img">
-                        {% if item.recipe.image %}
+                        {% if item.recipe.image_url %}
                             <img
-                                src="{{ item.recipe.image }}"
-                                alt="{{ item.recipe.title }}"
+                                src="{{ item.recipe.image_url }}"
+                                alt="{{ item.recipe.name }}"
                                 loading="lazy"
                             >
+                        {% else %}
+                            <span class="mealplan-recipe-card__image-placeholder">
+                                No photo available
+                            </span>
                         {% endif %}
                     </div>
 
-                    <h2 class="recipe-card__title">{{ item.recipe.title }}</h2>
+                    <h2 class="recipe-card__title">{{ item.recipe.name }}</h2>
+                    <span class="recipe-card__category">
+                        {{ item.recipe.get_meal_category_display }}
+                    </span>
                     <p class="recipe-card__summary">
-                        {{ item.recipe.summary|striptags|truncatewords:20 }}
+                        {{ item.recipe.description|striptags|truncatewords:25 }}
                     </p>
-                </a>
+
+                {% if item.recipe.source_recipe_id %}
+                    </a>
+                {% else %}
+                    </article>
+                    {% endif %}
             {% empty %}
                 <p class="mealplan-empty-message">
                     There are no recipes in this plan yet.

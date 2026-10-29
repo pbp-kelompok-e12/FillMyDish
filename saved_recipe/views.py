@@ -37,11 +37,20 @@ def saved_recipe_page(request):
         {"value": "snack", "label": "Snack"},
     ]
 
+    mealplan_draft = request.session.get("mealplan_draft")
+    draft_recipe_ids = (
+        mealplan_draft.get("recipe_ids", [])
+        if mealplan_draft
+        else []
+    )
+
     return render(request, "saved_recipe/saved_recipe.html", {
         "recipes": recipes,
         "categories": categories,
         "search_query": search_query,
         "current_category": current_category,
+        "mealplan_draft": mealplan_draft,
+        "draft_recipe_ids": draft_recipe_ids,
     })
 
 

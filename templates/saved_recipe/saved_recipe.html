@@ -32,6 +32,76 @@
         </nav>
     </div>
 
+    {% if mealplan_draft %}
+        <section class="sr-plan-draft">
+            <div>
+                <p class="sr-plan-draft__label">Creating Meal Plan</p>
+                <h2>{{ mealplan_draft.title }}</h2>
+                <p>Select recipes to add to this plan.</p>
+            </div>
+
+            <p id="sr-plan-error" class="sr-plan-error" role="alert"></p>
+            <p id="sr-plan-status" class="sr-plan-status" role="status" aria-live="polite"></p>
+            
+            <div class="sr-plan-draft__actions">
+                <form method="POST" action="{% url 'mealplan:cancel_mealplan_draft' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="sr-plan-cancel">
+                        Cancel Plan
+                    </button>
+                </form>
+
+                <button 
+                type="button" 
+                id="sr-save-mealplan" 
+                data-save-url="{% url 'mealplan:save_mealplan_draft' %}"
+                class="sr-plan-save"
+                >
+                    Save This Plan
+                </button>
+            </div>
+        </section>
+
+        <div
+            id="sr-save-plan-modal"
+            class="sr-save-plan-modal"
+            hidden
+        >
+            <div
+                class="sr-save-plan-modal__content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="sr-save-plan-title"
+                aria-describedby="sr-save-plan-message"
+            >
+                <h2 id="sr-save-plan-title">Save This Plan?</h2>
+
+                <p id="sr-save-plan-message">
+                    Are you sure you want to save
+                    <strong>{{ mealplan_draft.title }}</strong>?
+                </p>
+
+                <div class="sr-save-plan-modal__actions">
+                    <button
+                        type="button"
+                        id="sr-cancel-save-plan"
+                        class="sr-save-plan-modal__cancel"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        id="sr-confirm-save-plan"
+                        class="sr-save-plan-modal__confirm"
+                    >
+                        Yes, Save Plan
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     <!-- RECIPE CARDS -->
     <section class="sr-grid">
         {% for recipe in recipes %}
@@ -78,6 +148,21 @@
             {% endif %}
 
             <div class="sr-actions">
+                {% if mealplan_draft %}
+                    <button
+                        type="button"
+                        class="sr-btn-add-to-plan{% if recipe.id in draft_recipe_ids %} is-added{% endif %}"
+                        data-toggle-url="{% url 'mealplan:toggle_draft_recipe' recipe.id %}"
+                        data-added="{% if recipe.id in draft_recipe_ids %}true{% else %}false{% endif %}"
+                    >
+                        {% if recipe.id in draft_recipe_ids %}
+                            Added to Plan
+                        {% else %}
+                            Add to Plan
+                        {% endif %}        
+                    </button>
+                {% endif %}
+                
                 <button 
                     type="button" 
                     class="sr-btn-edit"
