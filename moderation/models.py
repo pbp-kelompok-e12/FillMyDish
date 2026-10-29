@@ -8,5 +8,13 @@ class SuspiciousRequest(models.Model):
                                  on_delete=models.CASCADE,
                                 )
     arguments = models.JSONField(default=list)
-    reviewed = models.BooleanField(default=False)
-    review_status = models.CharField(max_length=255, blank=True)
+    class Status(models.TextChoices):
+        WAITING = 'waiting', 'Waiting'
+        FLAGGED = 'flagged', 'Flagged'
+        CLEARED = 'cleared', 'Cleared'
+
+    status = models.CharField(
+        max_length=10,
+        choices=Status.choices,
+        default=Status.WAITING,
+    )
