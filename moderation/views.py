@@ -35,6 +35,13 @@ def review(request, log_id):
         if status in (SuspiciousRequest.Status.CLEARED, SuspiciousRequest.Status.FLAGGED):
             log.status = status
             log.save()
+            reported_user = log.user
+            if status == SuspiciousRequest.Status.FLAGGED:
+                reported_user.is_banned = not reported_user.is_moderator
+                reported_user.save()
+            elif status == SuspiciousRequest.Status.CLEARED:
+                reported_user.is_banned = False
+                reported_user.save()
         if is_htmx:
             response = HttpResponse(status=204)
             response['HX-Trigger'] = 'reviewed'
