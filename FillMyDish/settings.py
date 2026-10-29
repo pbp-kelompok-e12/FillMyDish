@@ -90,6 +90,7 @@ WSGI_APPLICATION = 'FillMyDish.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 SPOONACULAR_API_KEY = os.environ.get("SPOONACULAR_API_KEY", "")
+MODERATOR_KEY = os.environ.get("MODERATOR_KEY", "")
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "")
 GOOGLE_CLIENT_SECRET = os.environ.get("GOOGLE_CLIENT_SECRET", "")
 if PRODUCTION:
@@ -156,3 +157,5 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = ["https://musthofa-ridho-fillmydish.pws.cs.ui.ac.id"]
+
+AUTH_USER_MODEL = "FillMyDish.User"

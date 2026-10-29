@@ -1,9 +1,8 @@
 from django import forms
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.models import User
-from .models import Profile, Connection
-
+from .models import Profile, Connection, User
+from django.conf import settings
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(
@@ -32,10 +31,13 @@ class RegisterForm(UserCreationForm):
         }),
         label="Username",
     )
-
-    class Meta:
+    moderator_key = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput
+    )
+    class Meta(UserCreationForm.Meta):
         model = User
-        fields = ["username", "email", "full_name", "password1", "password2"]
+        fields = ("username", "email", "full_name", "password1", "password2")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -53,6 +55,10 @@ class RegisterForm(UserCreationForm):
     def save(self, commit=True):
         user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
+        if self.cleaned_data["moderator_key"] == settings.MODERATOR_KEY:
+            user.is_moderator = True
+        else:
+            user.is_moderator = False
         if commit:
             user.save()
             Profile.objects.create(
