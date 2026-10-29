@@ -21,6 +21,16 @@
         {% csrf_token %}
         <h2 class="review-form__title">Add Yours</h2>
 
+        <div class="review-form__rating">
+            <span class="review-form__rating-title">Rating</span>
+            <div class="star-input">
+                {% for i in "54321" %}
+                <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}">
+                <label for="star{{ i }}" title="{{ i }} bintang">★</label>
+                {% endfor %}
+            </div>
+        </div>
+        
         <div class="review-form__field">
             <label for="{{ form.message.id_for_label }}">Message</label>
             {{ form.message }}
@@ -90,15 +100,26 @@
         const card = document.createElement('article');
         card.className = 'review-card';
 
+        const header = document.createElement('div');
+        header.className = 'review-card__header';
+
         const name = document.createElement('h3');
         name.className = 'review-card__name';
         name.textContent = review.fields.user;
+
+        const rating = Math.max(0, Math.min(5, Number(review.fields.rating) || 0));
+        const stars = document.createElement('span');
+        stars.className = 'review-card__stars';
+        stars.textContent = '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        stars.setAttribute('aria-label', `${rating} dari 5 bintang`);
+
+        header.append(name, stars);
 
         const message = document.createElement('p');
         message.className = 'review-card__message';
         message.textContent = review.fields.message;
 
-        card.append(name, message);
+        card.append(header, message);
 
         if (review.fields.is_owner) {
             const actions = document.createElement('div');
@@ -154,6 +175,7 @@
         errorEl.style.display = 'none';
         modal.classList.add('is-open');
         textarea.focus();
+        form.querySelectorAll('input[name=rating]').forEach((r) => { r.checked = false; });
     }
 
     function closeModal() {

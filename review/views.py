@@ -30,6 +30,7 @@ def get_reviews_json(request):
                 "message":review.message,
                 "created_at":review.created_at,
                 "updated_at":review.updated_at,
+                "rating": review.rating,
             },
         })
     return JsonResponse(data, safe=False)

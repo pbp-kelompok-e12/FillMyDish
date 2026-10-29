@@ -321,6 +321,66 @@
   background-color: var(--color-palette-primary-600);
 }
 
+.frame .review-form__rating {
+  margin-bottom: 1.25rem;
+}
+
+.frame .review-form__rating-title {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--review-brown);
+}
+
+.frame .star-input {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;   /* membalik 5..1 menjadi 1..5 */
+  justify-content: flex-end;
+}
+
+.frame .star-input input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.frame .star-input label {
+  padding: 0 0.15rem;
+  font-size: 2.25rem;
+  line-height: 1;
+  color: rgba(74, 60, 0, 0.3);
+  cursor: pointer;
+}
+
+.frame .star-input input:checked ~ label,
+.frame .star-input label:hover,
+.frame .star-input label:hover ~ label {
+  color: var(--review-brown);
+}
+
+.frame .star-input input:focus-visible + label {
+  outline: 2px solid var(--review-brown);
+  border-radius: 0.25rem;
+}
+
+/* Bintang di kartu review */
+.frame .review-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.frame .review-card__stars {
+  font-size: 1.25rem;
+  letter-spacing: 0.1rem;
+  white-space: nowrap;
+  color: var(--review-gold);
+}
+
 @media (max-width: 1023px) {
   .frame .deco-layer.deco-layer--full {
     bottom: 8rem; /* kira-kira tinggi footer mobile */
@@ -422,6 +482,7 @@
     width: clamp(7rem, 26vw, 9.75rem);
   }
 }
+<<<<<<< HEAD
 .frame .review-card {
   position: relative; /* anchors the badge to the card's corner */
 }
@@ -451,4 +512,13 @@
 .frame .review-card__status--cleared {
   background-color: #2e7d32;
   color: #fff;
+=======
+
+.frame .review-card .review-card__name {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #4a3c00 !important;
+  -webkit-text-fill-color: #4a3c00 !important;
+>>>>>>> review-page
 }
