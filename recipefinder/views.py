@@ -13,6 +13,7 @@ import requests
 from django.views.decorators.http import require_POST
 
 from recipefinder.models import RecipeCache, Recipe
+from moderation.models import SuspiciousRequest
 from saved_recipe.models import SavedRecipe
 from .wordlist import EQUIPMENT
 from datetime import datetime, timedelta, timezone
@@ -49,7 +50,17 @@ def get_recipe_cache():
         if updated:
             recipe_cache.refresh_from_db()
     return recipe_cache
-    
+
+def suspicious(ingredients):
+    vowels = ["a", "e", "i", "o", "u", "y"]
+    flagged = False
+    no_vowel = True
+    for ingredient in ingredients:
+        for vowel in vowels:
+            no_vowel = no_vowel and (vowel not in ingredient)
+        flagged = no_vowel or len(ingredient) > 50 or len(ingredient) == 1
+    return flagged
+        
 @login_required(login_url="login")
 def show_recipes(request):
     ingredients_raw = request.GET.get("ingredients", "")
@@ -64,7 +75,9 @@ def show_recipes(request):
             error = f"{tool} is not recognized as a tool by the API, please try again without it\n"
         elif tool not in EQUIPMENT and error is not None:
             error += f"{tool} is not recognized as a tool by the API, please try again without it\n"
-    if ingredients and error is None:
+    if suspicious(ingredients):
+        SuspiciousRequest.objects.create(user=request.user, arguments=ingredients)
+    elif ingredients and error is None:
         key = "recipes:" + "|".join([
             ",".join(sorted(i.lower() for i in ingredients)),
             ",".join(sorted(e.lower() for e in exclude)),
