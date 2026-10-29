@@ -422,3 +422,33 @@
     width: clamp(7rem, 26vw, 9.75rem);
   }
 }
+.frame .review-card {
+  position: relative; /* anchors the badge to the card's corner */
+}
+
+.frame .review-card__status {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  padding: 0.25rem 0.9rem;
+  border-radius: 999px;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.frame .review-card__status--waiting {
+  background-color: var(--review-yellow);
+  color: var(--review-brown);
+}
+
+.frame .review-card__status--flagged {
+  background-color: #c62828;
+  color: #fff;
+}
+
+.frame .review-card__status--cleared {
+  background-color: #2e7d32;
+  color: #fff;
+}
