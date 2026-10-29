@@ -1,0 +1,15 @@
+<form class="review-form" hx-post="{% url 'moderation:review' log.pk %}">
+    {% csrf_token %}
+    <h2 class="review-form__title">{{ log.user.username }}</h2>
+
+    {% for argument in log.arguments %}
+        <p class="review-card__message">{{ argument }}</p>
+    {% endfor %}
+
+    <div class="review-form__actions">
+        <button type="button" class="review-form__cancel"
+                onclick="document.getElementById('modal').classList.remove('is-open')">Cancel</button>
+        <button type="submit" name="status" value="cleared" class="review-form__submit">Clear</button>
+        <button type="submit" name="status" value="flagged" class="review-form__submit">Flag</button>
+    </div>
+</form>
