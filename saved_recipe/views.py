@@ -38,7 +38,7 @@ def saved_recipe_page(request):
     ]
 
     mealplan_draft = request.session.get("mealplan_draft")
-    drafr_recipe_ids = (
+    draft_recipe_ids = (
         mealplan_draft.get("recipe_ids", [])
         if mealplan_draft
         else []
@@ -50,7 +50,7 @@ def saved_recipe_page(request):
         "search_query": search_query,
         "current_category": current_category,
         "mealplan_draft": mealplan_draft,
-        "draft_recipe_ids": drafr_recipe_ids,
+        "draft_recipe_ids": draft_recipe_ids,
     })
 
 

@@ -15,6 +15,7 @@ def show_mealplan(request):
     context = {'plans': plans}
     return render(request, 'mealplan.html', context)
 
+@login_required(login_url='/login/')
 def create_mealplan(request):
     if request.method == 'POST':
         title = request.POST.get('title', '').strip()
@@ -38,6 +39,7 @@ def create_mealplan(request):
         return redirect('saved_recipe')
     return render(request, 'mealplan_create.html')
 
+@login_required(login_url='/login/')
 @require_POST
 def toggle_draft_recipe(request, recipe_id):
     draft = request.session.get("mealplan_draft")
@@ -60,6 +62,7 @@ def toggle_draft_recipe(request, recipe_id):
 
     return JsonResponse({"success": True, "added": added, "message": "Recipe added to plan." if added else "Recipe removed from plan.",})
 
+@login_required(login_url='/login/')
 @require_POST
 def save_mealplan_draft(request):
     draft = request.session.get("mealplan_draft")
@@ -85,7 +88,7 @@ def save_mealplan_draft(request):
     with transaction.atomic():
         plan = MealPlan.objects.create(user=request.user, title=title, description=description,)
 
-        MealPlan.objects.bulk_create([
+        MealPlanItem.objects.bulk_create([
             MealPlanItem(
                 meal_plan=plan,
                 recipe=recipes_by_id[recipe_id],
@@ -97,13 +100,14 @@ def save_mealplan_draft(request):
     request.session.pop("mealplan_draft", None)
 
     return JsonResponse({
-        "succes": True,
+        "success": True,
         "redirect_url": reverse(
             "mealplan:mealplan_detail",
             args=[plan.pk],
         ),
     })
 
+@login_required(login_url='/login/')
 @require_POST
 def cancel_mealplan_draft(request):
     request.session.pop("mealplan_draft", None)
