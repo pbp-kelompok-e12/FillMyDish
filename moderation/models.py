@@ -8,3 +8,5 @@ class SuspiciousRequest(models.Model):
                                  on_delete=models.CASCADE,
                                 )
     arguments = models.JSONField(default=list)
+    reviewed = models.BooleanField(default=False)
+    review_status = models.CharField(max_length=255, blank=True)
