@@ -60,6 +60,45 @@
                 </button>
             </div>
         </section>
+
+        <div
+            id="sr-save-plan-modal"
+            class="sr-save-plan-modal"
+            hidden
+        >
+            <div
+                class="sr-save-plan-modal__content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="sr-save-plan-title"
+                aria-describedby="sr-save-plan-message"
+            >
+                <h2 id="sr-save-plan-title">Save This Plan?</h2>
+
+                <p id="sr-save-plan-message">
+                    Are you sure you want to save
+                    <strong>{{ mealplan_draft.title }}</strong>?
+                </p>
+
+                <div class="sr-save-plan-modal__actions">
+                    <button
+                        type="button"
+                        id="sr-cancel-save-plan"
+                        class="sr-save-plan-modal__cancel"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        id="sr-confirm-save-plan"
+                        class="sr-save-plan-modal__confirm"
+                    >
+                        Yes, Save Plan
+                    </button>
+                </div>
+            </div>
+        </div>
     {% endif %}
 
     <!-- RECIPE CARDS -->

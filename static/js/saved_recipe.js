@@ -208,47 +208,80 @@ document.addEventListener("DOMContentLoaded", function () {
     // Save the selected recipes and create the plan
     const saveMealplanButton =
         document.getElementById("sr-save-mealplan");
+    const savePlanModal =
+        document.getElementById("sr-save-plan-modal");
+    const cancelSavePlanButton =
+        document.getElementById("sr-cancel-save-plan");
+    const confirmSavePlanButton =
+        document.getElementById("sr-confirm-save-plan");
+    const savePlanError =
+        document.getElementById("sr-plan-error");
 
-    if (saveMealplanButton) {
+    function closeSavePlanModal() {
+        if (savePlanModal) {
+            savePlanModal.hidden = true;
+        }
+    }
+
+    if (saveMealplanButton && savePlanModal) {
         saveMealplanButton.addEventListener("click", async function () {
-            if (!window.confirm("Are you sure you want to save this plan?")) {
-                return;
+            if (savePlanError) {
+                savePlanError.textContent ="";
             }
 
-            saveMealplanButton.disabled = true;
+            savePlanModal.hidden = false;
+            confirmSavePlanButton.focus();
+        });
 
-            try {
-                const response = await fetch(
-                    saveMealplanButton.dataset.saveUrl,
-                    {
-                        method: "POST",
-                        headers: {
-                            "X-CSRFToken": csrfToken
-                        },
-                        mode: "same-origin"
-                    }
-                );
-
-                const result = await response.json().catch(() => ({}));
-
-                if (!response.ok) {
-                    throw new Error(result.message || "Could not save the plan.");
-                }
-
-                window.location.href = result.redirect_url;
-            } catch (error) {
-                const errorMessage =
-                    document.getElementById("sr-plan-error");
-
-                if (errorMessage) {
-                    errorMessage.textContent =
-                        error.message || "Could not connect to the server.";
-                } else {
-                    alert(error.message || "Could not save the plan.");
-                }
-
-                saveMealplanButton.disabled = false;
+        cancelSavePlanButton.addEventListener(
+            "click",
+            closeSavePlanModal
+        );
+        savePlanModal.addEventListener("click", function (event) {
+            if (event.target === savePlanModal){
+                closeSavePlanModal();
             }
         });
+        document.addEventListener("keydown", function(event) {
+            if ( event.key === "Escape" && !savePlanModal.hidden) {
+                closeSavePlanModal();
+            }
+        });
+
+        confirmSavePlanButton.addEventListener(
+            "click",
+            async function () {
+                confirmSavePlanButton.disabled = true;
+                confirmSavePlanButton.textContent = "Saving...";
+
+                try {
+                    const response = await fetch(
+                        saveMealplanButton.dataset.saveUrl,
+                        {
+                            method: "POST",
+                            headers: {"X-CSRFToken": csrfToken},
+                            mode: "same-origin"
+                        }
+                    );
+
+                    const result = await response.json().catch(() => ({}));
+
+                    if (!response.ok) {
+                        throw new Error(result.message || "Could not save the plan.");
+                    }
+
+                    window.location.href = result.redirect_url;
+                } catch (error) {
+                    closeSavePlanModal();
+
+                    if (savePlanError) {
+                        savePlanError.textContent = error.message || "Could not connect to the server.";
+                    }
+
+                    confirmSavePlanButton.disabled = false;
+                    confirmSavePlanButton.textContent = "Yes, Save Plan";
+                }
+            }
+        )
     }
 });

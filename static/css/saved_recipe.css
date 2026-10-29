@@ -279,6 +279,80 @@
     font-size: 13px;
 }
 
+.sr-save-plan-modal[hidden] {
+    display: none !important;
+}
+
+.sr-save-plan-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgb(0 0 0 / 55%);
+}
+
+.sr-save-plan-modal__content {
+    width: min(560px, 100%);
+    padding: 32px;
+    border-radius: 14px;
+    background: #650f06;
+    color: #f8f9fa;
+    box-shadow: 0 16px 48px rgb(0 0 0 / 30%);
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.sr-save-plan-modal__content h2 {
+    margin: 0 0 20px;
+    font-family: "Poppins", sans-serif;
+    font-size: 28px;
+    text-align: center;
+}
+
+.sr-save-plan-modal__content p {
+    margin: 0;
+    font-size: 18px;
+}
+
+.sr-save-plan-modal__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.sr-save-plan-modal__actions button {
+    min-width: 120px;
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 7px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+}
+
+.sr-save-plan-modal__actions button:hover {
+    filter: brightness(0.9);
+}
+
+.sr-save-plan-modal__cancel {
+    background: #e8aaa5;
+    color: #4b100b;
+}
+
+.sr-save-plan-modal__confirm {
+    background: #fff;
+    color: #650f06;
+}
+
+.sr-save-plan-modal__actions button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
 
 
 /* ===================================
@@ -615,6 +689,27 @@ body:has(.sr-page) {
 
     .sr-plan-draft__actions {
         flex-wrap: wrap;
+    }
+
+    .sr-save-plan-modal__content {
+        padding: 24px 20px;
+    }
+
+    .sr-save-plan-modal__content h2 {
+        font-size: 23px;
+    }
+
+    .sr-save-plan-modal__content p {
+        font-size: 16px;
+    }
+
+    .sr-save-plan-modal__actions {
+        gap: 8px;
+    }
+
+    .sr-save-plan-modal__actions button {
+        min-width: 0;
+        flex: 1;
     }
 
     .sr-grid {
