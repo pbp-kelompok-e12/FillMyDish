@@ -261,6 +261,84 @@
   margin-right: 0;
 }
 
+/* Delete plan confirmation popover */
+.delete-modal[popover] {
+  position: fixed;
+  inset: 0;
+  width: min(42rem, calc(100vw - 2rem));
+  max-width: none;
+  margin: auto;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.delete-modal::backdrop {
+  background: rgb(0 0 0 / 55%);
+}
+
+.delete-modal__content {
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border-radius: 1rem;
+  background: #650f06;
+  color: #f8f9fa;
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 30%);
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+}
+
+.delete-modal__content h2 {
+  margin: 0 0 1.25rem;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  text-align: center;
+}
+
+.delete-modal__content > p {
+  font-size: 1.2rem;
+}
+
+.delete-modal__error {
+  color: #ffd4d0;
+}
+
+.delete-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.delete-modal__actions button {
+  min-width: 7.5rem;
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 0.4rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+
+.delete-modal__actions button:hover {
+  filter: brightness(0.9);
+}
+
+.delete-modal__cancel {
+  background: #e8aaa5;
+  color: #4b100b;
+}
+
+.delete-modal__confirm {
+  background: #fff;
+  color: #650f06;
+}
+
+.delete-modal__actions button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 @media (max-width: 1023px) {
   .mealplan-page {
     width: 100%;
@@ -364,12 +442,25 @@
     padding: 0.55rem 0.85rem;
     font-size: 0.9rem;
   }
+
+  .delete-modal__content > p {
+    font-size: 1rem;
+  }
+
+  .delete-modal__actions {
+    gap: 0.65rem;
+  }
+
+  .delete-modal__actions button {
+    min-width: 6.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .plan-card,
   .delete-btn,
-  .make-new-link {
+  .make-new-link,
+  .delete-modal__actions button {
     transition: none;
   }
 }
