@@ -20,7 +20,7 @@
                         Cancel
                     </button>
                     <button
-                        class="mealplan-edit-link mealplan-save-button"
+                        class="sr-plan-save"
                         type="submit"
                         form="save-mealplan-recipe-changes"
                     >
@@ -76,18 +76,6 @@
                     <p class="recipe-card__summary">
                         {{ item.recipe.description|striptags|truncatewords:25 }}
                     </p>
-
-                    {% if edit_mode %}
-                        <div class="sr-actions">
-                            <button
-                                type="button"
-                                class="sr-btn-delete"
-                                data-item-id="{{ item.id }}"
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    {% endif %}
 
                 {% if edit_mode or not item.recipe.source_recipe_id %}
                     </article>

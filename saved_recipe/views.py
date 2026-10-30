@@ -38,11 +38,24 @@ def saved_recipe_page(request):
     ]
 
     mealplan_draft = request.session.get("mealplan_draft")
-    draft_recipe_ids = (
-        mealplan_draft.get("recipe_ids", [])
-        if mealplan_draft
-        else []
-    )
+    edit_draft = request.session.get("mealplan_edit_draft")
+    editing_plan_id = request.GET.get("editing_plan", "")
+
+    mealplan_edit_draft = None
+    if (
+        editing_plan_id.isdecimal()
+        and edit_draft
+        and str(edit_draft.get("plan_id")) == editing_plan_id
+    ):
+        mealplan_edit_draft = edit_draft
+        mealplan_draft = None
+
+    if mealplan_edit_draft:
+        draft_recipe_ids = mealplan_edit_draft.get("recipe_ids", [])
+    elif mealplan_draft:
+        draft_recipe_ids = mealplan_draft.get("recipe_ids", [])
+    else:
+        draft_recipe_ids = []
 
     return render(request, "saved_recipe/saved_recipe.html", {
         "recipes": recipes,
@@ -50,6 +63,7 @@ def saved_recipe_page(request):
         "search_query": search_query,
         "current_category": current_category,
         "mealplan_draft": mealplan_draft,
+        "mealplan_edit_draft": mealplan_edit_draft,
         "draft_recipe_ids": draft_recipe_ids,
     })
 
