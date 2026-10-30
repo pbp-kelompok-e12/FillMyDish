@@ -44,9 +44,9 @@
                 >{{ description|default:plan.description }}</textarea>
             </div>
 
-            <div class="mealplan-form-actions">
+            <div class="mealplan-form-actions sr-plan-draft__actions">
                 <button
-                    class="mealplan-cancel-link mealplan-cancel-button"
+                    class="sr-plan-cancel mealplan-cancel-button"
                     type="submit"
                     name="action"
                     value="cancel"
@@ -55,12 +55,12 @@
                     Cancel
                 </button>
                 <a
-                    class="mealplan-cancel-link"
+                    class="sr-plan-cancel"
                     href="{% url 'mealplan:edit_mealplan_recipes' plan.id %}"
                 >
                     Skip
                 </a>
-                <button class="search-btn mealplan-submit-btn" type="submit">
+                <button class="sr-plan-save mealplan-submit-btn" type="submit">
                     Continue
                 </button>
             </div>

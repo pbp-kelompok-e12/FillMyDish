@@ -10,8 +10,14 @@
         <header class="mealplan-detail-header">
             {% if edit_mode %}
                 <div class="mealplan-edit-actions">
+                    <a
+                        class="sr-plan-save"
+                        href="{% url 'saved_recipe' %}?editing_plan={{ plan.id }}"
+                    >
+                        Manage Recipes
+                    </a>
                     <button
-                        class="mealplan-edit-link mealplan-cancel-button"
+                        class="sr-plan-cancel mealplan-cancel-button"
                         type="submit"
                         name="action"
                         value="cancel"
@@ -96,124 +102,8 @@
                 hidden
             >
                 {% csrf_token %}
-                <div id="pending-recipe-deletions"></div>
             </form>
 
-            <div
-                id="delete-recipe-modal"
-                class="delete-modal"
-                popover="auto"
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="delete-recipe-title"
-            >
-                <div class="delete-modal__content">
-                    <h2 id="delete-recipe-title">Delete Recipe</h2>
-
-                    <p>
-                        Are you sure you want to remove
-                        <strong id="delete-recipe-name"></strong>
-                        from this plan?
-                    </p>
-
-                    <p
-                        id="delete-recipe-error"
-                        class="delete-modal__error"
-                        role="alert"
-                    ></p>
-
-                    <div class="delete-modal__actions">
-                        <button
-                            type="button"
-                            class="delete-modal__cancel"
-                            popovertarget="delete-recipe-modal"
-                            popovertargetaction="hide"
-                        >
-                            Cancel
-                        </button>
-
-                        <button
-                            type="button"
-                            id="confirm-delete-recipe"
-                            class="delete-modal__confirm"
-                        >
-                            Yes, Delete
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <script>
-                let currentRecipeDeleteButton = null;
-
-                const deleteRecipeModal = document.getElementById(
-                    'delete-recipe-modal'
-                );
-                const deleteRecipeName = document.getElementById(
-                    'delete-recipe-name'
-                );
-                const deleteRecipeError = document.getElementById(
-                    'delete-recipe-error'
-                );
-                const confirmDeleteRecipeButton = document.getElementById(
-                    'confirm-delete-recipe'
-                );
-
-                document.querySelectorAll(
-                    '.mealplan-detail-page .sr-btn-delete[data-item-id]'
-                ).forEach((button) => {
-                    button.addEventListener('click', () => {
-                        currentRecipeDeleteButton = button;
-
-                        const card = button.closest('.mealplan-recipe-card');
-                        deleteRecipeName.textContent = card
-                            .querySelector('.recipe-card__title')
-                            .textContent
-                            .trim();
-
-                        deleteRecipeError.textContent = '';
-                        deleteRecipeModal.showPopover();
-                    });
-                });
-
-                confirmDeleteRecipeButton.addEventListener('click', function () {
-                    if (!currentRecipeDeleteButton) {
-                        return;
-                    }
-
-                    const button = currentRecipeDeleteButton;
-                    const card = button.closest('.mealplan-recipe-card');
-                    const itemInput = document.createElement('input');
-
-                    itemInput.type = 'hidden';
-                    itemInput.name = 'items_to_delete';
-                    itemInput.value = button.dataset.itemId;
-
-                    document
-                        .getElementById('pending-recipe-deletions')
-                        .appendChild(itemInput);
-
-                    card.remove();
-                    deleteRecipeModal.hidePopover();
-                    deleteRecipeError.textContent = '';
-                    currentRecipeDeleteButton = null;
-
-                    const remainingCards = document.querySelectorAll(
-                        '.mealplan-detail-page .mealplan-recipe-card'
-                    );
-
-                    if (remainingCards.length === 0) {
-                        const emptyMessage = document.createElement('p');
-                        emptyMessage.className = 'mealplan-empty-message';
-                        emptyMessage.textContent =
-                            'There are no recipes in this plan yet.';
-
-                        document.querySelector('.recipe-grid').appendChild(
-                            emptyMessage
-                        );
-                    }
-                });
-            </script>
         {% endif %}
     </main>
 {% endblock %}
