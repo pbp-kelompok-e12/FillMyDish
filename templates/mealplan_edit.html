@@ -45,12 +45,15 @@
             </div>
 
             <div class="mealplan-form-actions">
-                <a
-                    class="mealplan-cancel-link"
-                    href="{% url 'mealplan:mealplan_detail' plan.id %}"
+                <button
+                    class="mealplan-cancel-link mealplan-cancel-button"
+                    type="submit"
+                    name="action"
+                    value="cancel"
+                    formnovalidate
                 >
                     Cancel
-                </a>
+                </button>
                 <a
                     class="mealplan-cancel-link"
                     href="{% url 'mealplan:edit_mealplan_recipes' plan.id %}"
@@ -58,7 +61,7 @@
                     Skip
                 </a>
                 <button class="search-btn mealplan-submit-btn" type="submit">
-                    Save Changes
+                    Continue
                 </button>
             </div>
         </form>

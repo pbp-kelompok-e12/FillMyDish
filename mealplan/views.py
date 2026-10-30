@@ -141,6 +141,18 @@ def delete_mealplan(request, plan_id):
 @login_required(login_url='/login/')
 def edit_mealplan_recipes(request, plan_id):
     plan = get_object_or_404(MealPlan, id=plan_id, user=request.user,)
+    edit_draft = request.session.get('mealplan_edit_draft')
+
+    if not edit_draft or edit_draft.get('plan_id') != plan.id:
+        edit_draft = {
+            'plan_id': plan.id,
+            'title': plan.title,
+            'description': plan.description or '',
+        }
+        request.session['mealplan_edit_draft'] = edit_draft
+
+    plan.title = edit_draft['title']
+    plan.description = edit_draft['description']
 
     return render(
         request,
@@ -157,6 +169,12 @@ def update_mealplan(request, plan_id):
     plan = get_object_or_404(MealPlan, id=plan_id, user=request.user,)
 
     if request.method == 'POST':
+        if request.POST.get('action') == 'cancel':
+            edit_draft = request.session.get('mealplan_edit_draft')
+            if edit_draft and edit_draft.get('plan_id') == plan.id:
+                request.session.pop('mealplan_edit_draft', None)
+            return redirect('mealplan:mealplan_detail', plan_id=plan.id)
+
         title = request.POST.get('title', '').strip()
         description = request.POST.get('description', '').strip()
 
@@ -172,9 +190,48 @@ def update_mealplan(request, plan_id):
                 },
                 status=400,
             )
-        plan.title = title
-        plan.description = description
-        plan.save()
+        request.session['mealplan_edit_draft'] = {
+            'plan_id': plan.id,
+            'title': title,
+            'description': description,
+        }
         return redirect('mealplan:edit_mealplan_recipes', plan_id=plan.id)
 
+    request.session['mealplan_edit_draft'] = {
+        'plan_id': plan.id,
+        'title': plan.title,
+        'description': plan.description or '',
+    }
     return render(request, 'mealplan_edit.html', {'plan': plan})
+
+@login_required(login_url='/login/')
+@require_POST
+def save_mealplan_recipe_changes(request, plan_id):
+    plan = get_object_or_404(
+        MealPlan,
+        id=plan_id,
+        user=request.user,
+    )
+
+    edit_draft = request.session.get('mealplan_edit_draft')
+    if not edit_draft or edit_draft.get('plan_id') != plan.id:
+        edit_draft = {
+            'title': plan.title,
+            'description': plan.description or '',
+        }
+
+    if request.POST.get('action') == 'cancel':
+        request.session.pop('mealplan_edit_draft', None)
+        return redirect('mealplan:mealplan_detail', plan_id=plan.id)
+
+    item_ids = request.POST.getlist('items_to_delete')
+
+    with transaction.atomic():
+        plan.title = edit_draft['title']
+        plan.description = edit_draft['description']
+        plan.save(update_fields=['title', 'description'])
+        plan.items.filter(id__in=item_ids).delete()
+
+    request.session.pop('mealplan_edit_draft', None)
+
+    return redirect('mealplan:mealplan_detail', plan_id=plan.id)

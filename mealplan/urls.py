@@ -10,6 +10,7 @@ from mealplan.views import (
     update_mealplan,
     edit_mealplan_recipes,
     delete_item,
+    save_mealplan_recipe_changes,
 )
 
 app_name = 'mealplan'
@@ -25,4 +26,5 @@ urlpatterns = [
     path('plan/<int:plan_id>/edit/', update_mealplan, name='update_mealplan'),
     path('plan/<int:plan_id>/edit-recipes/', edit_mealplan_recipes, name='edit_mealplan_recipes'),
     path('plan/item/<int:item_id>/delete/', delete_item, name='delete_item'),
+    path('plan/<int:plan_id>/save-recipe-changes/', save_mealplan_recipe_changes, name='save_mealplan_recipe_changes',),
 ]

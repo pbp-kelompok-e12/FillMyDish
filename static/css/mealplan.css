@@ -200,6 +200,50 @@
   text-underline-offset: 0.2em;
 }
 
+.mealplan-edit-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mealplan-edit-actions .mealplan-edit-link {
+  margin-bottom: 0;
+}
+
+.mealplan-edit-actions > .mealplan-cancel-button {
+  color: var(--color-palette-secondary-800, #2f3d39);
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: inherit;
+}
+
+.mealplan-cancel-button {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #5c4b00;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.mealplan-save-button {
+  appearance: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-palette-secondary-800, #2f3d39);
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: inherit;
+  cursor: pointer;
+}
+
 .mealplan-detail-title {
   margin: 0;
   color: var(--color-palette-primary-600, #720000);
