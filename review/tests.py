@@ -116,9 +116,19 @@ class ReviewJsonTests(ReviewTestBase):
         self.assertIsInstance(item['pk'], str)
         self.assertEqual(
             set(item['fields']),
-            {'user', 'is_owner', 'message', 'created_at', 'updated_at'},
+            {
+                'user', 'profile_username', 'profile_image', 'profile_url',
+                'is_owner', 'message', 'created_at', 'updated_at',
+            },
         )
         self.assertEqual(item['fields']['user'], 'owner')
+
+    def test_author_profile_data_uses_safe_defaults(self):
+        item = self.client.get(reverse(self.url_name)).json()[0]
+
+        self.assertEqual(item['fields']['profile_username'], 'owner')
+        self.assertEqual(item['fields']['profile_image'], '')
+        self.assertEqual(item['fields']['profile_url'], reverse('user_profile', args=['owner']))
 
     def test_is_owner_flag(self):
         self.login('owner')

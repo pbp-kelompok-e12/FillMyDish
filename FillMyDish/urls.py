@@ -17,10 +17,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from FillMyDish import views
 
+# urls.py -> mendefinisikan URL routing untuk aplikasi FillMyDish, menghubungkan URL dengan 
+#            tampilan (views)
+
 urlpatterns = [
     path("admin/", admin.site.urls),
 
     path("profile/", views.profile_view, name="profile"),
+    path("profile/<str:username>/", views.user_profile_view, name="user_profile"),
     path("edit-profile/", views.edit_profile_view, name="edit_profile"),
     path("login/", views.login_view, name="login"),
     path("register/", views.register_view, name="register"),
@@ -33,6 +37,7 @@ urlpatterns = [
     path("review/", include("review.urls")),
     path("", include("mealplan.urls")),
     path("saved-recipes/", include("saved_recipe.urls")),
+    path("", include("moderation.urls")),
 ]
 
 if settings.DEBUG:

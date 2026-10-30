@@ -209,5 +209,145 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // Add or remove a recipe from the meal plan draft
+    document.querySelectorAll(".sr-btn-add-to-plan").forEach(button => {
+        button.addEventListener("click", async function () {
+            const planError = document.getElementById("sr-plan-error");
+            const planStatus = document.getElementById("sr-plan-status");
+            const recipeName = button
+                .closest(".sr-card")
+                .querySelector(".sr-title-category h3")
+                .textContent
+                .trim();
 
+            if (planError) planError.textContent = "";
+            if (planStatus) planStatus.textContent = "";
+
+            button.disabled = true;
+            button.textContent = "Updating...";
+
+            try {
+                const response = await fetch(button.dataset.toggleUrl, {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken
+                    },
+                    mode: "same-origin"
+                });
+
+                const result = await response.json().catch(() => ({}));
+
+                if (!response.ok) {
+                    throw new Error(
+                        result.message || "Could not update the meal plan."
+                    );
+                }
+
+                button.dataset.added = String(result.added);
+                button.textContent = result.added
+                    ? "Added to Plan"
+                    : "Add to Plan";
+                button.classList.toggle("is-added", result.added);
+
+                if (planStatus) {
+                    planStatus.textContent = result.added
+                        ? `${recipeName} added to this plan.`
+                        : `${recipeName} removed from this plan.`;
+                }
+            } catch (error) {
+                if (planError) {
+                    planError.textContent =
+                        error.message || "Could not connect to the server.";
+                } else {
+                    alert(error.message || "Could not update the meal plan.");
+                }
+
+                button.textContent = button.dataset.added === "true"
+                    ? "Added to Plan"
+                    : "Add to Plan";
+            } finally {
+                button.disabled = false;
+            }
+        });
+    });
+
+    // Save the selected recipes and create the plan
+    const saveMealplanButton =
+        document.getElementById("sr-save-mealplan");
+    const savePlanModal =
+        document.getElementById("sr-save-plan-modal");
+    const cancelSavePlanButton =
+        document.getElementById("sr-cancel-save-plan");
+    const confirmSavePlanButton =
+        document.getElementById("sr-confirm-save-plan");
+    const savePlanError =
+        document.getElementById("sr-plan-error");
+
+    function closeSavePlanModal() {
+        if (savePlanModal) {
+            savePlanModal.hidden = true;
+        }
+    }
+
+    if (saveMealplanButton && savePlanModal) {
+        saveMealplanButton.addEventListener("click", async function () {
+            if (savePlanError) {
+                savePlanError.textContent = "";
+            }
+
+            savePlanModal.hidden = false;
+            confirmSavePlanButton.focus();
+        });
+
+        cancelSavePlanButton.addEventListener(
+            "click",
+            closeSavePlanModal
+        );
+        savePlanModal.addEventListener("click", function (event) {
+            if (event.target === savePlanModal) {
+                closeSavePlanModal();
+            }
+        });
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape" && !savePlanModal.hidden) {
+                closeSavePlanModal();
+            }
+        });
+
+        confirmSavePlanButton.addEventListener(
+            "click",
+            async function () {
+                confirmSavePlanButton.disabled = true;
+                confirmSavePlanButton.textContent = "Saving...";
+
+                try {
+                    const response = await fetch(
+                        saveMealplanButton.dataset.saveUrl,
+                        {
+                            method: "POST",
+                            headers: {"X-CSRFToken": csrfToken},
+                            mode: "same-origin"
+                        }
+                    );
+
+                    const result = await response.json().catch(() => ({}));
+
+                    if (!response.ok) {
+                        throw new Error(result.message || "Could not save the plan.");
+                    }
+
+                    window.location.href = result.redirect_url;
+                } catch (error) {
+                    closeSavePlanModal();
+
+                    if (savePlanError) {
+                        savePlanError.textContent = error.message || "Could not connect to the server.";
+                    }
+
+                    confirmSavePlanButton.disabled = false;
+                    confirmSavePlanButton.textContent = "Yes, Save Plan";
+                }
+            }
+        );
+    }
 });

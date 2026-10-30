@@ -5,7 +5,10 @@ from .models import Review
 class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['message']
+        fields = ['rating', 'message']
         widgets = {
             'message': forms.Textarea(attrs={'placeholder': 'Input Your Message'}),
+        }
+        error_messages = {
+            'rating': {'required': 'Pilih rating terlebih dahulu.'},
         }

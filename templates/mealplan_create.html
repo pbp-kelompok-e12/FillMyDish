@@ -42,11 +42,11 @@
                 >{{ description|default:'' }}</textarea>
             </div>
 
-            <div class="mealplan-form-actions">
-                <a class="mealplan-cancel-link" href="{% url 'mealplan:show_mealplan' %}">
+            <div class="mealplan-form-actions sr-plan-draft__actions">
+                <a class="sr-plan-cancel" href="{% url 'mealplan:show_mealplan' %}">
                     Cancel
                 </a>
-                <button class="search-btn mealplan-submit-btn" type="submit">
+                <button class="sr-plan-save mealplan-submit-btn" type="submit">
                     Add
                 </button>
             </div>
