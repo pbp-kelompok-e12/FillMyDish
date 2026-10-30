@@ -1,3 +1,5 @@
+from curses.ascii import isalpha
+
 from django.contrib import messages
 from django.core import serializers
 from django.http import Http404, HttpResponse
@@ -53,14 +55,22 @@ def get_recipe_cache():
 
 def suspicious(ingredients):
     vowels = ["a", "e", "i", "o", "u", "y"]
-    flagged = False
     for ingredient in ingredients:
         text = ingredient.lower()
-        no_vowel = True
-        for vowel in vowels:
-            no_vowel = no_vowel and (vowel not in text)
-        flagged = flagged or no_vowel or len(text) > 50 or len(text) == 1
-    return flagged
+        vowel_count = 0
+        consonant_count = 0
+        for letter in text:
+            if letter in vowels:
+                vowel_count += 1
+            elif letter.isalpha():
+                consonant_count += 1
+        if(vowel_count == 0 
+                   or consonant_count == 0
+                   or len(text) > 30 
+                   or len(text) == 1
+                   or len(text) > 9*vowel_count):
+            return True
+    return False
         
 @login_required(login_url="login")
 def show_recipes(request):
