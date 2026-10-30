@@ -8,6 +8,16 @@
 {% block content %}
     <main class="mealplan-page mealplan-detail-page">
         <header class="mealplan-detail-header">
+            {% if not edit_mode %}
+                <a
+                    class="mealplan-back-link mealplan-detail-back"
+                    href="{% url 'mealplan:show_mealplan' %}"
+                >
+                    <span aria-hidden="true">←</span>
+                    Back to Meal Plans
+                </a>
+            {% endif %}
+
             {% if edit_mode %}
                 <div class="mealplan-edit-actions">
                     <a

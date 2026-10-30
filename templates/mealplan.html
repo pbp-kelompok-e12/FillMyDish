@@ -3,6 +3,11 @@
 
 {% block content %}
     <main class="mealplan-page">
+        <a class="mealplan-back-link" href="{% url 'main:show_main' %}">
+            <span aria-hidden="true">←</span>
+            Back to Main Menu
+        </a>
+
         <header class="mealplan-header">
             <h1 class="mealplan-title">Your Meal Plan</h1>
             <a href="{% url 'mealplan:create_mealplan' %}" class="make-new-link">
