@@ -143,7 +143,38 @@
   border-radius: 0.5rem;
 }
 
+.frame .review-card__author {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--review-brown);
+  text-decoration: none;
+}
+
+.frame .review-card__author:hover .review-card__name {
+  text-decoration: underline;
+}
+
+.frame .review-card__avatar {
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.frame .review-card__avatar--fallback {
+  display: grid;
+  place-items: center;
+  background-color: var(--color-palette-primary-600);
+  color: #ffffff;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .frame .review-card__name {
+  display: inline-block;
   margin: 0;
   font-family: "Poppins", Helvetica, sans-serif;
   font-weight: 600;
@@ -321,6 +352,66 @@
   background-color: var(--color-palette-primary-600);
 }
 
+.frame .review-form__rating {
+  margin-bottom: 1.25rem;
+}
+
+.frame .review-form__rating-title {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--review-brown);
+}
+
+.frame .star-input {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;   /* membalik 5..1 menjadi 1..5 */
+  justify-content: flex-end;
+}
+
+.frame .star-input input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.frame .star-input label {
+  padding: 0 0.15rem;
+  font-size: 2.25rem;
+  line-height: 1;
+  color: rgba(74, 60, 0, 0.3);
+  cursor: pointer;
+}
+
+.frame .star-input input:checked ~ label,
+.frame .star-input label:hover,
+.frame .star-input label:hover ~ label {
+  color: var(--review-brown);
+}
+
+.frame .star-input input:focus-visible + label {
+  outline: 2px solid var(--review-brown);
+  border-radius: 0.25rem;
+}
+
+/* Bintang di kartu review */
+.frame .review-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.frame .review-card__stars {
+  font-size: 1.25rem;
+  letter-spacing: 0.1rem;
+  white-space: nowrap;
+  color: var(--review-gold);
+}
+
 @media (max-width: 1023px) {
   .frame .deco-layer.deco-layer--full {
     bottom: 8rem; /* kira-kira tinggi footer mobile */
@@ -421,4 +512,43 @@
   .frame .review-form__submit {
     width: clamp(7rem, 26vw, 9.75rem);
   }
+}
+
+.frame .review-card {
+  position: relative; /* anchors the badge to the card's corner */
+}
+
+.frame .review-card__status {
+  position: absolute;
+  top: 1rem;
+  right: 1.25rem;
+  padding: 0.25rem 0.9rem;
+  border-radius: 999px;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+.frame .review-card__status--waiting {
+  background-color: var(--review-yellow);
+  color: var(--review-brown);
+}
+
+.frame .review-card__status--flagged {
+  background-color: #c62828;
+  color: #fff;
+}
+
+.frame .review-card__status--cleared {
+  background-color: #2e7d32;
+  color: #fff;
+}
+
+.frame .review-card .review-card__name {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #4a3c00 !important;
+  -webkit-text-fill-color: #4a3c00 !important;
 }

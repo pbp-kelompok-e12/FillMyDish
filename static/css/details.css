@@ -186,3 +186,21 @@ a.recipe-detail__save-btn.recipe-detail__save-btn--saved:hover {
         font-size: 16px;
     }
 }
+
+a.recipe-detail__save-btn.recipe-detail__save-btn--saved:hover {
+    color: #FFFFFF;
+}
+
+a.recipe-detail__action-btn,
+a.recipe-detail__action-btn:visited {
+    color: #FFFFFF;
+}
+
+a.recipe-detail__action-btn:hover {
+    color: #FFFFFF;
+}
+
+.recipe-detail__action-btn {
+    background-color: rgba(114, 0, 0, 0.8);
+    width: fit-content;
+}

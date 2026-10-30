@@ -32,8 +32,13 @@
                                     {% endfor %}
                                 </ol>
                             </div>
+                            {% if source %}
+                            <a class="recipe-detail__save-btn recipe-detail__action-btn"
+                               href="{{ source }}">
+                                Source
+                            </a>
+                            {% endif %}
                         </div>
-                    
                         <div class="recipe-detail__right">
                             <h1 class="recipe-detail__name">{{ title }}</h1>
                                                         {% if user.is_authenticated %}

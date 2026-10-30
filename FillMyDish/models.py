@@ -1,7 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
+# models.py -> mendefinisikan model Profile dan Connection untuk menyimpan informasi profil pengguna 
+#              dan koneksi media sosial mereka
 
+class User(AbstractUser):
+    is_moderator = models.BooleanField(default=False)
+    is_banned = models.BooleanField(default=False)
+    
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     username = models.CharField(max_length=150, blank=True)

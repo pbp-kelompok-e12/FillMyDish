@@ -3,14 +3,16 @@ import secrets
 import requests
 from django.conf import settings
 from django.contrib.auth import get_user_model
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.urls import reverse
 from .models import Profile
 from .forms import RegisterForm, LoginForm, ProfileForm, ConnectionFormSet
-
+from django.utils.http import url_has_allowed_host_and_scheme
+# views.py -> menangani tampilan profil dan proses edit profil pengguna, serta proses login, logout, 
+#             dan pendaftaran akun baru. Juga menangani integrasi login dengan Google OAuth.
 
 def register_view(request):
     if request.user.is_authenticated:
@@ -34,11 +36,14 @@ def login_view(request):
         return redirect("profile")
 
     if request.method == "POST":
+        next_url = request.POST.get("next") or request.GET.get("next", "")
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             messages.success(request, f"Welcome back, {user.username}!")
+            if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+                return redirect(next_url)
             return redirect("profile")
     else:
         form = LoginForm()
@@ -146,7 +151,22 @@ def logout_view(request):
 @login_required(login_url="login")
 def profile_view(request):
     profile, _ = Profile.objects.get_or_create(user=request.user)
-    return render(request, "profile.html", {"profile": profile})
+    return render(request, "profile.html", {
+        "profile": profile,
+        "profile_user": request.user,
+        "is_own_profile": True,
+    })
+
+
+def user_profile_view(request, username):
+    User = get_user_model()
+    profile_user = get_object_or_404(User, username=username)
+    profile, _ = Profile.objects.get_or_create(user=profile_user)
+    return render(request, "profile.html", {
+        "profile": profile,
+        "profile_user": profile_user,
+        "is_own_profile": request.user.is_authenticated and request.user.pk == profile_user.pk,
+    })
 
 
 @login_required(login_url="login")

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="review-modal" id="modal"></div>
+    <div class="review-page review-page--list">
+        <header class="review-header">
+            <h1 class="review-title">Log</h1>
+            <p class="review-subtitle">Suspicious recipe requests appear here</p>
+        </header>
+
+        <section class="review-body">
+            <div class="review-list"
+                 id="review-list"
+                 hx-get="{% url 'moderation:logs_list' %}"
+                 hx-trigger="load, every 10s, reviewed from:body"
+                 hx-swap="innerHTML">
+                <article class="review-card">Loading...</article>
+            </div>
+        </section>
+    </div>
+
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script>
+        const modal = document.getElementById('modal');
+        document.body.addEventListener('reviewed', () => {modal.classList.remove('is-open'); showToast('Request successfully reviewed');});
+    </script>
+{% endblock content %}
