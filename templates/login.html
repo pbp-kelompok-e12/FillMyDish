@@ -6,7 +6,7 @@
 {% block content %}
 <div class="profile-page">
     <!-- Membuat form dan menetapkan tujuan serta cara pengiriman datanya. -->
-    <form class="profile-form-card" method="post" action="{% url 'login' %}">
+    <form class="profile-form-card" method="post" action="">
         {# Menambahkan token keamanan untuk melindungi pengiriman form. #}
         {% csrf_token %}
         <!-- Menampilkan judul bagian halaman. -->
@@ -18,7 +18,7 @@
             <div class="form-error">{{ form.non_field_errors }}</div>
         {# Mengakhiri percabangan kondisi Django. #}
         {% endif %}
-
+        
         {# Mengulang tampilan untuk setiap data dalam daftar. #}
         {% for field in form %}
             <!-- Membuat wadah untuk mengelompokkan elemen terkait. -->
