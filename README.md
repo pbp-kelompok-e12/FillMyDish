@@ -327,6 +327,9 @@ Saya menggunakan ChatGPT sebagai bantuan dalam mengembangkan halaman profil pada
 [Percakapan Bagian Profile Page](https://chatgpt.com/share/6ae2fec7-da90-83ec-bf8f-8d69c833db36)
 
 [recipefinder/moderation](/recipefinder/docs/AI_DISCLOSURE.md)
+
 [mealplan](/mealplan/AI_DISCLOSURE.md)
+
 [review](/review/AI_DISCLOSURE.md)
+
 [saved_recipe](/saved_recipe/README.md)
