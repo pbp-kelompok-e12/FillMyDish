@@ -325,3 +325,8 @@ Cleared akan unban user yang terkait
 Saya menggunakan ChatGPT sebagai bantuan dalam mengembangkan halaman profil pada website FillMyDish. AI membantu memberikan saran mengenai struktur HTML, styling CSS, responsive layout, serta implementasi fitur profil seperti pengeditan informasi pengguna dan penambahan tautan koneksi sosial. AI juga membantu menjelaskan beberapa konsep Django dan kode yang digunakan pada halaman profil. Selain itu, ChatGPT membantu menjelaskan konteks pendukung proyek, seperti proses Google Login, pembuatan dan pengambilan kredensial OAuth di Google Cloud, serta pengaturan GitHub Organization. Fokus pengerjaan saya tetap pada halaman profil; hal-hal pendukung tersebut dibahas untuk membantu memahami integrasi dan alur kerja proyek. Saya menyesuaikan struktur, tampilan, dan implementasinya secara manual agar sesuai dengan kebutuhan proyek. Saya juga memeriksa dan mengubah kode yang dihasilkan agar dapat berjalan sesuai kebutuhan halaman profil.
 
 [Percakapan Bagian Profile Page](https://chatgpt.com/share/6ae2fec7-da90-83ec-bf8f-8d69c833db36)
+
+[recipefinder/moderation](/recipefinder/docs/AI_DISCLOSURE.md)
+[mealplan](/mealplan/AI_DISCLOSURE.md)
+[review](/review/AI_DISCLOSURE.md)
+[saved_recipe](/saved_recipe/README.md)
