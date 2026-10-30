@@ -44,17 +44,6 @@
     </form>
 </div>
 
-<div id="django-messages" hidden>
-    {% for message in messages %}
-        <span
-            class="django-message"
-            data-level="{{ message.tags }}"
-        >
-            {{ message }}
-        </span>
-    {% endfor %}
-</div>
-
 
 <div
     id="review-config"
@@ -87,13 +76,6 @@
         config.dataset.deleteUrl.replace("/0/", `/${id}/`);
 
 
-    function showToast(text, isError = false) {
-        const toast = document.createElement('div');
-        toast.className = 'review-toast' + (isError ? ' review-toast--error' : '');
-        toast.textContent = text;
-        document.body.append(toast);
-        setTimeout(() => toast.remove(), 3000);
-    }
 
     // textContent (bukan innerHTML) supaya aman dari XSS
     function makeCard(review) {
@@ -238,12 +220,6 @@
         }
     });
 
-    document.querySelectorAll(".django-message").forEach((item) => {
-    const message = item.textContent.trim();
-    const isError = item.dataset.level.split(" ").includes("error");
-
-    showToast(message, isError);
-    });
 
     loadReviews();
 </script>

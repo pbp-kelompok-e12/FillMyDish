@@ -10,7 +10,7 @@ from django.contrib import messages
 from django.urls import reverse
 from .models import Profile
 from .forms import RegisterForm, LoginForm, ProfileForm, ConnectionFormSet
-
+from django.utils.http import url_has_allowed_host_and_scheme
 # views.py -> menangani tampilan profil dan proses edit profil pengguna, serta proses login, logout, 
 #             dan pendaftaran akun baru. Juga menangani integrasi login dengan Google OAuth.
 
@@ -36,11 +36,14 @@ def login_view(request):
         return redirect("profile")
 
     if request.method == "POST":
+        next_url = request.POST.get("next") or request.GET.get("next", "")
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             messages.success(request, f"Welcome back, {user.username}!")
+            if url_has_allowed_host_and_scheme(next_url, allowed_hosts={request.get_host()}, require_https=request.is_secure()):
+                return redirect(next_url)
             return redirect("profile")
     else:
         form = LoginForm()

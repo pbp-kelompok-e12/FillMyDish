@@ -75,8 +75,12 @@
                 {% endif %}
 
             </div>
+            <div id="django-messages" hidden>
+                {% for message in messages %}
+                    <span class="django-message" data-level="{{ message.tags }}">{{ message }}</span>
+                {% endfor %}
+            </div>
         </div>
-
         <script>
             (function () {
                 document.addEventListener('click', function (event) {
@@ -174,6 +178,19 @@
                     totalForms.value = String(idx + 1);
                 });
             })();
+        </script>
+        <script>
+            function showToast(text, isError = false) {
+                const toast = document.createElement('div');
+                toast.className = 'review-toast' + (isError ? ' review-toast--error' : '');
+                toast.textContent = text;
+                document.body.append(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
+        
+            document.querySelectorAll('.django-message').forEach((item) => {
+                showToast(item.textContent.trim(), item.dataset.level.split(' ').includes('error'));
+            });
         </script>
     </body>
 </html>
