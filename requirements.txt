@@ -8,3 +8,4 @@ requests
 Pillow
 strip-tags
 django-ratelimit
+selenium

@@ -1,0 +1,3 @@
+Dalam pengembangan modul Saved Recipe, saya menggunakan ChatGPT (OpenAI) sebagai alat bantu untuk memahami implementasi Django, merancang contoh kode, mempelajari penggunaan AJAX, melakukan debugging, menyusun skenario test case, memperbaiki layout HTML/CSS, serta membantu penyusunan dokumentasi.
+
+Bantuan AI digunakan dalam proses pengembangan dan pemecahan masalah. Kode tetap perlu diperiksa, disesuaikan dengan struktur proyek, dan diuji oleh pengembang sebelum digabungkan ke repository utama.a
