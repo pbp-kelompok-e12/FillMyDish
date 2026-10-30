@@ -180,6 +180,50 @@
         </div>
     </div>
 
+    <dialog
+        id="sr-delete-dialog"
+        class="sr-delete-dialog"
+        aria-labelledby="sr-delete-title"
+        aria-describedby="sr-delete-message"
+    >
+        <h2 id="sr-delete-title">
+            Are you sure?
+        </h2>
+
+        <p id="sr-delete-message">
+            Are you sure you want to delete
+            <strong id="sr-delete-recipe-name"></strong>
+            from your saved recipes?
+        </p>
+
+        <p class="sr-delete-warning">
+            This action cannot be undone.
+        </p>
+
+        <p id="sr-delete-error" hidden>
+            Failed to delete recipe. Please try again.
+        </p>
+
+        <div class="sr-delete-actions">
+            <button
+                type="button"
+                id="sr-delete-cancel"
+                class="sr-delete-cancel"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                id="sr-delete-confirm"
+                class="sr-delete-confirm"
+            >
+                Confirm Delete
+            </button>
+        </div>
+    </dialog>
+
+
 </main>
 
 <script src="{% static 'js/saved_recipe.js' %}" defer></script>

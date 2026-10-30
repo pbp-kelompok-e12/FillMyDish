@@ -502,7 +502,121 @@ body:has(.sr-page) {
 }
 
 
-/* RESPONSIVE */
+.sr-delete-dialog {
+    width: min(520px, calc(100% - 32px));
+    max-height: calc(100vh - 32px);
+    margin: auto;
+    padding: 32px 36px;
+
+    background-color: #830000;
+    color: #FFFFFF;
+
+    border: none;
+    border-radius: 24px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+
+    font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.sr-delete-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+}
+
+#sr-delete-title {
+    margin: 0 0 16px;
+    font-family: "Poppins", sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+#sr-delete-message {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.6;
+    color: #FFFFFF;
+    margin-bottom: 12px;
+}
+
+.sr-delete-warning {
+    color: #FFD9D9;
+    font-size: 14px;
+    margin-bottom: 24px;
+}
+
+#sr-delete-error {
+    color: #FFE5A3;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+#sr-delete-error[hidden] {
+    display: none;
+}
+
+.sr-delete-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.sr-delete-actions button {
+    padding: 12px 20px;
+    border-radius: 9px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.sr-delete-cancel {
+    background: transparent;
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF;
+}
+
+.sr-delete-cancel:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.sr-delete-confirm {
+    background: #FFFFFF;
+    color: #830000;
+    border: 2px solid #FFFFFF;
+}
+
+.sr-delete-confirm:hover {
+    background: #FFE2E2;
+}
+
+.sr-delete-actions button:focus-visible {
+    outline: 3px solid #F4CE14;
+    outline-offset: 3px;
+}
+
+.sr-delete-actions button:disabled {
+    opacity: 0.65;
+    cursor: wait;
+}
+
+/* Responsif */
+@media (max-width: 600px) {
+    .sr-delete-dialog {
+        padding: 24px 20px;
+    }
+
+    #sr-delete-title {
+        font-size: 26px;
+    }
+
+    .sr-delete-actions {
+        flex-direction: column;
+    }
+
+    .sr-delete-actions button {
+        width: 100%;
+    }
+}
 
 @media (max-width: 900px) {
     .sr-grid {
