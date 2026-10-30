@@ -1,3 +1,5 @@
+from curses.ascii import isalpha
+
 from django.contrib import messages
 from django.core import serializers
 from django.http import Http404, HttpResponse
@@ -11,7 +13,7 @@ from django.conf import settings
 import datetime
 import requests
 from django.views.decorators.http import require_POST
-
+from django_ratelimit.decorators import ratelimit
 from recipefinder.models import RecipeCache, Recipe
 from moderation.models import SuspiciousRequest
 from saved_recipe.models import SavedRecipe
@@ -53,16 +55,25 @@ def get_recipe_cache():
 
 def suspicious(ingredients):
     vowels = ["a", "e", "i", "o", "u", "y"]
-    flagged = False
     for ingredient in ingredients:
         text = ingredient.lower()
-        no_vowel = True
-        for vowel in vowels:
-            no_vowel = no_vowel and (vowel not in text)
-        flagged = flagged or no_vowel or len(text) > 50 or len(text) == 1
-    return flagged
+        vowel_count = 0
+        consonant_count = 0
+        for letter in text:
+            if letter in vowels:
+                vowel_count += 1
+            elif letter.isalpha():
+                consonant_count += 1
+        if(vowel_count == 0 
+                   or consonant_count == 0
+                   or len(text) > 30 
+                   or len(text) == 1
+                   or len(text) > 9*vowel_count):
+            return True
+    return False
         
 @login_required(login_url="login")
+@ratelimit(key="ip", rate="5/m", block=False)
 def show_recipes(request):
     ingredients_raw = request.GET.get("ingredients", "")
     tools_raw = request.GET.get("tools", "")
@@ -76,8 +87,16 @@ def show_recipes(request):
             error = f"{tool} is not recognized as a tool by the API, please try again without it\n"
         elif tool not in EQUIPMENT and error is not None:
             error += f"{tool} is not recognized as a tool by the API, please try again without it\n"
+    if request.limited:
+        if error is None:
+            error = "Too many searches, Please try again later.\n"
+        elif error is not None:
+            error += "Too many searches, Please try again later.\n"
     if suspicious(ingredients):
-        SuspiciousRequest.objects.create(user=request.user, arguments=ingredients)
+        sus = SuspiciousRequest.objects.create(user=request.user, arguments=list(ingredients))
+        if request.limited:
+            sus.arguments.append("Hit rate limit")
+            sus.save()
     elif ingredients and error is None:
         key = "recipes:" + "|".join([
             ",".join(sorted(i.lower() for i in ingredients)),
