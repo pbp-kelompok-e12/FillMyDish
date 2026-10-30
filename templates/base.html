@@ -60,7 +60,10 @@
                         </a>
                     </div>
                     <div class="text-wrapper-9">
-                        <a href="{% url 'review:list' %}">Review</a>
+                        <a href="{% url 'review:list' %}"
+                            class="{% if request.resolver_match.app_name == 'review' %}active{% endif %}">
+                            Review
+                        </a>
                     </div>
                 </div>
 
