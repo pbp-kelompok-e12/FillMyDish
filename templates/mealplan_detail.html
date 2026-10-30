@@ -1,9 +1,57 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/saved_recipe.css' %}">
+{% endblock %}
+
 {% block content %}
     <main class="mealplan-page mealplan-detail-page">
         <header class="mealplan-detail-header">
+            {% if not edit_mode %}
+                <a
+                    class="mealplan-back-link mealplan-detail-back"
+                    href="{% url 'mealplan:show_mealplan' %}"
+                >
+                    <span aria-hidden="true">←</span>
+                    Back to Meal Plans
+                </a>
+            {% endif %}
+
+            {% if edit_mode %}
+                <div class="mealplan-edit-actions">
+                    <a
+                        class="sr-plan-save"
+                        href="{% url 'saved_recipe' %}?editing_plan={{ plan.id }}"
+                    >
+                        Manage Recipes
+                    </a>
+                    <button
+                        class="sr-plan-cancel mealplan-cancel-button"
+                        type="submit"
+                        name="action"
+                        value="cancel"
+                        form="save-mealplan-recipe-changes"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        class="sr-plan-save"
+                        type="submit"
+                        form="save-mealplan-recipe-changes"
+                    >
+                        Save Changes
+                    </button>
+                </div>
+            {% else %}
+                <a
+                    class="mealplan-edit-link"
+                    href="{% url 'mealplan:update_mealplan' plan.id %}"
+                >
+                    Edit Your Plan
+                </a>
+            {% endif %}
+
             <h1 class="mealplan-detail-title">{{ plan.title }}</h1>
             <p class="mealplan-detail-description">
                 {{ plan.description|default:"No Description" }}
@@ -12,7 +60,9 @@
 
         <section class="recipe-grid" aria-label="Recipes in this meal plan">
             {% for item in items %}
-                {% if item.recipe.source_recipe_id %}
+                {% if edit_mode %}
+                    <article class="recipe-card mealplan-recipe-card">
+                {% elif item.recipe.source_recipe_id %}
                     <a
                         class="recipe-card mealplan-recipe-card"
                         href="{% url 'recipefinder:show_recipe_details' item.recipe.source_recipe_id %}"
@@ -43,16 +93,27 @@
                         {{ item.recipe.description|striptags|truncatewords:25 }}
                     </p>
 
-                {% if item.recipe.source_recipe_id %}
-                    </a>
-                {% else %}
+                {% if edit_mode or not item.recipe.source_recipe_id %}
                     </article>
-                    {% endif %}
+                {% else %}
+                    </a>
+                {% endif %}
             {% empty %}
                 <p class="mealplan-empty-message">
                     There are no recipes in this plan yet.
                 </p>
             {% endfor %}
         </section>
+        {% if edit_mode %}
+            <form
+                id="save-mealplan-recipe-changes"
+                method="post"
+                action="{% url 'mealplan:save_mealplan_recipe_changes' plan.id %}"
+                hidden
+            >
+                {% csrf_token %}
+            </form>
+
+        {% endif %}
     </main>
 {% endblock %}

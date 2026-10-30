@@ -1,4 +1,9 @@
 .mealplan-page {
+  --sr-yellow: #f4ce14;
+  --sr-green: #6e8b82;
+  --sr-background: #f5f7f8;
+  --sr-dark: #495e57;
+
   position: relative;
   z-index: 1;
   display: flex;
@@ -8,6 +13,35 @@
   width: 73.75rem;
   max-width: calc(100vw - 2rem);
   margin: 11.5rem 0 7rem;
+}
+
+.mealplan-back-link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid #495e57;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #495e57;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mealplan-back-link:hover {
+  background: #495e57;
+  color: #fff;
+}
+
+.mealplan-back-link:focus-visible {
+  outline: 3px solid #f4ce14 !important;
+  outline-offset: 3px;
 }
 
 .mealplan-header {
@@ -200,6 +234,77 @@
   text-underline-offset: 0.2em;
 }
 
+.mealplan-edit-link:focus-visible {
+  outline: 3px solid #f4ce14;
+  outline-offset: 3px;
+}
+
+.mealplan-edit-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+}
+
+.mealplan-edit-actions > a,
+.mealplan-edit-actions > button,
+.mealplan-form-actions > a,
+.mealplan-form-actions > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.5rem;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--sr-dark, #495e57);
+  border-radius: 0.5rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, filter 0.15s ease;
+}
+
+.mealplan-edit-actions > a:hover,
+.mealplan-edit-actions > button:hover,
+.mealplan-form-actions > a:hover,
+.mealplan-form-actions > button:hover {
+  filter: brightness(0.92);
+}
+
+.mealplan-edit-actions .sr-plan-cancel,
+.mealplan-form-actions .sr-plan-cancel {
+  background: #fff;
+  color: #830000;
+}
+
+.mealplan-edit-actions .sr-plan-save,
+.mealplan-form-actions .sr-plan-save {
+  background: #495e57;
+  color: #fff;
+}
+
+.mealplan-edit-actions > a:focus-visible,
+.mealplan-edit-actions > button:focus-visible,
+.mealplan-form-actions > a:focus-visible,
+.mealplan-form-actions > button:focus-visible,
+.delete-modal__actions button:focus-visible {
+  outline: 3px solid #f4ce14 !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 1px #495e57;
+}
+
+.mealplan-cancel-button {
+  appearance: none;
+  margin: 0;
+}
+
+.mealplan-submit-btn {
+  margin: 0;
+}
+
 .mealplan-detail-title {
   margin: 0;
   color: var(--color-palette-primary-600, #720000);
@@ -214,6 +319,15 @@
   color: var(--color-palette-secondary-800, #2f3d39);
   font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
   font-size: 1rem;
+}
+
+.mealplan-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  margin-top: 0.5rem;
 }
 
 .mealplan-recipe-card {
@@ -347,22 +461,6 @@
   resize: vertical;
 }
 
-.mealplan-form-actions {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-}
-
-.mealplan-cancel-link {
-  color: #5c4b00;
-  font-weight: 600;
-}
-
-.mealplan-submit-btn {
-  margin-right: 0;
-}
-
 /* Delete plan confirmation popover */
 .delete-modal[popover] {
   position: fixed;
@@ -412,14 +510,24 @@
 }
 
 .delete-modal__actions button {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-width: 7.5rem;
   padding: 0.7rem 1rem;
   border: 0;
   border-radius: 0.4rem;
   font: inherit;
   font-weight: 700;
+  line-height: 1.25;
+  text-align: center;
   cursor: pointer;
   transition: filter 0.15s ease;
+}
+
+.delete-modal__error:empty {
+  display: none;
 }
 
 .delete-modal__actions button:hover {

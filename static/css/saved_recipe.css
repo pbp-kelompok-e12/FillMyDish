@@ -265,7 +265,9 @@
     margin: 0;
 }
 
-.sr-plan-draft__actions button {
+.sr-plan-draft__actions button,
+.sr-plan-draft__actions a {
+    display: inline-block;
     padding: 9px 14px;
     border: 1px solid var(--sr-dark);
     border-radius: 8px;
@@ -274,6 +276,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.15s ease, color 0.15s ease;
+    text-decoration: none;
 }
 
 .sr-plan-cancel {
@@ -281,12 +284,41 @@
     color: #830000;
 }
 
+.sr-plan-draft__actions .sr-plan-back {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 14px;
+    border: 1px solid var(--sr-dark, #495e57);
+    border-radius: 8px;
+    background: #fff;
+    color: #830000;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.sr-plan-draft__actions .sr-plan-back:hover {
+    filter: brightness(0.92);
+}
+
+.sr-plan-draft__actions .sr-plan-back:focus-visible {
+    outline: 3px solid #f4ce14;
+    outline-offset: 3px;
+}
+
 .sr-plan-save {
     background: var(--sr-dark);
     color: white;
 }
 
-.sr-plan-draft__actions button:hover {
+.sr-plan-draft__actions button:hover,
+.sr-plan-draft__actions a:hover {
     filter: brightness(0.92);
 }
 
