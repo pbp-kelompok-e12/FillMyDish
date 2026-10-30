@@ -44,12 +44,24 @@
     </form>
 </div>
 
+<div class="review-modal" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title">
+    <div class="review-confirm">
+        <h2 class="review-confirm__title" id="confirm-title">Are you sure?</h2>
+        <p class="review-confirm__text">Are you sure you want to delete this review?</p>
+        <p class="review-confirm__note">This action cannot be undone.</p>
+
+        <div class="review-confirm__actions">
+            <button type="button" class="review-confirm__cancel" id="confirm-cancel">Cancel</button>
+            <button type="button" class="review-confirm__delete" id="confirm-delete">Confirm Delete</button>
+        </div>
+    </div>
+</div>
 
 <div
     id="review-config"
     hidden
     data-logged-in="{{ user.is_authenticated|yesno:'true,false' }}"
-    data-login-url="{{ login_url }}"
+    data-login-url="{% url 'login' %}?next={% url 'review:list' %}"
     data-update-url="{% url 'review:update' 0 %}"
     data-delete-url="{% url 'review:delete' 0 %}"
 ></div>
@@ -151,7 +163,8 @@
 
             deleteForm.append(token, deleteBtn);
             deleteForm.addEventListener('submit', (e) => {
-                if (!confirm('Hapus review ini?')) e.preventDefault();
+                e.preventDefault();         
+                openConfirm(deleteForm);
             });
 
             actions.append(editLink, deleteForm);
@@ -186,6 +199,34 @@
     function closeModal() {
         modal.classList.remove('is-open');
     }
+
+    const confirmModal = document.getElementById('confirm-modal');
+    let pendingDeleteForm = null;
+
+    function openConfirm(deleteForm) {
+        pendingDeleteForm = deleteForm;
+        confirmModal.classList.add('is-open');
+        document.getElementById('confirm-cancel').focus();
+    }
+
+    function closeConfirm() {
+        confirmModal.classList.remove('is-open');
+        pendingDeleteForm = null;
+    }
+
+    document.getElementById('confirm-cancel').onclick = closeConfirm;
+
+    document.getElementById('confirm-delete').onclick = () => {
+        if (pendingDeleteForm) pendingDeleteForm.submit();   // kirim form hapus (token CSRF ikut terkirim)
+    };
+
+    confirmModal.addEventListener('click', (e) => {
+        if (e.target === confirmModal) closeConfirm();       // klik area gelap = batal
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeConfirm();
+    });
 
     document.getElementById('add-btn').onclick = () => {
         if (!isLoggedIn) {

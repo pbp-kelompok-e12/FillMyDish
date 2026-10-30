@@ -43,35 +43,26 @@
                     <span></span>
                     <span></span>
                 </button>
-                <div class="navbar" >
-                    <a class="text-wrapper-9 {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}">Profile</a>
-                    <div class="text-wrapper-9">
-                        <a href="{% url 'recipefinder:find_recipe' %}">Find Recipe</a>
-                    </div>
-                    
-                    <div class="text-wrapper-9">
-                        <a
-                            href="{% url 'saved_recipe' %}"
-                            class="text-wrapper-9 {% if request.resolver_match.url_name == 'saved_recipe' %}active{% endif %}"
-                        >
-                            Saved Recipe
-                        </a>
-                    </div>
+                <div class="navbar">
+                    <a class="text-wrapper-9 {% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
+                       href="{% url 'profile' %}">Profile</a>
 
-                    <div class="text-wrapper-9">
-                        <a href="{% url 'mealplan:show_mealplan' %}"
-                            class="{% if request.resolver_match.app_name == 'mealplan' %}active{% endif %}">
-                            Meal Plan
-                        </a>
-                    </div>
-                    <div class="text-wrapper-9">
-                        <a href="{% url 'review:list' %}">Review</a>
-                    </div>
+                    <a class="text-wrapper-9 {% if request.resolver_match.app_name == 'recipefinder' %}active{% endif %}"
+                       href="{% url 'recipefinder:find_recipe' %}">Find Recipe</a>
+
+                    <a class="text-wrapper-9 {% if request.resolver_match.url_name == 'saved_recipe' %}active{% endif %}"
+                       href="{% url 'saved_recipe' %}">Saved Recipe</a>
+
+                    <a class="text-wrapper-9 {% if request.resolver_match.app_name == 'mealplan' %}active{% endif %}"
+                       href="{% url 'mealplan:show_mealplan' %}">Meal Plan</a>
+
+                    <a class="text-wrapper-9 {% if request.resolver_match.app_name == 'review' %}active{% endif %}"
+                       href="{% url 'review:list' %}">Review</a>
                 </div>
 
                 {% if user.is_authenticated %}
                     {% if user.is_moderator %}
-                    <a class="text-wrapper-10" href="{% url 'moderation:show_logs' %}">Logs</a>
+                    <a class="text-wrapper-9 {% if request.resolver_match.app_name == 'moderation' %}active{% endif %}" href="{% url 'moderation:show_logs' %}">Logs</a>
                     {% endif %}
                     <a class="text-wrapper-10" href="{% url 'logout' %}">Logout</a>
                 {% else %}
