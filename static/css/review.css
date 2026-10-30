@@ -412,6 +412,71 @@
   color: var(--review-gold);
 }
 
+.frame .review-modal .review-confirm {
+  box-sizing: border-box;
+  width: min(100%, 36.6rem);
+  margin: auto;
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  background-color: var(--color-palette-primary-500);
+  border-radius: 1.75rem;
+  color: var(--color-palette-font-50);
+}
+
+.frame .review-confirm__title {
+  margin: 0 0 1.25rem;
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 5vw, 2.25rem);
+}
+
+.frame .review-confirm__text {
+  margin: 0 0 0.75rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1rem, 3.4vw, 1.25rem);
+  line-height: 1.5;
+}
+
+.frame .review-confirm__note {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-size: clamp(0.9375rem, 3.2vw, 1.25rem);
+}
+
+.frame .review-confirm__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+}
+
+.frame .review-confirm__cancel,
+.frame .review-confirm__delete {
+  padding: 0.85rem 1.6rem;
+  border-radius: 0.6rem;
+  font-family: "Plus Jakarta Sans", Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: clamp(0.9375rem, 3.2vw, 1.25rem);
+  cursor: pointer;
+}
+
+.frame .review-confirm__cancel {
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 0.15rem solid rgba(255, 255, 255, 0.9);
+  color: #ffffff;
+}
+
+.frame .review-confirm__delete {
+  background-color: #ffffff;
+  border: 0.15rem solid #ffffff;
+  color: var(--color-palette-primary-500);
+}
+
+.frame .review-confirm__cancel:hover,
+.frame .review-confirm__delete:hover {
+  filter: brightness(1.1);
+}
+
 @media (max-width: 1023px) {
   .frame .deco-layer.deco-layer--full {
     bottom: 8rem; /* kira-kira tinggi footer mobile */

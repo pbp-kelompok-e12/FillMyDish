@@ -1,34 +1,13 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
-from django.contrib.auth.models import User
+from FillMyDish.models import User
+from moderation.models import SuspiciousRequest
 from recipefinder.models import Recipe, RecipeCache
 from recipefinder.views import get_recipe_cache
 from strip_tags import strip_tags
 import html
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
 
-class RegistrationExtensionTest(StaticLiveServerTestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        super().setUpClass()
-        # Configure headless mode for CI/CD environments
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")
-        chrome_options.add_argument("--window-size=1920,1080")
-        
-        cls.driver = webdriver.Chrome(options=chrome_options)
-        cls.driver.implicitly_wait(10) # Safeguard for element loading
-
-    @classmethod
-    def tearDownClass(cls):
-        # Ensure the browser closes after tests complete
-        cls.driver.quit()
-        super().tearDownClass()
 def escape_html(value):
     return html.escape(str(value if value is not None else ''), quote=True)
 raw = {
@@ -491,13 +470,37 @@ class MainTest(TestCase):
             self.assertContains(response, f'No ingredients were entered')
             self.assertContains(response, f'href="javascript:history.back()"')
             
-    #def test_recipe_result_with_no_recipes(self):
-    #    response = self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=a')
-    #    self.assertEqual(response.status_code, 200)
-    #    self.assertTemplateUsed(response, "results.html")
-    #    self.assertContains(response, f'No recipes found for a')
-    #    self.assertContains(response, f'href="javascript:history.back()"')
-    #            
+    def test_recipe_result_with_no_recipes(self):
+        response = self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=a')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "results.html")
+        self.assertContains(response, f'No recipes found for a')
+        self.assertContains(response, f'href="javascript:history.back()"')
+        
+    def test_recipe_result_invalid_tool(self):
+            response = self.client.get(f'{reverse("recipefinder:show_recipes")}?tools=dfghjkjhgf')
+            self.assertEqual(response.status_code, 200)
+            self.assertTemplateUsed(response, "results.html")
+            self.assertContains(response, f'dfghjkjhgf is not recognized as a tool by the API, please try again without it')
+            self.assertContains(response, f'href="javascript:history.back()"')
+            
+    def z_test_suspicious_requests_and_rate_limit(self):
+        self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=a')
+        self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=sdfgh')
+        self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=asdfghjkkjhgfd')
+        self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=aaaaaaaaaaaaaaa')
+        self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=a')
+        self.assertEqual(SuspiciousRequest.objects.get(id=1).user, self.user)
+        self.assertEqual(SuspiciousRequest.objects.get(id=2).user, self.user)
+        self.assertEqual(SuspiciousRequest.objects.get(id=3).user, self.user)
+        self.assertEqual(SuspiciousRequest.objects.get(id=4).user, self.user)
+        self.assertEqual(SuspiciousRequest.objects.get(id=5).user, self.user)
+        response = self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=chicken')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "results.html")
+        self.assertContains(response, f'Too many searches, Please try again later')
+        self.assertContains(response, f'href="javascript:history.back()"')
+        
     #def test_recipe_result_page_no_cache_with_results(self):
     #    response = self.client.get(f'{reverse("recipefinder:show_recipes")}?ingredients=chicken')
     #    self.assertEqual(response.status_code, 200)
@@ -532,4 +535,8 @@ class MainTest(TestCase):
         self.assertContains(response, self.recipe.title)
         self.assertContains(response, escape_html(strip_tags(self.recipe.summary)))
         self.assertContains(response, f'<img src="{ self.recipe.image }" alt="{self.recipe.title}">')
+        self.assertContains(response, f'href="{ self.recipe.source }"')
+        self.assertContains(response, f'action="{reverse("create_saved_recipe")}"')
         self.assertContains(response, f'href="javascript:history.back()"')
+        
+        
