@@ -129,27 +129,62 @@
 a.recipe-detail__save-btn.recipe-detail__save-btn--saved {
     color: #45474B;
 }
-
-@media (max-width: 1023px) {
-  .recipe-detail {
-    grid-template-columns: 1fr;
-    row-gap: 1.5rem;
-    padding: 1.5rem 1.25rem 2rem;
-  }
-
-  .recipe-detail__name {
-    font-size: clamp(1.75rem, 7vw, 2.774rem);
-  }
-
-  /* di HP: judul, deskripsi, gizi dulu, lalu gambar dan langkah */
-  .recipe-detail__right { order: -1; padding-top: 0; }
-  .recipe-detail__steps { font-size: 1.05rem; }
-  .recipe-detail__desc  { font-size: 1.05rem; }
+a.recipe-detail__save-btn.recipe-detail__save-btn--saved:hover {
+    color: #ffffff;
 }
 
-a.recipe-detail__save-btn.recipe-detail__save-btn--saved,
-a.recipe-detail__save-btn.recipe-detail__save-btn--saved:visited {
-    color: #45474B;
+
+@media (max-width: 1023px) {
+
+    .recipe-detail {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: 20px;
+        padding: 24px 20px 32px;
+    }
+
+    .recipe-detail__left,
+    .recipe-detail__right {
+        display: contents;
+    }
+
+    .recipe-detail__name {
+        order: 1;
+        font-size: clamp(28px, 7vw, 42px);
+    }
+
+    .recipe-detail__image {
+        order: 2;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+    }
+
+    .recipe-detail__right > form,
+    .recipe-detail__right > a.recipe-detail__save-btn {
+        order: 3;
+        margin: 0;
+    }
+
+    .recipe-detail__right > form .recipe-detail__save-btn {
+        margin-top: 0;
+    }
+
+    .recipe-detail__desc {
+        order: 4;
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+    .recipe-detail__nutrition {
+        order: 5;
+        margin: 0;
+    }
+
+    .recipe-detail__steps {
+        order: 6;
+        margin: 0;
+        font-size: 16px;
+    }
 }
 
 a.recipe-detail__save-btn.recipe-detail__save-btn--saved:hover {
