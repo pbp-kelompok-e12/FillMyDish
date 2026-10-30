@@ -8,3 +8,4 @@ requests
 Pillow
 strip-tags
 windows-curses
+django-ratelimit

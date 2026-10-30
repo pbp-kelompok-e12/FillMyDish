@@ -13,7 +13,7 @@ from django.conf import settings
 import datetime
 import requests
 from django.views.decorators.http import require_POST
-
+from django_ratelimit.decorators import ratelimit
 from recipefinder.models import RecipeCache, Recipe
 from moderation.models import SuspiciousRequest
 from saved_recipe.models import SavedRecipe
@@ -73,6 +73,7 @@ def suspicious(ingredients):
     return False
         
 @login_required(login_url="login")
+@ratelimit(key="ip", rate="5/m", block=False)
 def show_recipes(request):
     ingredients_raw = request.GET.get("ingredients", "")
     tools_raw = request.GET.get("tools", "")
@@ -86,8 +87,16 @@ def show_recipes(request):
             error = f"{tool} is not recognized as a tool by the API, please try again without it\n"
         elif tool not in EQUIPMENT and error is not None:
             error += f"{tool} is not recognized as a tool by the API, please try again without it\n"
+    if request.limited:
+        if error is None:
+            error = "Too many searches, Please try again later.\n"
+        elif error is not None:
+            error += "Too many searches, Please try again later.\n"
     if suspicious(ingredients):
-        SuspiciousRequest.objects.create(user=request.user, arguments=ingredients)
+        sus = SuspiciousRequest.objects.create(user=request.user, arguments=list(ingredients))
+        if request.limited:
+            sus.arguments.append("Hit rate limit")
+            sus.save()
     elif ingredients and error is None:
         key = "recipes:" + "|".join([
             ",".join(sorted(i.lower() for i in ingredients)),
