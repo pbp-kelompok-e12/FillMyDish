@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let activeButton = null;
 
-    // MEMBUKA POPUP EDIT
     document.querySelectorAll(".sr-btn-edit").forEach(button => {
 
         button.addEventListener("click", function () {
@@ -42,7 +41,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 ).checked = true;
             }
 
-            // Tampilkan foto resep jika tersedia
             if (modalImage) {
                 const card = button.closest(".sr-card");
                 const cardImage = card.querySelector(".sr-image img");
@@ -61,7 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // MENUTUP POPUP
     function closeModal() {
         modal.hidden = true;
     }
@@ -77,7 +74,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // UPDATE KE DATABASE DJANGO
     form.addEventListener("submit", async function (event) {
 
         event.preventDefault();
@@ -124,42 +120,93 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-    // DELETE DARI DATABASE DJANGO
+
+    const deleteDialog = document.getElementById("sr-delete-dialog");
+    const deleteCancel = document.getElementById("sr-delete-cancel");
+    const deleteConfirm = document.getElementById("sr-delete-confirm");
+    const deleteRecipeName = document.getElementById("sr-delete-recipe-name");
+    const deleteError = document.getElementById("sr-delete-error");
+
+    let selectedDeleteButton = null;
+    let deleteInProgress = false;
+
     document.querySelectorAll(".sr-btn-delete").forEach(button => {
+        button.addEventListener("click", function () {
 
-        button.addEventListener("click", async function () {
+            selectedDeleteButton = button;
 
-            const confirmed = confirm(
-                "Are you sure you want to delete this saved recipe?"
+            const card = button.closest(".sr-card");
+            const recipeName = card.querySelector("h3").textContent.trim();
+
+            deleteRecipeName.textContent = recipeName;
+            deleteError.hidden = true;
+
+            deleteDialog.showModal();
+        });
+    });
+
+    deleteCancel.addEventListener("click", function () {
+        deleteDialog.close();
+    });
+
+    deleteDialog.addEventListener("click", function (event) {
+        if (event.target === deleteDialog && !deleteInProgress) {
+            deleteDialog.close();
+        }
+    });
+
+    deleteDialog.addEventListener("cancel", function (event) {
+        if (deleteInProgress) {
+            event.preventDefault();
+        }
+    });
+
+    deleteDialog.addEventListener("close", function () {
+        selectedDeleteButton = null;
+    });
+
+    deleteConfirm.addEventListener("click", async function () {
+
+        if (!selectedDeleteButton || deleteInProgress) return;
+
+        const button = selectedDeleteButton;
+        deleteInProgress = true;
+
+        button.disabled = true;
+        deleteCancel.disabled = true;
+        deleteConfirm.disabled = true;
+        deleteConfirm.textContent = "Deleting...";
+        deleteError.hidden = true;
+
+        try {
+            const response = await fetch(
+                button.dataset.deleteUrl,
+                {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": csrfToken
+                    },
+                    credentials: "same-origin"
+                }
             );
 
-            if (!confirmed) return;
-
-            button.disabled = true;
-
-            try {
-                const response = await fetch(
-                    button.dataset.deleteUrl,
-                    {
-                        method: "POST",
-                        headers: {
-                            "X-CSRFToken": csrfToken
-                        },
-                        mode: "same-origin"
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error("Delete gagal");
-                }
-
-                window.location.reload();
-
-            } catch (error) {
-                alert("Gagal menghapus resep.");
-                button.disabled = false;
+            if (!response.ok) {
+                throw new Error("Delete gagal");
             }
-        });
+
+            deleteDialog.close();
+            window.location.reload();
+
+        } catch (error) {
+            deleteError.hidden = false;
+
+        } finally {
+            deleteInProgress = false;
+            button.disabled = false;
+            deleteCancel.disabled = false;
+            deleteConfirm.disabled = false;
+            deleteConfirm.textContent = "Confirm Delete";
+        }
     });
 
     // Add or remove a recipe from the meal plan draft
