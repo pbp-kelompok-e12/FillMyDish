@@ -394,5 +394,9 @@ class SaveRecipeFromDetailsTests(TestCase):
 
         self.assertContains(
             response,
-            "Saved — View Saved Recipes"
+            "View Saved Recipes"
+        )
+        self.assertContains(
+            response,
+            'recipe-detail__save-btn--saved'
         )
