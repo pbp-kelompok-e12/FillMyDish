@@ -43,4 +43,4 @@ Saya menggunakan ChatGPT sebagai bantuan dalam mengembangkan halaman profil pada
 https://www.figma.com/files/team/1569679838448420365/folder/655611366?fuid=1687367044933420310
 
 ### PWS:
-https://pws.cs.ui.ac.id/musthofa.ridho/fillmydish
+https://musthofa-ridho-fillmydish.pws.cs.ui.ac.id
