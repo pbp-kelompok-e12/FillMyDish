@@ -1,9 +1,29 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/saved_recipe.css' %}">
+{% endblock %}
+
 {% block content %}
     <main class="mealplan-page mealplan-detail-page">
         <header class="mealplan-detail-header">
+            {% if edit_mode %}
+                <a
+                    class="mealplan-edit-link"
+                    href="{% url 'mealplan:mealplan_detail' plan.id %}"
+                >
+                    Save Changes
+                </a>
+            {% else %}
+                <a
+                    class="mealplan-edit-link"
+                    href="{% url 'mealplan:update_mealplan' plan.id %}"
+                >
+                    Edit Your Plan
+                </a>
+            {% endif %}
+
             <h1 class="mealplan-detail-title">{{ plan.title }}</h1>
             <p class="mealplan-detail-description">
                 {{ plan.description|default:"No Description" }}
@@ -12,7 +32,9 @@
 
         <section class="recipe-grid" aria-label="Recipes in this meal plan">
             {% for item in items %}
-                {% if item.recipe.source_recipe_id %}
+                {% if edit_mode %}
+                    <article class="recipe-card mealplan-recipe-card">
+                {% elif item.recipe.source_recipe_id %}
                     <a
                         class="recipe-card mealplan-recipe-card"
                         href="{% url 'recipefinder:show_recipe_details' item.recipe.source_recipe_id %}"
@@ -43,16 +65,86 @@
                         {{ item.recipe.description|striptags|truncatewords:25 }}
                     </p>
 
-                {% if item.recipe.source_recipe_id %}
-                    </a>
-                {% else %}
-                    </article>
+                    {% if edit_mode %}
+                        <div class="sr-actions">
+                            <button
+                                type="button"
+                                class="sr-btn-delete"
+                                data-delete-url="{% url 'mealplan:delete_item' item.id %}"
+                            >
+                                Delete
+                            </button>
+                        </div>
                     {% endif %}
+
+                {% if edit_mode or not item.recipe.source_recipe_id %}
+                    </article>
+                {% else %}
+                    </a>
+                {% endif %}
             {% empty %}
                 <p class="mealplan-empty-message">
                     There are no recipes in this plan yet.
                 </p>
             {% endfor %}
         </section>
+        {% if edit_mode %}
+            <form id="mealplan-csrf-form" hidden>
+                {% csrf_token %}
+            </form>
+
+            <script>
+                document.addEventListener('click', async function (event) {
+                    const button = event.target.closest('.mealplan-detail-page .sr-btn-delete');
+
+                    if (!button) {return;}
+                    const confirmed = window.confirm('Remove this recipe from the meal plan?');
+                    if (!confirmed) {return;}
+
+                    button.disabled = true;
+
+                    const csrfToken = document.querySelector('#mealplan-csrf-form [name=csrfmiddlewaretoken]').value;
+
+                    try {
+                        const response = await fetch(button.dataset.deleteUrl, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrfToken,
+                                'X-Requested-With': 'XMLHttpRequest',
+                            },
+                        });
+
+                        const result = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(
+                                result.message || 'The recipe could not be removed.'
+                            );
+                        }
+
+                        const card = button.closest('.mealplan-recipe-card');
+                        card.remove();
+
+                        const remainingCards = document.querySelectorAll(
+                            '.mealplan-detail-page .mealplan-recipe-card'
+                        );
+
+                        if (remainingCards.length === 0) {
+                            const emptyMessage = document.createElement('p');
+                            emptyMessage.className = 'mealplan-empty-message';
+                            emptyMessage.textContent =
+                                'There are no recipes in this plan yet.';
+
+                            document.querySelector('.recipe-grid').appendChild(
+                                emptyMessage
+                            );
+                        }
+                    } catch (error) {
+                        window.alert(error.message);
+                        button.disabled = false;
+                    }
+                });
+            </script>
+        {% endif %}
     </main>
 {% endblock %}

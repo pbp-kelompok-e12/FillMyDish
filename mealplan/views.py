@@ -138,7 +138,43 @@ def delete_mealplan(request, plan_id):
     plan.delete()
     return JsonResponse({"message": "Plan deleted successfully"}, status=200)
 
-@require_POST
+@login_required(login_url='/login/')
+def edit_mealplan_recipes(request, plan_id):
+    plan = get_object_or_404(MealPlan, id=plan_id, user=request.user,)
+
+    return render(
+        request,
+        'mealplan_detail.html',
+        {
+            'plan': plan,
+            'items': plan.items.all(),
+            'edit_mode': True,
+        },
+    )
+
+@login_required(login_url='/login/')
 def update_mealplan(request, plan_id):
-    plan = get_object_or_404(MealPlan, id=plan_id, user=request.user)
-    form = MealPlan(request.POST)
+    plan = get_object_or_404(MealPlan, id=plan_id, user=request.user,)
+
+    if request.method == 'POST':
+        title = request.POST.get('title', '').strip()
+        description = request.POST.get('description', '').strip()
+
+        if not title:
+            return render(
+                request,
+                'mealplan_edit.html',
+                {
+                    'plan': plan,
+                    'error': 'Plan title is required.',
+                    'title': title,
+                    'description': description,
+                },
+                status=400,
+            )
+        plan.title = title
+        plan.description = description
+        plan.save()
+        return redirect('mealplan:edit_mealplan_recipes', plan_id=plan.id)
+
+    return render(request, 'mealplan_edit.html', {'plan': plan})
