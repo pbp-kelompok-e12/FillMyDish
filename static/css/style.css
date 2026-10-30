@@ -658,10 +658,14 @@
 
 .connection-row {
   display: grid;
-  grid-template-columns: 1fr 2fr auto;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
   gap: 0.5rem;
   align-items: center;
   margin-bottom: 0.5rem;
+}
+
+.connection-row > .form-input {
+  min-width: 0;
 }
 
 .connection-fields {
@@ -879,6 +883,43 @@
   outline-offset: 1px;
 }
 
+.password-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.password-input-wrap .form-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-page .profile-form-card .password-input-wrap .password-toggle {
+  flex: 0 0 auto;
+  min-width: 5.25rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--color-palette-primary-600);
+  color: var(--color-palette-font-50);
+  font-family: "Poppins", Helvetica, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.profile-page .profile-form-card .password-input-wrap .password-toggle:hover {
+  background: var(--color-palette-primary-500);
+  transform: translateY(-1px);
+}
+
+.profile-page .profile-form-card .password-input-wrap .password-toggle:focus-visible {
+  outline: 2px solid var(--color-palette-secondary-800);
+  outline-offset: 2px;
+}
+
 .form-textarea {
   resize: vertical;
   min-height: 5rem;
@@ -1000,7 +1041,7 @@
   }
 
   .connection-row {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
   }
 
   .connection-row .form-check {
@@ -1011,7 +1052,7 @@
   }
 
   .connection-row .btn-remove-connection {
-    grid-column: 2;
+    grid-column: 3;
     grid-row: 1;
   }
 

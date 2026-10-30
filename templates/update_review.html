@@ -7,6 +7,20 @@
         {% csrf_token %}
         <h2 class="review-form__title">Edit Yours</h2>
 
+        <div class="review-form__rating">
+            <span class="review-form__rating-title">Rating</span>
+            <div class="star-input">
+                {% for i in "54321" %}
+                <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}"
+                {% if form.rating.value|stringformat:"s" == i %}checked{% endif %}>
+                <label for="star{{ i }}" title="{{ i }} bintang">★</label>
+                {% endfor %}
+            </div>
+            {% for error in form.rating.errors %}
+                <p class="review-form__error" style="display:block">{{ error }}</p>
+            {% endfor %}
+        </div>
+
         <div class="review-form__field">
             <label for="{{ form.message.id_for_label }}">Message</label>
             {{ form.message }}

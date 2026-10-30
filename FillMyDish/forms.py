@@ -1,9 +1,15 @@
 from django import forms
 from django.forms import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
+from .models import Profile, Connection
 from django.core.exceptions import ValidationError
 from .models import Profile, Connection, User
 from django.conf import settings
+
+# forms.py -> mendefinisikan form untuk pendaftaran, login, pengeditan profil, dan koneksi media 
+#             sosial. Formulir ini digunakan untuk memvalidasi input pengguna dan menyimpan data 
+#             ke model terkait.
 
 class RegisterForm(UserCreationForm):
     email = forms.EmailField(

@@ -3,8 +3,10 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from FillMyDish.models import Profile
 from .forms import ReviewForm
 from .models import Review
 
@@ -22,14 +24,21 @@ def get_reviews_json(request):
     data = []
 
     for review in reviews:
+        profile = getattr(review.user, "profile", None)
+        profile_image = profile.profile_image.url if profile and profile.profile_image else ""
+        profile_username = profile.username if profile and profile.username else review.user.username
         data.append({
             "pk":str(review.pk),
             "fields":{
                 "user":review.user.username,
+                "profile_username": profile_username,
+                "profile_image": profile_image,
+                "profile_url": reverse("user_profile", kwargs={"username": review.user.username}),
                 "is_owner": review.user_id == request.user.id,
                 "message":review.message,
                 "created_at":review.created_at,
                 "updated_at":review.updated_at,
+                "rating": review.rating,
             },
         })
     return JsonResponse(data, safe=False)

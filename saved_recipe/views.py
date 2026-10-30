@@ -9,7 +9,7 @@ from django.utils.html import strip_tags
 from recipefinder.models import Recipe
 
 # READ: Menampilkan resep tersimpan
-@login_required
+@login_required(login_url="/login")
 def saved_recipe_page(request):
 
     recipes = SavedRecipe.objects.filter(
@@ -38,11 +38,24 @@ def saved_recipe_page(request):
     ]
 
     mealplan_draft = request.session.get("mealplan_draft")
-    draft_recipe_ids = (
-        mealplan_draft.get("recipe_ids", [])
-        if mealplan_draft
-        else []
-    )
+    edit_draft = request.session.get("mealplan_edit_draft")
+    editing_plan_id = request.GET.get("editing_plan", "")
+
+    mealplan_edit_draft = None
+    if (
+        editing_plan_id.isdecimal()
+        and edit_draft
+        and str(edit_draft.get("plan_id")) == editing_plan_id
+    ):
+        mealplan_edit_draft = edit_draft
+        mealplan_draft = None
+
+    if mealplan_edit_draft:
+        draft_recipe_ids = mealplan_edit_draft.get("recipe_ids", [])
+    elif mealplan_draft:
+        draft_recipe_ids = mealplan_draft.get("recipe_ids", [])
+    else:
+        draft_recipe_ids = []
 
     return render(request, "saved_recipe/saved_recipe.html", {
         "recipes": recipes,
@@ -50,12 +63,13 @@ def saved_recipe_page(request):
         "search_query": search_query,
         "current_category": current_category,
         "mealplan_draft": mealplan_draft,
+        "mealplan_edit_draft": mealplan_edit_draft,
         "draft_recipe_ids": draft_recipe_ids,
     })
 
 
 # UPDATE: Favorite dan Meal Category
-@login_required
+@login_required(login_url="/login")
 @require_POST
 def update_saved_recipe(request, pk):
 
@@ -90,7 +104,7 @@ def update_saved_recipe(request, pk):
 
 
 # DELETE: Menghapus resep tersimpan
-@login_required
+@login_required(login_url="/login")
 @require_POST
 def delete_saved_recipe(request, pk):
 
@@ -107,7 +121,7 @@ def delete_saved_recipe(request, pk):
 
 # CREATE: Dipanggil dari halaman rekomendasi AI
 
-@login_required
+@login_required(login_url="/login")
 @require_POST
 def create_saved_recipe(request):
 
