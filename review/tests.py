@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.test import Client, TestCase
 from django.urls import reverse
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 from .forms import ReviewForm
 from .models import Review
@@ -57,7 +58,7 @@ class ReviewModelTests(ReviewTestBase):
 
 class ReviewFormTests(TestCase):
     def test_valid(self):
-        self.assertTrue(ReviewForm(data={'message': 'Mantap'}).is_valid())
+        self.assertTrue(ReviewForm(data={'rating': 5, 'message': 'Mantap'}).is_valid())
 
     def test_empty_message_invalid(self):
         form = ReviewForm(data={'message': ''})
@@ -67,8 +68,8 @@ class ReviewFormTests(TestCase):
     def test_whitespace_message_invalid(self):
         self.assertFalse(ReviewForm(data={'message': '   '}).is_valid())
 
-    def test_only_message_field(self):
-        self.assertEqual(list(ReviewForm().fields), ['message'])
+    def ttest_form_fields(self):
+        self.assertEqual(list(ReviewForm().fields), ['rating', 'message'])
 
     def test_placeholder(self):
         widget = ReviewForm().fields['message'].widget
@@ -118,7 +119,7 @@ class ReviewJsonTests(ReviewTestBase):
             set(item['fields']),
             {
                 'user', 'profile_username', 'profile_image', 'profile_url',
-                'is_owner', 'message', 'created_at', 'updated_at',
+                'is_owner', 'message', 'rating', 'created_at', 'updated_at',
             },
         )
         self.assertEqual(item['fields']['user'], 'owner')
@@ -164,7 +165,7 @@ class CreateReviewAjaxTests(ReviewTestBase):
 
     def test_valid_creates_review(self):
         self.login('other')
-        res = self.client.post(self.url, {'message': 'hai'})
+        res = self.client.post(self.url, {'rating': 5, 'message': 'hai'})
         self.assertEqual(res.status_code, 201)
         self.assertEqual(Review.objects.count(), 2)
         new = Review.objects.get(pk=res.json()['pk'])
@@ -182,9 +183,9 @@ class CreateReviewAjaxTests(ReviewTestBase):
 
     def test_cannot_set_user_or_visibility_from_post(self):
         self.login('other')
-        res = self.client.post(
+        res = self.client.post(                                                   # test_cannot_set_user_or_visibility_from_post
             self.url,
-            {'message': 'curang', 'user': self.owner.pk, 'is_visible': ''},
+            {'rating': 5, 'message': 'curang', 'user': self.owner.pk, 'is_visible': ''},
         )
         new = Review.objects.get(pk=res.json()['pk'])
         self.assertEqual(new.user, self.other)
@@ -211,7 +212,7 @@ class UpdateReviewTests(ReviewTestBase):
 
     def test_owner_post_valid(self):
         self.login('owner')
-        res = self.client.post(self.url, {'message': 'Baru'})
+        res = self.client.post(self.url, {'rating': 5, 'message': 'Baru'})
         self.assertRedirects(
             res, reverse('review:list'), fetch_redirect_response=False
         )
@@ -295,7 +296,7 @@ class ReviewSecurityTests(ReviewTestBase):
     def test_script_stored_and_returned_as_is(self):
         self.login('other')
         payload = '<script>alert(1)</script>'
-        self.client.post(reverse('review:create_ajax'), {'message': payload})
+        self.client.post(reverse('review:create_ajax'), {'rating': 5, 'message': payload})
         data = self.client.get(reverse('review:json')).json()
         self.assertIn(payload, [d['fields']['message'] for d in data])
 
@@ -305,3 +306,18 @@ class ReviewSecurityTests(ReviewTestBase):
         res = client.post(reverse('review:create_ajax'), {'message': 'hai'})
         self.assertEqual(res.status_code, 403)
         self.assertEqual(Review.objects.count(), 1)
+
+    def test_default_rating_is_5(self):
+        self.assertEqual(self.review.rating, 5)
+
+    def test_rating_valid_range(self):
+        for value in range(1, 6):
+            with self.subTest(rating=value):
+                Review(user=self.owner, message='ok', rating=value).full_clean()
+
+    def test_rating_out_of_range_fails_validation(self):
+        for value in (0, 6):
+            with self.subTest(rating=value):
+                with self.assertRaises(ValidationError) as ctx:
+                    Review(user=self.owner, message='ok', rating=value).full_clean()
+                self.assertIn('rating', ctx.exception.message_dict)
