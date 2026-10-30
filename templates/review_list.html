@@ -60,7 +60,7 @@
     id="review-config"
     hidden
     data-logged-in="{{ user.is_authenticated|yesno:'true,false' }}"
-    data-login-url="{{ login_url }}"
+    data-login-url="{% url 'login' %}?next={% url 'review:list' %}"
     data-update-url="{% url 'review:update' 0 %}"
     data-delete-url="{% url 'review:delete' 0 %}"
 ></div>
