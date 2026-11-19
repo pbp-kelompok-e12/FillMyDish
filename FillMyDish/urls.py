@@ -16,6 +16,7 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from FillMyDish import views
+from saved_recipe.api_views import SavedRecipeListAPIView
 
 # urls.py -> mendefinisikan URL routing untuk aplikasi FillMyDish, menghubungkan URL dengan 
 #            tampilan (views)
@@ -38,6 +39,7 @@ urlpatterns = [
     path("", include("mealplan.urls")),
     path("saved-recipes/", include("saved_recipe.urls")),
     path("", include("moderation.urls")),
+    path("api/saved-recipes/",SavedRecipeListAPIView.as_view(),name="api_saved_recipe_list",),
 ]
 
 if settings.DEBUG:
