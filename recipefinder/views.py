@@ -1,5 +1,3 @@
-from curses.ascii import isalpha
-
 from django.contrib import messages
 from django.core import serializers
 from django.http import Http404, HttpResponse
