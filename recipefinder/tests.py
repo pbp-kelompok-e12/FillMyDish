@@ -1,6 +1,11 @@
+from unittest.mock import patch
+
+from django.core.cache import cache
 from django.test import TestCase
 from django.urls import reverse
-from django.utils import timezone
+from rest_framework import status
+from rest_framework.test import APITestCase
+
 from FillMyDish.models import User
 from moderation.models import SuspiciousRequest
 from recipefinder.models import Recipe, RecipeCache
@@ -538,5 +543,123 @@ class MainTest(TestCase):
         self.assertContains(response, f'href="{ self.recipe.source }"')
         self.assertContains(response, f'action="{reverse("create_saved_recipe")}"')
         self.assertContains(response, f'href="javascript:history.back()"')
+        
+
+SEARCH_URL = "recipefinder:api_show_recipes"
+DETAIL_URL = "recipefinder:api_show_recipe_details"
+
+
+class RecipeAPITest(APITestCase):
+    def setUp(self):
+        cache.clear()  # reset rate-limit counters between tests
+        self.user = User.objects.create_user(username="testuser")
+        self.client.force_authenticate(self.user)
+        self.recipe = Recipe.objects.create(**raw)
+        self.recipe_cache = get_recipe_cache()
+
+    # ---- model -----------------------------------------------------
+    def test_recipe_model(self):
+        self.assertEqual(self.recipe.title, "Easy Chicken Pot Pie")
+        self.assertEqual(self.recipe.id, 641901)
+        self.assertEqual(self.recipe.nutrients["nutrients"][0]["name"], "Calories")
+
+    # ---- auth ------------------------------------------------------
+    def test_search_requires_authentication(self):
+        self.client.force_authenticate(None)
+        response = self.client.get(reverse(SEARCH_URL), {"ingredients": "chicken"})
+        self.assertIn(
+            response.status_code,
+            (status.HTTP_401_UNAUTHORIZED, status.HTTP_403_FORBIDDEN),
+        )
+
+    # ---- search ----------------------------------------------------
+    def test_search_without_ingredients_returns_empty_list(self):
+        response = self.client.get(reverse(SEARCH_URL))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 0)
+        self.assertEqual(response.data["recipes"], [])
+
+    def test_search_suspicious_ingredient_is_logged(self):
+        response = self.client.get(reverse(SEARCH_URL), {"ingredients": "a"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["recipes"], [])
+        self.assertTrue(SuspiciousRequest.objects.filter(user=self.user).exists())
+
+    def test_search_invalid_tool_returns_400(self):
+        response = self.client.get(reverse(SEARCH_URL), {"tools": "dfghjkjhgf"})
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("tools", response.data["errors"])
+        self.assertIn(
+            "dfghjkjhgf is not recognized as a tool by the API",
+            str(response.data["errors"]["tools"][0]),
+        )
+
+    def test_search_uses_cache(self):
+        self.recipe_cache.recipes["recipes:chicken||"] = [raw]
+        self.recipe_cache.save()
+        with patch("recipefinder.services.requests.get") as mock_get:
+            response = self.client.get(reverse(SEARCH_URL), {"ingredients": "chicken"})
+            mock_get.assert_not_called()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        item = response.data["recipes"][0]
+        self.assertEqual(item["id"], self.recipe.id)
+        self.assertEqual(item["title"], self.recipe.title)
+        self.assertEqual(item["image"], self.recipe.image)
+
+    def test_search_calls_upstream_and_stores_results(self):
+        Recipe.objects.all().delete()
+        upstream = {
+            "results": [
+                {
+                    "id": 641901,
+                    "title": raw["title"],
+                    "image": raw["image"],
+                    "summary": raw["summary"],
+                    "analyzedInstructions": raw["instructions"],
+                    "nutrition": raw["nutrients"],
+                    "sourceUrl": raw["source"],
+                }
+            ]
+        }
+        with patch("recipefinder.services.requests.get") as mock_get:
+            mock_get.return_value.json.return_value = upstream
+            mock_get.return_value.raise_for_status.return_value = None
+            response = self.client.get(reverse(SEARCH_URL), {"ingredients": "chicken"})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["count"], 1)
+        self.assertTrue(Recipe.objects.filter(pk=641901).exists())
+
+    def test_search_upstream_failure_returns_502(self):
+        import requests as req
+
+        with patch("recipefinder.services.requests.get", side_effect=req.RequestException):
+            response = self.client.get(reverse(SEARCH_URL), {"ingredients": "chicken"})
+        self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
+
+    def test_search_rate_limit_returns_429(self):
+        for _ in range(5):
+            self.client.get(reverse(SEARCH_URL))
+        response = self.client.get(reverse(SEARCH_URL), {"ingredients": "chicken"})
+        self.assertEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+
+    # ---- detail ----------------------------------------------------
+    def test_detail_not_found_returns_404(self):
+        response = self.client.get(reverse(DETAIL_URL, kwargs={"recipe_id": 123}))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_detail_valid(self):
+        response = self.client.get(reverse(DETAIL_URL, kwargs={"recipe_id": self.recipe.id}))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.data
+        self.assertEqual(data["title"], self.recipe.title)
+        self.assertEqual(data["image"], self.recipe.image)
+        self.assertEqual(data["source"], self.recipe.source)
+        self.assertEqual(data["nutrients"][0]["name"], "Calories")
+        self.assertEqual(
+            data["steps"][0]["step"],
+            "Mix first 3 ingredients and pour into a greased baking dish.",
+        )
+        self.assertFalse(data["already_saved"])
         
         
