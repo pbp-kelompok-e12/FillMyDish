@@ -94,6 +94,13 @@ class LoginForm(AuthenticationForm):
     )
     def confirm_login_allowed(self, user):
         super().confirm_login_allowed(user)
+        same_emails = User.objects.all().filter(email=user.email)
+        for account in same_emails:
+            if account.is_banned:
+                raise ValidationError(
+                                "This email is tied to a banned account.",
+                                code="banned",
+                            )
         if user.is_banned:
             raise ValidationError(
                 "This account has been banned.",
